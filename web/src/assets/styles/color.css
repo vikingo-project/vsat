@@ -1,0 +1,47 @@
+.status-process:before{
+    background-color: #82B0BF!important;
+}
+.status-pause:before{
+    background-color: #F9E09E!important;
+}
+.status-result:before{
+    background-color: #C0E1A5!important;
+}
+.status-stop:before{
+    background-color: #8E8E8E!important;
+}
+.status-warning:before{
+    background-color: #FCAFAF!important;
+}
+
+
+.status-event-info:before{
+    background-color: #8E8E8E!important;
+}
+.status-event-info .status{
+	color: #8E8E8E!important;
+}
+.status-event-success:before{
+    background-color: #C0E1A5 !important
+}
+.status-event-success .status{
+	color: #C0E1A5 !important
+}
+.status-event-redirect:before{
+    background-color: #82B0BF!important;
+}
+.status-event-redirect .status{
+	color: #82B0BF!important;
+}
+.status-event-error:before{
+    background-color: #FCAFAF!important;
+}
+.status-event-error .status{
+	color: #FCAFAF!important;
+}
+.status-event-notice:before{
+    background-color: #F9E09E!important;
+}
+.status-event-notice .status{
+	color: #F9E09E!important;
+}

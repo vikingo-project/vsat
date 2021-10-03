@@ -1,0 +1,10 @@
+vikingo-sattelite.exe
+data/userdata/
+server/data.go
+tmp/*
+*.exe
+debug.log
+vsat.key
+vsat.crt
+.DS_Store
+*.db

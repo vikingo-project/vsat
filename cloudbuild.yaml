@@ -1,0 +1,190 @@
+timeout: 1500s
+steps:
+  - name: node:12
+    entrypoint: npm
+    args: ["install"]
+    dir: "web"
+  - name: node:12
+    entrypoint: npm
+    args: ["run", "build"]
+    dir: "web"
+  - name: golang:1.16.5
+    entrypoint: bash
+    args:
+      - "-c"
+      - |
+        mkdir -p /go/src/github.com/vikingo-project/vsat && cp -r . /go/src/github.com/vikingo-project/vsat && go env
+    volumes:
+      - name: go
+        path: /go
+  - name: golang:1.16.5
+    dir: "/go/src/github.com/vikingo-project/vsat"
+    args: ["go", "get", "-d"]
+    env: ["GOPATH=/go", "GOOS=linux", "GOARCH=amd64"]
+    volumes:
+      - name: go
+        path: /go
+  - name: golang:1.16.5
+    dir: "/go/src/github.com/vikingo-project/vsat"
+    args: ["go", "get", "-u", "github.com/jteeuwen/go-bindata/..."]
+    env: ["GOPATH=/go", "GOOS=linux", "GOARCH=amd64", "GO111MODULE=off"] # disable GO111MODULE! it's loading another version of bindata
+    volumes:
+      - name: go
+        path: /go
+  - name: golang:1.16.5
+    dir: "/go/src/github.com/vikingo-project/vsat/web"
+    args:
+      [
+        "/go/bin/go-bindata",
+        "-pkg",
+        "ctrl",
+        "-o",
+        "../ctrl/static.go",
+        "dist/...",
+      ]
+    env: ["GOPATH=/go", "GOOS=linux", "GOARCH=amd64"]
+    volumes:
+      - name: go
+        path: /go
+
+  - name: golang:1.16.5
+    dir: "/go/src/github.com/vikingo-project/vsat"
+    entrypoint: /bin/sh
+    args:
+      - "-c"
+      - |
+        set -x && \
+        go build -ldflags="-X 'github.com/vikingo-project/vsat/shared.BuildHash=$SHORT_SHA' -X 'github.com/vikingo-project/vsat/shared.Version=$TAG_NAME' " -o vsat64
+    env:
+      [
+        "GOPATH=/go",
+        "GOOS=linux",
+        "GOARCH=amd64",
+        "TAG_NAME=$TAG_NAME",
+        "CGO_ENABLED=0",
+      ]
+    volumes:
+      - name: go
+        path: /go
+  - name: golang:1.16.5
+    dir: "/go/src/github.com/vikingo-project/vsat"
+    entrypoint: /bin/sh
+    args:
+      - "-c"
+      - |
+        set -x && \
+        go build -ldflags="-X 'github.com/vikingo-project/vsat/shared.BuildHash=$SHORT_SHA' -X 'github.com/vikingo-project/vsat/shared.Version=$TAG_NAME' " -o vsat64-macos
+    env:
+      [
+        "GOPATH=/go",
+        "GOOS=darwin",
+        "GOARCH=amd64",
+        "TAG_NAME=$TAG_NAME",
+        "CGO_ENABLED=0",
+      ]
+    volumes:
+      - name: go
+        path: /go
+
+  - name: golang:1.16.5
+    dir: "/go/src/github.com/vikingo-project/vsat"
+    entrypoint: /bin/sh
+    args:
+      - "-c"
+      - |
+        set -x && \
+        go build -ldflags="-X 'github.com/vikingo-project/vsat/shared.BuildHash=$SHORT_SHA' -X 'github.com/vikingo-project/vsat/shared.Version=$TAG_NAME' " -o vsat64.exe
+    env:
+      [
+        "GOPATH=/go",
+        "GOOS=windows",
+        "GOARCH=amd64",
+        "TAG_NAME=$TAG_NAME",
+        "CGO_ENABLED=0",
+      ]
+    volumes:
+      - name: go
+        path: /go
+
+  - name: akamajoris/github-release:latest
+    env:
+      - "TAG_NAME=$TAG_NAME"
+    secretEnv: ["GITHUB_TOKEN"]
+    entrypoint: "sh"
+    args:
+      - "-c"
+      - |
+        github-release release --user vikingo-project --repo vsat --tag $TAG_NAME --name "Release $TAG_NAME" --description "Description avaliable at https://vsat.vikingo.org"
+
+  # Upload ELF to release assets
+  - name: akamajoris/github-release:latest
+    dir: "/go/src/github.com/vikingo-project/vsat"
+    env:
+      - "TAG_NAME=$TAG_NAME"
+    secretEnv: ["GITHUB_TOKEN"]
+    entrypoint: "sh"
+    args:
+      - "-c"
+      - |
+        github-release upload -u vikingo-project -r vsat -t $TAG_NAME -n vsat64 -f vsat64
+    volumes:
+      - name: go
+        path: /go
+
+  # Upload Darwin to release assets
+  - name: akamajoris/github-release:latest
+    dir: "/go/src/github.com/vikingo-project/vsat"
+    env:
+      - "TAG_NAME=$TAG_NAME"
+    secretEnv: ["GITHUB_TOKEN"]
+    entrypoint: "sh"
+    args:
+      - "-c"
+      - |
+        github-release upload -u vikingo-project -r vsat -t $TAG_NAME -n vsat64-macos -f vsat64-macos
+    volumes:
+      - name: go
+        path: /go
+
+  # Upload EXE to release assets
+  - name: akamajoris/github-release:latest
+    dir: "/go/src/github.com/vikingo-project/vsat"
+    env:
+      - "TAG_NAME=$TAG_NAME"
+    secretEnv: ["GITHUB_TOKEN"]
+    entrypoint: "sh"
+    args:
+      - "-c"
+      - |
+        github-release upload -u vikingo-project -r vsat -t $TAG_NAME -n vsat64.exe -f vsat64.exe
+    volumes:
+      - name: go
+        path: /go
+
+  # Docker
+  - name: "gcr.io/cloud-builders/docker"
+    entrypoint: "bash"
+    args: ["-c", "docker login --username=$_DOCKERUSER --password=$_DOCKERPASS"]
+
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["build", "-t", "vkngo/vsat:$TAG_NAME", "."]
+    dir: "/go/src/github.com/vikingo-project/vsat"
+    volumes:
+      - name: go
+        path: /go
+
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "vkngo/vsat:$TAG_NAME"]
+    dir: "/go/src/github.com/vikingo-project/vsat"
+
+  - name: "gcr.io/cloud-builders/docker"
+    entrypoint: "bash"
+    args: ["-c", "docker tag vkngo/vsat:$TAG_NAME vkngo/vsat:latest"]
+
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "vkngo/vsat:latest"]
+
+availableSecrets:
+  secretManager:
+    - versionName: projects/190440625825/secrets/GITHUB_TOKEN/versions/latest
+      env: "GITHUB_TOKEN"
