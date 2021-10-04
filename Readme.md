@@ -13,9 +13,8 @@ Key features:
 - one file ~20mb (no need to link 3th party and dependencies)
 - user-friendly UI
 - HTTP module supports automatic renewal of Letsencrypt TLS certificates
-- works on all platforms and docker
+- cross-platform
 - integration with Vikingo Engine
-- easy to extendable
 
 Built-in modules:
 
@@ -48,4 +47,8 @@ where `/your/persistent/directory` is a directory on the host system.
 <details>
   <summary>Interactions page</summary>
   <img src="https://static.vikingo.org/images/satellite-1.jpg"/ >
+</details>
+<details>
+  <summary>Share folder via HTTP</summary>
+  <a href="https://www.youtube.com/watch?v=uPK0ltzT5o4"><img src="https://i9.ytimg.com/vi/uPK0ltzT5o4/mq2.jpg?sqp=CISP6YoG&rs=AOn4CLDUE2vpBcxG2C-mGOxpIRcoj2G2bg" /></a>
 </details>
