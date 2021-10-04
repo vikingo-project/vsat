@@ -85,7 +85,7 @@ export function objectToString(o) {
     ? Object.keys(o)
         .reduce(function(a, k) {
           if (o[k]) {
-            if (typeof o[k] == "string") {
+            if (typeof o[k] == "string" || typeof o[k] == "number") {
               a.push(k + "=" + encodeURIComponent(o[k]));
             }
             if (typeof o[k] == "object") {
