@@ -276,7 +276,7 @@ export default {
           if (data.status === "error") {
             that.$notify.error({
               title: "Error",
-              message: response.data.error,
+              message: data.error,
             });
             return;
           }

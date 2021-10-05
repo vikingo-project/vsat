@@ -42,7 +42,7 @@ func main() {
 		// check new version
 		ctx := context.Background()
 		fut := whatsnew.Check(ctx, &whatsnew.Options{
-			Slug:    "vikingo-project/satellite",
+			Slug:    "vikingo-project/vsat",
 			Version: shared.Version,
 		})
 		if v, _ := fut.Get(); v != "" {

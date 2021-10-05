@@ -62,17 +62,18 @@ func (s *Server) Run() {
 
 func (s *Server) Stop() error {
 	for _, l := range s.listeners {
-		err := l.ShutdownContext(context.Background())
-		if err != nil {
-			return err
+		if l != nil {
+			err := l.ShutdownContext(context.Background())
+			if err != nil {
+				return err
+			}
 		}
-		log.Println("killed")
 	}
 	return nil
 }
 
 func (s *Server) start(ds *dns.Server) {
-	log.Printf("Start %s listener on %s", ds.Net, s.Addr())
+	utils.PrintDebug("DNS SERVER: start %s listener on %s", ds.Net, s.Addr())
 	err := ds.ListenAndServe()
 	if err != nil {
 		log.Printf("Start %s listener on %s failed:%s", ds.Net, s.Addr(), err.Error())

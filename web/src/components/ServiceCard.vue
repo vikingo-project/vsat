@@ -45,7 +45,7 @@
     </article>
 
     <el-dialog
-      :title="`Edit service ` + localService.moduleName"
+      :title="`Edit service ` + localService.serviceName"
       :visible.sync="editServiceDialogVisible"
       class="modal-new-modules"
     >
@@ -91,14 +91,7 @@
                 </div>
                 <div class="">
                   <el-form-item label="Auto start">
-                    <el-switch
-                      active-color="#82b0bf"
-                      inactive-color="#c3cbcd"
-                      v-model="localService.autoStart"
-                      :active-value="true"
-                      :inactive-value="false"
-                    >
-                    </el-switch>
+                    <el-checkbox v-model="localService.autoStart"></el-checkbox>
                   </el-form-item>
                 </div>
               </div>
@@ -132,6 +125,7 @@ import { FormWizard, TabContent } from "@/components/vue-form-wizard";
 import "@/components/vue-form-wizard/assets/wizard.scss";
 import Empty from "@/components/settings/Empty.vue";
 import DNS from "@/components/settings/DNS.vue";
+import RogueMysql from "@/components/settings/RogueMysql.vue";
 import HTTP from "@/components/settings/HTTP.vue";
 import TCP from "@/components/settings/TCP.vue";
 import FTP from "@/components/settings/FTP.vue";
@@ -148,11 +142,12 @@ export default {
     return {
       finishBtnText: "Save and restart",
       moduleSettingsComp: {
+        Empty: Empty,
         DNS: DNS,
         HTTP: HTTP,
         TCP: TCP,
         FTP: FTP,
-        Empty: Empty,
+        Rogue_MySQL_Server: RogueMysql,
       },
       networks: [],
       loading: false,
@@ -231,6 +226,9 @@ export default {
             message: err,
           });
         });
+    },
+    fixModuleName(name) {
+      return name.replace(/_/g, " ");
     },
     showEditDialog() {
       this.loadNetworks();

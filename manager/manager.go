@@ -8,7 +8,9 @@ import (
 	vsdns "github.com/vikingo-project/vsat/modules/dns"
 	vsftp "github.com/vikingo-project/vsat/modules/ftp"
 	vshttp "github.com/vikingo-project/vsat/modules/http"
+	vsroguemysql "github.com/vikingo-project/vsat/modules/rogue-mysql"
 	vstcp "github.com/vikingo-project/vsat/modules/tcp"
+
 	"github.com/vikingo-project/vsat/utils"
 )
 
@@ -34,6 +36,9 @@ func (mgr *Manager) Start() {
 	modules.Register(module)
 
 	module = vsftp.Load()
+	modules.Register(module)
+
+	module = vsroguemysql.Load()
 	modules.Register(module)
 
 	// check autostarted services in the DB

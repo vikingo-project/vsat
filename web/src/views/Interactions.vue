@@ -112,7 +112,7 @@
                   <li style="width: 5%">When</li>
                   <li style="width: 2%">Local address</li>
                   <li style="width: 2%">Client IP</li>
-                  <li></li>
+                  <li>Description</li>
                 </ul>
               </div>
 

@@ -23,6 +23,7 @@
 
         <div class="category-list">
           <h2>Filter</h2>
+          {{ newService.moduleName }}
           <el-form>
             <el-form-item label="Service name">
               <el-input v-model="filter.service_name"></el-input>
@@ -109,7 +110,7 @@
                   v-for="(module, idx) in modules"
                   :key="idx"
                 >
-                  <h3>{{ module.name }}</h3>
+                  <h3>{{ fixModuleName(module.name) }}</h3>
                   <p>{{ module.description }}</p>
                 </el-radio>
               </div>
@@ -162,14 +163,7 @@
                 </div>
                 <div class="">
                   <el-form-item label="Auto start">
-                    <el-switch
-                      active-color="#82b0bf"
-                      inactive-color="#c3cbcd"
-                      v-model="newService.autoStart"
-                      :active-value="true"
-                      :inactive-value="false"
-                    >
-                    </el-switch>
+                    <el-checkbox v-model="newService.autoStart"></el-checkbox>
                   </el-form-item>
                 </div>
               </div>
@@ -190,6 +184,7 @@ import { FormWizard, TabContent } from "@/components/vue-form-wizard";
 import "@/components/vue-form-wizard/assets/wizard.scss";
 import Empty from "@/components/settings/Empty.vue";
 import DNS from "@/components/settings/DNS.vue";
+import RogueMysql from "@/components/settings/RogueMysql.vue";
 import HTTP from "@/components/settings/HTTP.vue";
 import TCP from "@/components/settings/TCP.vue";
 import FTP from "@/components/settings/FTP.vue";
@@ -222,6 +217,7 @@ export default {
         HTTP: HTTP,
         TCP: TCP,
         FTP: FTP,
+        Rogue_MySQL_Server: RogueMysql,
       },
 
       menuItems: [
@@ -258,7 +254,8 @@ export default {
   },
   computed: {
     settingsView() {
-      let view = this.moduleSettingsComp[this.newService.moduleName];
+      let view =
+        this.moduleSettingsComp[this.fixModuleName(this.newService.moduleName)];
       return view ? view : Empty; // if module has no settings view render default Empty view
     },
   },
@@ -283,7 +280,8 @@ export default {
         let status =
           this.newService.moduleName && this.newService.moduleName !== "";
         if (status) {
-          this.newService.serviceName = this.newService.moduleName + " service";
+          this.newService.serviceName =
+            this.fixModuleName(this.newService.moduleName) + " service";
           if (this.$refs.moduleSettings.defaultPort) {
             this.newService.listenPort =
               this.$refs.moduleSettings.defaultPort();
@@ -378,6 +376,10 @@ export default {
         }
       }
       return tags;
+    },
+
+    fixModuleName(name) {
+      return name.replace(/_/g, " ");
     },
 
     async loadServices() {
