@@ -75,8 +75,3 @@ steps:
   - name: "gcr.io/cloud-builders/docker"
     args: ["push", "vkngo/vsat:dev"]
     dir: "/go/src/github.com/vikingo-project/vsat"
-
-availableSecrets:
-  secretManager:
-    - versionName: projects/190440625825/secrets/GITHUB_TOKEN/versions/latest
-      env: "GITHUB_TOKEN"
