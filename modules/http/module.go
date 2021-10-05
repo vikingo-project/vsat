@@ -11,6 +11,8 @@ import (
 	"net/http/httptest"
 	"net/http/httputil"
 	"net/url"
+	"regexp"
+	"sort"
 	"strings"
 	"sync"
 	"time"
@@ -422,8 +424,6 @@ func (m *module) Up() error {
 		}
 	}
 
-	//cc.Get(context.Background(), "lol")
-
 	srv := &http.Server{}
 	useTLS := m.settings.TLS.Enabled
 	if useTLS {
@@ -433,8 +433,21 @@ func (m *module) Up() error {
 			am := &autocert.Manager{
 				Cache: cc,
 				// Cache:      autocert.DirCache("/tmp"),
-				Prompt:     autocert.AcceptTOS,
-				HostPolicy: autocert.HostWhitelist(hosts.GetHostnames()...),
+				Prompt: autocert.AcceptTOS,
+				HostPolicy: func(ctx context.Context, host string) error {
+					hostsList := hosts.GetHostnames()
+					// sort by length desc
+					sort.Slice(hostsList, func(i, j int) bool {
+						return len(hostsList[i]) > len(hostsList[j])
+					})
+					// check subdomains, wildcards
+					for _, h := range hostsList {
+						if match(h, host) {
+							return nil
+						}
+					}
+					return fmt.Errorf("acme/autocert: host %q not configured in HostWhitelist", host)
+				},
 			}
 			tlsConf = am.TLSConfig()
 		} else {
@@ -492,4 +505,17 @@ func (m *module) Down() error {
 		log.Fatal("Server forced to shutdown:", err)
 	}
 	return nil
+}
+
+// match returns true if wildcard value is mathed
+func match(name string, value string) bool {
+	var result strings.Builder
+	for i, literal := range strings.Split(name, "*") {
+		if i > 0 {
+			result.WriteString(".*")
+		}
+		result.WriteString(regexp.QuoteMeta(literal))
+	}
+	matched, _ := regexp.MatchString(result.String(), value)
+	return matched
 }

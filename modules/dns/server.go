@@ -225,13 +225,12 @@ func (h *GODNSHandler) do(Net string, w dns.ResponseWriter, req *dns.Msg) {
 		clientIP = w.RemoteAddr().(*net.UDPAddr).IP
 	}
 	session, _ := h.API.NewSession(models.SessionInfo{
-		Description: fmt.Sprintf("lookup %s [%s]", Q.qname, Q.qtype),
+		Description: fmt.Sprintf("lookup [%s] %s ", Q.qname, Q.qtype),
 		ClientIP:    clientIP.String(),
 		LocalAddr:   w.LocalAddr().String(),
 	})
 
 	h.API.PushEvent(models.Event{Session: session, Name: "lookup", Data: map[string]interface{}{"resource": Q.qname, "query type": Q.qtype}})
-	log.Printf("%s lookup　%s", clientIP, Q.String())
 
 	switch q.Qtype {
 	case dns.TypeA:
@@ -268,6 +267,24 @@ func (h *GODNSHandler) do(Net string, w dns.ResponseWriter, req *dns.Msg) {
 			}
 			w.WriteMsg(m)
 		}
+	case dns.TypeCAA:
+		records := h.records.LookupCAA(Q.qname)
+		if len(records) > 0 {
+			m := new(dns.Msg)
+			m.SetReply(req)
+			rr_header := dns.RR_Header{
+				Name:   dns.Fqdn(q.Name),
+				Rrtype: dns.TypeCAA,
+				Class:  dns.ClassINET,
+				Ttl:    3600,
+			}
+			for _, record := range records {
+				caa := &dns.CAA{Hdr: rr_header, Flag: 0, Tag: record.Arg1.(string), Value: record.Content}
+				m.Answer = append(m.Answer, caa)
+			}
+			w.WriteMsg(m)
+		}
+
 	case dns.TypeCNAME:
 		target := h.records.LookupCNAME(Q.qname)
 		if len(target) > 0 {

@@ -21,6 +21,9 @@
             ></el-option
           ></el-select>
           <el-input v-model="record.name" placeholder="Name"></el-input>
+          <div v-if="record.type == 'CAA'">
+            <el-input v-model="record.arg1" placeholder="Tag"> </el-input>
+          </div>
           <el-input v-model="record.content" placeholder="Content"> </el-input>
         </div>
         <el-button class="btn w-100 btn-link" @click="addRecord()">
@@ -65,13 +68,13 @@ export default {
   props: ["preset"],
   data() {
     return {
-      recordBootstrap: { type: "", name: "", content: "" },
+      recordBootstrap: { type: "", name: "", content: "", arg1: "" },
       settings: {
         recursive: false,
         resolvers: ["8.8.8.8", "1.1.1.1"],
         records: [],
       },
-      recordTypes: ["A", "AAAA", "CNAME", "MX", "TXT"],
+      recordTypes: ["A", "AAAA", "CNAME", "MX", "TXT", "CAA"],
       rules: {},
     };
   },

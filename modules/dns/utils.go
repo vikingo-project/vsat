@@ -10,6 +10,7 @@ func parseRecords(userRecords []Record) Records {
 	var records Records
 	records.A = make(map[string][]string)
 	records.AAAA = make(map[string][]string)
+	records.CAA = make(map[string][]Record)
 	records.CNAME = make(map[string][]string)
 	records.MX = make(map[string][]string)
 	records.NS = make(map[string][]string)
@@ -31,6 +32,9 @@ func parseRecords(userRecords []Record) Records {
 			if isIP(content) {
 				records.AAAA[name] = append(records.AAAA[name], content)
 			}
+		case "CAA":
+			name := strings.ToLower(strings.TrimSpace(record.Name))
+			records.CAA[name] = append(records.CAA[name], record)
 		case "CNAME":
 			name := strings.ToLower(strings.TrimSpace(record.Name))
 			content := strings.TrimSpace(record.Content)
