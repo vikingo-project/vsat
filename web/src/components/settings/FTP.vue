@@ -126,8 +126,8 @@ var boot = [
   },
 ];
 export default {
-  props: ["preset"],
   name: "ftp-settings",
+  props: ["preset"],
   data() {
     return {
       settings: { fs: {}, minPassivePort: 60000, maxPassivePort: 60100 },

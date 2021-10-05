@@ -213,6 +213,7 @@
 import * as utils from "@/utils.js";
 
 export default {
+  name: "http-settings",
   props: ["preset"],
   data() {
     return {

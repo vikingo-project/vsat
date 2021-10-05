@@ -23,7 +23,6 @@
 
         <div class="category-list">
           <h2>Filter</h2>
-          {{ newService.moduleName }}
           <el-form>
             <el-form-item label="Service name">
               <el-input v-model="filter.service_name"></el-input>
@@ -254,8 +253,7 @@ export default {
   },
   computed: {
     settingsView() {
-      let view =
-        this.moduleSettingsComp[this.fixModuleName(this.newService.moduleName)];
+      let view = this.moduleSettingsComp[this.newService.moduleName];
       return view ? view : Empty; // if module has no settings view render default Empty view
     },
   },

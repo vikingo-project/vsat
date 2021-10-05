@@ -17,6 +17,7 @@
 </template>
 <script>
 export default {
+  name: "rogue-mysql-settings",
   props: ["preset"],
   data() {
     return {
