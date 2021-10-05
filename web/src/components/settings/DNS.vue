@@ -82,7 +82,7 @@ export default {
   },
   methods: {
     addRecord() {
-      this.settings.records.push(this.recordBootstrap);
+      this.settings.records.push(Object.assign({}, this.recordBootstrap));
     },
 
     removeRecord(idx) {
