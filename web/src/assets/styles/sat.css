@@ -175,6 +175,7 @@ h1.small-title {
   display: flex;
   width: 100%;
   align-items: center;
+  cursor: pointer;
 }
 
 .event-card .el-collapse-item__header .el-collapse-item__arrow {
