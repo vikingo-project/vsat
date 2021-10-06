@@ -42,9 +42,9 @@ func (api *EventsAPI) NewSession(info models.SessionInfo) (string, error) {
 		log.Println("failed to start new session", err)
 		return "", err
 	}
-	shared.Updates <- struct {
+	shared.Notifications <- struct {
 		Name string `json:"name"`
-	}{"interactions"}
+	}{"new_interaction"}
 
 	return hash, nil
 }
@@ -79,8 +79,4 @@ func (api *EventsAPI) PushEvent(event models.Event) {
 			db.GetConnection().Model(&models.File{}).Where("hash = ?", fileHash).Update("interaction_hash", event.Session)
 		}
 	}
-
-	shared.Updates <- struct {
-		Name string `json:"name"`
-	}{"event"}
 }

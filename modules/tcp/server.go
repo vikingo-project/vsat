@@ -17,6 +17,7 @@ type Server struct {
 	quit     chan interface{}
 	wg       sync.WaitGroup
 	API      *events.EventsAPI
+	settings settings
 }
 
 func (s *Server) serve() {
@@ -48,31 +49,48 @@ func (s *Server) Stop() {
 }
 
 func (s *Server) handleConection(conn net.Conn) {
-	defer conn.Close()
+
 	clientIP := utils.ExtractIP(conn.RemoteAddr().String())
 	session, _ := s.API.NewSession(models.SessionInfo{
 		Description: "connect",
 		ClientIP:    clientIP,
 		LocalAddr:   conn.LocalAddr().String(),
 	})
-
-	err := conn.SetReadDeadline(time.Now().Add(5 * time.Second))
-	if err != nil {
-		return
-	}
-
-	buf := make([]byte, 512)
-	n, err := conn.Read(buf)
-	if err != nil {
-		if netErr, ok := err.(net.Error); ok && netErr.Timeout() {
-			conn.Close()
+	if s.settings.Mode == "proxy" {
+		raddr, err := net.ResolveTCPAddr("tcp", s.settings.ProxySettings.Destination)
+		if err != nil {
+			utils.PrintDebug("Failed to resolve remote address: %s", err)
 			return
 		}
-	}
 
-	s.API.PushEvent(models.Event{Session: session, Name: "open session", Data: map[string]interface{}{
-		"hex:payload": hex.EncodeToString(buf[:n]),
-	}})
-	conn.Write([]byte("welcome to Vikingo Satellite"))
-	conn.Close()
+		p := s.newProxy(session, conn, raddr)
+		p.Start()
+	} else {
+		err := conn.SetReadDeadline(time.Now().Add(5 * time.Second))
+		if err != nil {
+			return
+		}
+
+		buf := make([]byte, 0xffff)
+		n, err := conn.Read(buf)
+		if err != nil {
+			if netErr, ok := err.(net.Error); ok && netErr.Timeout() {
+				conn.Close()
+				return
+			}
+		}
+		fields := make(map[string]interface{})
+		conn.Write([]byte(s.settings.ResponseSettings.Response))
+		conn.Close()
+
+		if s.settings.LogRequest {
+			fields["hex:request data"] = hex.EncodeToString(buf[:n])
+		}
+		if s.settings.LogResponse {
+			fields["hex:response data"] = hex.EncodeToString([]byte(s.settings.ResponseSettings.Response))
+		}
+		if s.settings.LogRequest || s.settings.LogResponse {
+			s.API.PushEvent(models.Event{Session: session, Data: fields})
+		}
+	}
 }
