@@ -8,25 +8,42 @@
     >
       <el-form-item label="DNS records" prop="records">
         <div v-for="(record, idx) in settings.records" :key="idx">
-          <div class="control-rule-item w-100 d-flex justify-content-end">
-            <button class="btn btn-icon del" @click.prevent="removeRecord(idx)">
-              <i class="vik vik-delete"></i>
-            </button>
+
+          <div class="rule-group">
+
+            <div class="control-rule-item w-100 d-flex justify-content-end">
+              <button class="btn btn-icon del" @click.prevent="removeRecord(idx)">
+                <i class="vik vik-delete"></i>
+              </button>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col">
+                <el-select v-model="record.type" placeholder="Resource records">
+                  <el-option v-for="type in recordTypes" :key="type" :value="type">
+                  </el-option>
+                </el-select>
+              </div>
+              <div class="col">
+                <div v-if="record.type == 'CAA'">
+                  <el-input v-model="record.arg1" placeholder="Tag"> </el-input>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <el-input v-model="record.name" placeholder="Name"></el-input>
+              </div>
+              <div class="col">
+                <el-input v-model="record.content" placeholder="Content"> </el-input>
+              </div>
+            </div>
+
           </div>
-          <el-select v-model="record.type"
-            ><el-option
-              v-for="type in recordTypes"
-              :key="type"
-              :value="type"
-            ></el-option
-          ></el-select>
-          <el-input v-model="record.name" placeholder="Name"></el-input>
-          <div v-if="record.type == 'CAA'">
-            <el-input v-model="record.arg1" placeholder="Tag"> </el-input>
-          </div>
-          <el-input v-model="record.content" placeholder="Content"> </el-input>
         </div>
-        <el-button class="btn w-100 btn-link" @click="addRecord()">
+
+        <el-button class="btn btn-add-new-group" @click="addRecord()">
           <i class="vik vik-plus"></i>Add record
         </el-button>
         <!-- 
