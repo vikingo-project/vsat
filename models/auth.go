@@ -1,8 +1,8 @@
 package models
 
-import "github.com/akamajoris/ngorm/model"
+import "gorm.io/gorm"
 
 type Auth struct {
-	model.Model
+	gorm.Model
 	Token string `json:"token"`
 }

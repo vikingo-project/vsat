@@ -22,10 +22,11 @@ func startWS() {
 
 	wsServer.OnEvent("/", "auth", func(s socketio.Conn, token string) {
 		var auth models.Auth
-		db.GetConnection().Begin().Model(&auth).First(&auth)
+		db.GetConnection().Model(&auth).First(&auth)
 		if auth.Token == token {
 			wsServer.JoinRoom("/", "users", s)
 		}
+
 	})
 
 	go func() {

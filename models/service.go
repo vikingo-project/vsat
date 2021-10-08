@@ -1,10 +1,7 @@
 package models
 
-import "github.com/akamajoris/ngorm/model"
-
 type Service struct {
-	model.Model
-	Hash        string `json:"hash"`
+	Hash        string `json:"hash" gorm:"primary_key"`
 	ServiceName string `json:"serviceName"`
 	ModuleName  string `json:"moduleName"`
 	ListenIP    string `json:"listenIP"`

@@ -63,7 +63,7 @@ func main() {
 }
 
 func init() {
-	_db := flag.String("db", "memory://mem.db", "Path to database. If the parameter is not set uses the memory DB")
+	_db := flag.String("db", "storage.db", "Path to database. If the parameter is not set storage.db will be used")
 	_config := flag.String("c", "", "Path to config.")
 	_token := flag.String("token", "", "New access token")
 	_ctrl_listen_addr := flag.String("l", "0.0.0.0:1025", "Control interface listen address")
@@ -90,11 +90,11 @@ func init() {
 func initAuth() {
 	if shared.Config.Token == "" {
 		var auth models.Auth
-		db.GetConnection().Begin().Model(&auth).First(&auth)
+		db.GetConnection().Model(&auth).First(&auth)
 		// if the token is not in DB generate a new one
 		if auth.Token == "" {
 			token := utils.EasyHash(true)
-			db.GetConnection().Begin().Save(&models.Auth{Token: token})
+			db.GetConnection().Save(&models.Auth{Token: token})
 			shared.Config.Token = token
 		} else {
 			shared.Config.Token = auth.Token

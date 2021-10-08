@@ -16,7 +16,7 @@ import (
 
 func loadServicesFromDB() ([]models.Service, error) {
 	var services []models.Service
-	err := db.GetConnection().Begin().Find(&services)
+	err := db.GetConnection().Find(&services).Error
 	return services, err
 }
 
@@ -26,12 +26,12 @@ func loadServiceFromDB(hash string) (models.Service, error) {
 		count   int64
 	)
 
-	db.GetConnection().Begin().Model(&service).Where(&service).Count(&count)
+	db.GetConnection().Model(&service).Where(&service).Count(&count)
 	if count != 1 {
 		return service, errors.New("service not found in DB")
 	}
 
-	err := db.GetConnection().Begin().Find(&service, &service)
+	err := db.GetConnection().Find(&service, &service).Error
 	return service, err
 }
 
