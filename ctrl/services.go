@@ -103,19 +103,6 @@ func updateService(c *gin.Context) {
 		return
 	}
 
-	// restart service
-	mgr := getManager(c)
-	err = mgr.StopService(params.Hash)
-	if err != nil {
-		c.JSON(200, gin.H{"status": "error", "error": err.Error()})
-		return
-	}
-	time.Sleep(time.Second)
-	err = mgr.StartService(params.Hash)
-	if err != nil {
-		c.JSON(200, gin.H{"status": "error", "error": err.Error()})
-		return
-	}
 	c.JSON(200, gin.H{"status": "ok"})
 }
 

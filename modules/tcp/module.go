@@ -8,7 +8,21 @@ import (
 	"github.com/vikingo-project/vsat/utils"
 )
 
+type ResponseSettings struct {
+	Response string `json:"response" mapstructure:"response"`
+	// todo: add steps/matchers
+}
+
+type ProxySettings struct {
+	Destination string `json:"destination" mapstructure:"destination"`
+}
+
 type settings struct {
+	LogRequest       bool             `json:"log_request" mapstructure:"log_request"`
+	LogResponse      bool             `json:"log_response" mapstructure:"log_response"`
+	Mode             string           `json:"mode" mapstructure:"mode"`
+	ProxySettings    ProxySettings    `json:"proxy_settings" mapstructure:"proxy_settings"`
+	ResponseSettings ResponseSettings `json:"response_settings" mapstructure:"response_settings"`
 }
 
 type module struct {
@@ -27,7 +41,7 @@ type module struct {
 func Load() *module {
 	return &module{
 		Name:        "TCP",
-		Description: "TCP Server. Logs all incoming connections (max: 1024kb per sessions).",
+		Description: "Simple TCP server with proxy mode",
 		BaseProto:   []string{"tcp"},
 	}
 }
@@ -39,8 +53,9 @@ func (m *module) Init(listenIP string, listenPort int, settings interface{}, API
 	utils.ExtractSettings(&m.settings, settings)
 
 	m.Server = &Server{
-		quit: make(chan interface{}),
-		API:  API,
+		quit:     make(chan interface{}),
+		API:      API,
+		settings: m.settings,
 	}
 }
 

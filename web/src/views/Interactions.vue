@@ -96,8 +96,12 @@
           </div>
 
           <div class="aux-block h-100" v-loading="loading">
-            <el-alert class="mb-3" show-icon type="warning" v-if="updates > 0"
-              >There are {{ updates }} new events
+            <el-alert
+              class="mb-3"
+              show-icon
+              type="warning"
+              v-if="new_interactions > 0"
+              >There are {{ new_interactions }} new interactions
               <div class="tags" style="float: right; margin-left: 12px">
                 <span @click="reloadSessions"
                   ><i class="el-icon-refresh" style="margin-right: 4px"></i
@@ -197,7 +201,7 @@ export default {
       currentPage: 1,
       pageSize: 15,
       cache: {},
-      updates: 0,
+      new_interactions: 0,
 
       loading: false,
       applyLoading: false,
@@ -210,9 +214,9 @@ export default {
 
   created() {
     this.$socket.emit("auth", localStorage.getItem("token"));
-    this.sockets.subscribe("updates", (msg) => {
-      if (msg.name && msg.name == "event") {
-        this.updates++;
+    this.sockets.subscribe("notifications", (msg) => {
+      if (msg.name && msg.name == "new_interaction") {
+        this.new_interactions++;
       }
     });
   },
@@ -221,7 +225,7 @@ export default {
     this.loadServices();
   },
   destroyed() {
-    this.sockets.unsubscribe("updates");
+    this.sockets.unsubscribe("notifications");
   },
 
   computed: {
@@ -264,13 +268,13 @@ export default {
     changePage(newPage) {
       this.currentPage = newPage;
       if (newPage == 1) {
-        this.updates = 0; // reset updates counter
+        this.new_interactions = 0; // reset updates counter
       }
       this.loadSessions();
     },
 
     reloadSessions() {
-      this.updates = 0;
+      this.new_interactions = 0;
       this.changePage(1);
     },
     async applyFilter() {

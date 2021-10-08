@@ -33,7 +33,7 @@
   font-size: 12px;
   color: #787B82;
   background-color: #FBFBFB;
-  border-radius: 5px;
+  border-radius: 4px;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -53,7 +53,7 @@
   list-style: none;
   padding: 5px 6px;
   background: #fbfbfb;
-  border-radius: 5px;
+  border-radius: 4px;
 }
 
 .sidebar .nav {
@@ -61,7 +61,7 @@
 }
 
 .nav-pills .nav-link {
-  border-radius: 5px;
+  border-radius: 4px;
   padding: 7px 18px;
   color: #8e8e8e;
 }
@@ -75,7 +75,7 @@
 }
 
 .nav-item .first-append {
-  border-radius: 5px;
+  border-radius: 4px;
 }
 
 .pill-control .unit-group .nav-link,

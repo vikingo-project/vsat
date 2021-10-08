@@ -197,11 +197,7 @@ export default {
 
   data() {
     return {
-      filteredServices: [],
-      filter: { service_name: "", base_proto: "" },
-      modules: [],
-      networks: [],
-      newService: {
+      serviceBootstrap: {
         serviceName: "",
         moduleName: "",
         listenIP: ``,
@@ -209,6 +205,11 @@ export default {
         autoStart: false,
         moduleSettings: {},
       },
+      filteredServices: [],
+      filter: { service_name: "", base_proto: "" },
+      modules: [],
+      networks: [],
+      newService: { ...this.serviceBootstrap },
 
       moduleSettingsComp: {
         Empty: Empty,
@@ -290,15 +291,17 @@ export default {
     },
     validateModuleSettings() {
       return new Promise((resolve, reject) => {
-        this.$refs.newServiceForm.validate((valid) => {
+        this.$refs.newServiceForm.validate(async (valid) => {
           if (valid) {
             if (this.$refs.moduleSettings.validate) {
               this.$refs.moduleSettings.validate().then(
-                (settings) => {
+                async (settings) => {
                   this.newService.moduleSettings = settings;
-                  this.createService();
+                  await this.createService();
                   // close dialog
                   this.newServiceDialogVisible = false;
+                  // reset form fields
+                  this.newService = this.serviceBootstrap;
                   // update services list
                   bus.$emit("refresh-services");
                   resolve(true);
@@ -310,8 +313,9 @@ export default {
             } else {
               // if module has no custom settings
               this.newService.moduleSettings = {};
-              this.createService();
+              await this.createService();
               this.newServiceDialogVisible = false;
+              this.newService = this.serviceBootstrap;
               // update services list
               bus.$emit("refresh-services");
               resolve(true);
@@ -321,31 +325,35 @@ export default {
         });
       });
     },
-    createService() {
+    async createService() {
       let that = this;
-      utils
-        .$post(`/api/services/create/`, this.newService)
-        .then((data) => {
-          if (data.status == "error") {
+      return new Promise((resolve, reject) => {
+        utils
+          .$post(`/api/services/create/`, this.newService)
+          .then((data) => {
+            if (data.status == "error") {
+              that.$notify.error({
+                title: "Error",
+                message: data.error,
+              });
+              reject();
+            }
+            if (data.status == "ok") {
+              that.$notify.success({
+                title: "Success",
+                message: "Service created",
+              });
+              resolve();
+            }
+          })
+          .catch((err) => {
             that.$notify.error({
               title: "Error",
-              message: data.error,
+              message: err,
             });
-            return;
-          }
-          if (data.status == "ok") {
-            that.$notify.success({
-              title: "Success",
-              message: "Service created",
-            });
-          }
-        })
-        .catch((err) => {
-          that.$notify.error({
-            title: "Error",
-            message: err,
+            reject();
           });
-        });
+      });
     },
     async applyFilter() {
       this.applyLoading = true;

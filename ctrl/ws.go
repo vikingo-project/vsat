@@ -29,8 +29,8 @@ func startWS() {
 	})
 
 	go func() {
-		for msg := range shared.Updates {
-			wsServer.BroadcastToRoom("/", "users", "updates", msg)
+		for msg := range shared.Notifications {
+			wsServer.BroadcastToRoom("/", "users", "notifications", msg)
 		}
 	}()
 }

@@ -8,8 +8,8 @@ type config struct {
 }
 
 var (
-	Config    config
-	Version   = "0.0.0" // the real versions gets from build env
-	BuildHash = "-"
-	Updates   = make(chan interface{})
+	Config        config
+	Version       = "0.0.0" // the real versions gets from build env
+	BuildHash     = "-"
+	Notifications = make(chan interface{})
 )

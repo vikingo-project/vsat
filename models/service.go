@@ -9,7 +9,7 @@ type Service struct {
 	ModuleName  string `json:"moduleName"`
 	ListenIP    string `json:"listenIP"`
 	ListenPort  int    `json:"listenPort"`
-	Autostart   bool   `json:"autostart"`
+	Autostart   bool   `json:"autoStart"`
 	Active      bool   `json:"active"`
 	Settings    string `json:"settings"`
 	BaseProto   string `json:"baseProto"`

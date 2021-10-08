@@ -1,16 +1,19 @@
 <template>
   <div class="col-auto">
-
-    <!-- <div class="mt-3 mb-2">00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f</div> -->
     <div class="mt-3 ow d-flex">
       <div class="col">
-        <el-input type="textarea" class="" spellcheck="false" :autosize="{ minRows: 2}" v-model="proxy"
-          @keydown="checkEvent">
+        <el-input
+          type="textarea"
+          class=""
+          spellcheck="false"
+          :autosize="{ minRows: 2 }"
+          v-model="proxy"
+          @keydown="checkEvent"
+        >
         </el-input>
       </div>
       <div class="col p-3">{{ raw }}</div>
     </div>
-
   </div>
 </template>
 <script>
@@ -60,12 +63,9 @@ export default {
       var h = "";
       for (var i = 0; i < this.value.length; i += 3) {
         var c = parseInt(this.value.substr(i, 2), 16);
-        h = 63 < c && 127 > c ? h + String.fromCharCode(c) : h + ".";
+        h = 32 <= c && 127 > c ? h + String.fromCharCode(c) : h + ".";
       }
       return h.replace(/(.{16})/g, "$1 ");
-    },
-    areaHight() {
-      return 1.5 + this.value.length / 47 + "em";
     },
   },
 };

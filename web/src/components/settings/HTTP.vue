@@ -109,27 +109,32 @@
                 ><div
                   v-for="(header, hidx) in location.action_data.headers"
                   :key="hidx"
+                  class="headers-group"
                 >
-                  <el-input
-                    placeholder="Name"
-                    v-model="header.name"
-                    style="width: 45%; margin-bottom: 5px"
-                  >
-                  </el-input>
-                  <el-input
-                    placeholder="Value"
-                    v-model="header.value"
-                    style="width: 45%; margin-bottom: 5px"
-                  >
-                  </el-input>
-                  <el-button
-                    class="btn btn-icon del"
-                    @click="removeHeader(idx, idx2, hidx)"
-                  >
-                    <i class="vik vik-delete"></i>
-                  </el-button>
+                  <div class="row">
+                    <div class="col">
+                      <el-input placeholder="Name" v-model="header.name">
+                      </el-input>
+                    </div>
+                    <div class="col">
+                      <el-input placeholder="Value" v-model="header.value">
+                      </el-input>
+                    </div>
+                    <div class="col-auto d-flex align-content-center">
+                      <el-button
+                        class="btn btn-mute del"
+                        @click="removeHeader(idx, idx2, hidx)"
+                      >
+                        <i class="vik vik-delete"></i>
+                      </el-button>
+                    </div>
+                  </div>
                 </div>
-                <el-button class="btn btn-link" @click="addHeader(idx, idx2)">
+
+                <el-button
+                  class="btn btn-add-new-group"
+                  @click="addHeader(idx, idx2)"
+                >
                   <i class="vik vik-plus"></i>Add header
                 </el-button>
               </el-form-item>
@@ -194,7 +199,7 @@
             <!-- end of proxy tab -->
           </div>
           <el-form-item>
-            <el-button class="btn w-100 btn-link" @click="addLocation(idx)">
+            <el-button class="btn btn-add-new-group" @click="addLocation(idx)">
               <i class="vik vik-plus"></i>Add location
             </el-button>
           </el-form-item>
@@ -260,7 +265,6 @@ export default {
     };
   },
   async mounted() {
-    console.log("HTTP mounted:", this.preset);
     if (this.preset) {
       console.log("preset changed..", this.preset);
       // todo: load file by hash
