@@ -65,10 +65,12 @@ func (mgr *Manager) startService(service models.Service) (modules.Module, error)
 	select {
 	// waiting for error or timeout
 	case err := <-errChan:
-		log.Println("Got error on start", err)
+		if err != nil {
+			utils.PrintDebug("Got error on start", err)
+		}
 		return module, err
 	case <-ticker.C:
-		log.Println("err timeout")
+		utils.PrintDebug("err timeout")
 		return module, nil
 	}
 
