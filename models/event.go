@@ -3,18 +3,17 @@ package models
 import (
 	"time"
 
-	"github.com/akamajoris/ngorm/model"
+	"gorm.io/gorm"
 )
 
 type Session struct {
-	model.Model
-	Hash        string    `json:"hash"`
+	Hash        string    `json:"hash" gorm:"primaryKey"`
 	Date        time.Time `json:"date"`
-	ClientIP    string    `json:"client_ip"`
-	Description string    `json:"description"`
+	ClientIP    string    `json:"client_ip" gorm:"index"`
+	Description string    `json:"description" gorm:"index"`
 	ModuleName  string    `json:"module_name"`
-	Service     string    `json:"service"`      // hash
-	ServiceName string    `json:"service_name"` // hash
+	Service     string    `json:"service" gorm:"index"` // hash
+	ServiceName string    `json:"service_name"`
 	Visited     bool      `json:"visited"`
 	LocalAddr   string    `json:"local_addr"`
 }
@@ -26,8 +25,8 @@ type SessionInfo struct {
 }
 
 type FullEvent struct {
-	model.Model
-	Hash    string    `json:"hash"`
+	gorm.Model
+	Hash    string    `json:"hash" gorm:"primaryKey"`
 	Date    time.Time `json:"date"`
 	Session string    `json:"session"`
 	Name    string    `json:"name"`

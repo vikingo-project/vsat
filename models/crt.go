@@ -1,12 +1,10 @@
 package models
 
-import (
-	"github.com/akamajoris/ngorm/model"
-)
+import "gorm.io/gorm"
 
 // single certificate
 type Crt struct {
-	model.Model
+	gorm.Model
 	Name string `mapstructure:"name" json:"name"`
 	Data []byte `mapstructure:"data" json:"data"`
 }

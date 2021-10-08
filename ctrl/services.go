@@ -2,6 +2,7 @@ package ctrl
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"strings"
 	"time"
@@ -10,25 +11,26 @@ import (
 	"github.com/vikingo-project/vsat/models"
 	"github.com/vikingo-project/vsat/modules"
 	"github.com/vikingo-project/vsat/utils"
+	"gorm.io/gorm"
 
 	"github.com/gin-gonic/gin"
 )
 
 func services(c *gin.Context) {
 	filterBaseProto := strings.Trim(c.Query("base_proto"), " ")
-	filterName := strings.Trim(c.Query("service_name"), " ")
+	filterName := strings.TrimSpace(c.Query("service_name"))
 	var services []models.Service
-	dq := db.GetConnection().Begin().Model(&models.Service{})
+	dq := db.GetConnection().Model(&models.Service{})
 	if filterBaseProto != "" {
-		dq.Where(`base_proto LIKE ?`, strings.ToLower(filterBaseProto))
+		dq.Where(`base_proto LIKE ?`, fmt.Sprintf("%%%s%%", strings.ToLower(filterBaseProto)))
 	}
 
 	if filterName != "" {
-		dq.Where("service_name LIKE ?", filterName)
+		dq.Where("service_name LIKE ?", fmt.Sprintf("%%%s%%", filterName))
 	}
 
-	err := dq.Find(&services)
-	if err != nil {
+	err := dq.Find(&services).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
 		log.Fatal(err)
 	}
 
@@ -61,7 +63,7 @@ func createService(c *gin.Context) {
 	module := modules.GetModuleByName(params.ModuleName)
 	baseProto := strings.Join(module.GetInfo()["base_proto"].([]string), "/")
 
-	err := db.GetConnection().Begin().Save(&models.Service{
+	err := db.GetConnection().Save(&models.Service{
 		Hash:        utils.EasyHash(false),
 		ServiceName: params.ServiceName,
 		ModuleName:  params.ModuleName,
@@ -70,9 +72,9 @@ func createService(c *gin.Context) {
 		Autostart:   params.AutoStart,
 		Settings:    string(settings),
 		BaseProto:   baseProto,
-	})
+	}).Error
 
-	if err != nil {
+	if err != nil && err != gorm.ErrRecordNotFound {
 		c.JSON(200, gin.H{"status": "error", "error": err.Error()})
 		return
 	}
@@ -96,8 +98,8 @@ func updateService(c *gin.Context) {
 	}
 
 	settings, _ := json.Marshal(params.Settings)
-	err := db.GetConnection().Begin().Model(&models.Service{}).Where(&models.Service{Hash: params.Hash}).Updates(&models.Service{ServiceName: params.ServiceName,
-		ListenIP: params.ListenIP, ListenPort: params.ListenPort, Autostart: params.AutoStart, Settings: string(settings)})
+	err := db.GetConnection().Model(&models.Service{}).Where(&models.Service{Hash: params.Hash}).Updates(&models.Service{ServiceName: params.ServiceName,
+		ListenIP: params.ListenIP, ListenPort: params.ListenPort, Autostart: params.AutoStart, Settings: string(settings)}).Error
 	if err != nil {
 		c.JSON(200, gin.H{"status": "error", "error": err.Error()})
 		return
@@ -123,7 +125,7 @@ func hRemoveService(c *gin.Context) {
 
 	// waiting for 1s, service should be stopped
 	time.Sleep(time.Second)
-	db.GetConnection().Begin().Delete(&models.Service{}, &models.Service{Hash: params.Hash})
+	db.GetConnection().Delete(&models.Service{}, &models.Service{Hash: params.Hash})
 	c.JSON(200, gin.H{"status": "ok"})
 }
 

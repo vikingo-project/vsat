@@ -61,7 +61,7 @@ steps:
         "GOOS=linux",
         "GOARCH=amd64",
         "TAG_NAME=$TAG_NAME",
-        "CGO_ENABLED=0",
+        "CGO_ENABLED=1",
       ]
     volumes:
       - name: go
@@ -80,7 +80,7 @@ steps:
         "GOOS=darwin",
         "GOARCH=amd64",
         "TAG_NAME=$TAG_NAME",
-        "CGO_ENABLED=0",
+        "CGO_ENABLED=1",
       ]
     volumes:
       - name: go
@@ -100,7 +100,7 @@ steps:
         "GOOS=windows",
         "GOARCH=amd64",
         "TAG_NAME=$TAG_NAME",
-        "CGO_ENABLED=0",
+        "CGO_ENABLED=1",
       ]
     volumes:
       - name: go

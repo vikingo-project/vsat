@@ -25,7 +25,7 @@ func (d CertsCache) Get(ctx context.Context, name string) ([]byte, error) {
 	go func() {
 		defer close(done)
 		var crt models.Crt
-		err = db.GetConnection().Where(&models.Crt{Name: name}).First(&crt)
+		err = db.GetConnection().Where(&models.Crt{Name: name}).First(&crt).Error
 		if err != nil {
 			log.Println("err != nil")
 			if db.ErrRecordNotFound(err) {
@@ -57,7 +57,7 @@ func (d CertsCache) Put(ctx context.Context, name string, data []byte) error {
 		err = db.GetConnection().Save(&models.Crt{
 			Name: name,
 			Data: data,
-		})
+		}).Error
 	}()
 	select {
 	case <-ctx.Done():
@@ -75,7 +75,7 @@ func (d CertsCache) Delete(ctx context.Context, name string) error {
 	)
 	go func() {
 		defer close(done)
-		err = db.GetConnection().Delete(&models.Crt{Name: name})
+		err = db.GetConnection().Delete(&models.Crt{Name: name}).Error
 	}()
 	select {
 	case <-ctx.Done():

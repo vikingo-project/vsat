@@ -3,8 +3,6 @@ module github.com/vikingo-project/vsat
 go 1.16
 
 require (
-	github.com/akamajoris/ngorm v1.2.1
-	github.com/akamajoris/ql v0.1.1
 	github.com/edsrzf/mmap-go v1.0.0 // indirect
 	github.com/elazarl/go-bindata-assetfs v1.0.1
 	github.com/flosch/pongo2/v4 v4.0.2
@@ -19,4 +17,6 @@ require (
 	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
 	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c // indirect
 	gopkg.in/yaml.v2 v2.4.0
+	gorm.io/driver/sqlite v1.1.6 // indirect
+	gorm.io/gorm v1.21.15 // indirect
 )

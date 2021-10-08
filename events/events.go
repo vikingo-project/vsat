@@ -28,7 +28,7 @@ type EventsAPI struct {
 
 func (api *EventsAPI) NewSession(info models.SessionInfo) (string, error) {
 	hash := utils.EasyHash(true)
-	err := db.GetConnection().Begin().Save(&models.Session{
+	err := db.GetConnection().Save(&models.Session{
 		Hash:        hash,
 		Date:        time.Now(),
 		Service:     api.serviceHash,
@@ -37,7 +37,7 @@ func (api *EventsAPI) NewSession(info models.SessionInfo) (string, error) {
 		ClientIP:    info.ClientIP,
 		Description: info.Description, // short info
 		LocalAddr:   info.LocalAddr,
-	})
+	}).Error
 	if err != nil {
 		log.Println("failed to start new session", err)
 		return "", err
@@ -54,22 +54,23 @@ func (api *EventsAPI) PushEvent(event models.Event) {
 	for k, v := range event.Data {
 		if f, ok := v.(models.File); ok {
 			fileHash := utils.EasyHash(true)
-			db.GetConnection().Begin().Save(&f)
+			db.GetConnection().Save(&f)
 			delete(event.Data, k)
 			event.Data["file:"+k] = fileHash
 		}
 	}
 
 	encodedData, _ := json.Marshal(event.Data)
-	err := db.GetConnection().Begin().Save(&models.FullEvent{
+	err := db.GetConnection().Save(&models.FullEvent{
 		Hash:    utils.EasyHash(true),
 		Date:    time.Now(),
 		Name:    event.Name,
 		Session: event.Session,
 		Data:    string(encodedData),
-	})
+	}).Error
 	if err != nil {
-		log.Println(err)
+		utils.PrintDebug("push event err %v", err)
+		return
 	}
 
 	// update file fileds
