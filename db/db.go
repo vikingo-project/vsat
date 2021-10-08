@@ -10,7 +10,6 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 
-	"github.com/akamajoris/ngorm/errmsg"
 	"github.com/vikingo-project/vsat/shared"
 )
 
@@ -78,7 +77,7 @@ func SQLQuery(query string, args ...interface{}) (result []map[string]string, er
 }
 
 func ErrRecordNotFound(err error) bool {
-	return errors.Is(err, errmsg.ErrRecordNotFound)
+	return errors.Is(err, gorm.ErrRecordNotFound)
 }
 
 func GetConnection() *gorm.DB {

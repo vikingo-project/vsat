@@ -55,7 +55,7 @@ steps:
       - |
         set -x && \
         go build -ldflags="-X 'github.com/vikingo-project/vsat/shared.Version=13.3.7' " -o vsat64
-    env: ["GOPATH=/go", "GOOS=linux", "GOARCH=amd64", "CGO_ENABLED=0"]
+    env: ["GOPATH=/go", "GOOS=linux", "GOARCH=amd64", "CGO_ENABLED=1"]
     volumes:
       - name: go
         path: /go
