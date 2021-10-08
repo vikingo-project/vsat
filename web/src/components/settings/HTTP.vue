@@ -108,7 +108,8 @@
               <el-form-item label="Headers"
                 ><div
                   v-for="(header, hidx) in location.action_data.headers"
-                  :key="hidx" class="headers-group"
+                  :key="hidx"
+                  class="headers-group"
                 >
                   <div class="row">
                     <div class="col">
@@ -120,15 +121,20 @@
                       </el-input>
                     </div>
                     <div class="col-auto d-flex align-content-center">
-                      <el-button class="btn  btn-mute del" @click="removeHeader(idx, idx2, hidx)">
+                      <el-button
+                        class="btn btn-mute del"
+                        @click="removeHeader(idx, idx2, hidx)"
+                      >
                         <i class="vik vik-delete"></i>
                       </el-button>
                     </div>
                   </div>
-                  
                 </div>
 
-                <el-button class="btn btn-add-new-group" @click="addHeader(idx, idx2)">
+                <el-button
+                  class="btn btn-add-new-group"
+                  @click="addHeader(idx, idx2)"
+                >
                   <i class="vik vik-plus"></i>Add header
                 </el-button>
               </el-form-item>
@@ -259,7 +265,6 @@ export default {
     };
   },
   async mounted() {
-    console.log("HTTP mounted:", this.preset);
     if (this.preset) {
       console.log("preset changed..", this.preset);
       // todo: load file by hash

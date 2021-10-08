@@ -140,7 +140,7 @@ export default {
   },
   data() {
     return {
-      finishBtnText: "Save and restart",
+      finishBtnText: "Save",
       moduleSettingsComp: {
         Empty: Empty,
         DNS: DNS,
@@ -306,7 +306,7 @@ export default {
     },
     validateModuleSettings() {
       let that = this;
-      this.finishBtnText = "Restarting...";
+      this.finishBtnText = "Saving...";
       return new Promise((resolve, reject) => {
         this.$refs.localServiceForm.validate((valid) => {
           if (valid) {
