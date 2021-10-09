@@ -15,7 +15,7 @@ import (
 
 func hFiles(c *gin.Context) {
 	fileHash := c.Query("hash")
-	fileName := c.Query("file_name")
+	fileName := strings.TrimSpace(c.Query("file_name"))
 	fileType := c.Query("file_type")
 
 	page, _ := strconv.Atoi(c.Query("page"))
@@ -29,9 +29,9 @@ func hFiles(c *gin.Context) {
 	cq := db.GetConnection().Model(&models.File{})
 	cq.Count(&total)
 
-	dq := db.GetConnection().Model(&models.File{}).Select("hash,date,file_name,size,content_type,interaction_hash,service_hash").Order("id() desc").Limit(pageSize).Offset(offset)
+	dq := db.GetConnection().Model(&models.File{}).Select("hash,date,file_name,size,content_type,interaction_hash,service_hash").Order("date DESC").Limit(pageSize).Offset(offset)
 	if fileName != "" {
-		dq.Where("file_name LIKE ?", strings.TrimSpace(fileName))
+		dq.Where("file_name LIKE ?", fmt.Sprintf("%%%s%%", fileName))
 	}
 	if fileType != "" {
 		dq.Where("content_type == ?", fileType)
@@ -41,7 +41,7 @@ func hFiles(c *gin.Context) {
 	}
 
 	var files []models.File
-	err := dq.Find(&files)
+	err := dq.Find(&files).Error
 	if err != nil {
 		c.JSON(200, gin.H{"status": "error", "error": err.Error()})
 		return
@@ -81,7 +81,7 @@ func hUploadFiles(c *gin.Context) {
 	f.Close()
 
 	fileStruct := files.PrepareFile(filename, buff)
-	err = db.GetConnection().Begin().Save(&fileStruct)
+	err = db.GetConnection().Save(&fileStruct).Error
 	if err != nil {
 		c.JSON(200, gin.H{"status": "error", "error": err.Error()})
 		return
@@ -94,7 +94,7 @@ func hRemoveFile(c *gin.Context) {
 	}
 	var params p
 	if err := c.ShouldBindJSON(&params); err == nil {
-		err := db.GetConnection().Begin().Delete(&models.File{}, &models.File{Hash: params.Hash})
+		err := db.GetConnection().Delete(&models.File{}, &models.File{Hash: params.Hash}).Error
 		if err != nil {
 			c.JSON(200, gin.H{"status": "error", "error": err.Error()})
 		} else {

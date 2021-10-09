@@ -7,7 +7,7 @@ import (
 )
 
 func migrate() {
-	_, err := connection.Automigrate(&models.Service{}, &models.Session{},
+	err := connection.AutoMigrate(&models.Service{}, &models.Session{},
 		&models.FullEvent{}, &models.File{}, &models.Crt{}, &models.Auth{})
 	if err != nil {
 		log.Fatal(err)

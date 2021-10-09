@@ -98,7 +98,7 @@
       :visible.sync="newServiceDialogVisible"
       class="modal-new-modules"
     >
-      <form-wizard finishButtonText="Create service">
+      <form-wizard :key="formKey" finishButtonText="Create service">
         <tab-content title="Choose module" :before-change="validateModule">
           <div class="content-mod">
             <div class="list-modules">
@@ -209,8 +209,8 @@ export default {
       filter: { service_name: "", base_proto: "" },
       modules: [],
       networks: [],
-      newService: { ...this.serviceBootstrap },
-
+      newService: Object.assign({}, this.serviceBootstrap),
+      formKey: "default",
       moduleSettingsComp: {
         Empty: Empty,
         DNS: DNS,
@@ -301,7 +301,7 @@ export default {
                   // close dialog
                   this.newServiceDialogVisible = false;
                   // reset form fields
-                  this.newService = this.serviceBootstrap;
+                  this.resetNewServiceForm();
                   // update services list
                   bus.$emit("refresh-services");
                   resolve(true);
@@ -315,7 +315,8 @@ export default {
               this.newService.moduleSettings = {};
               await this.createService();
               this.newServiceDialogVisible = false;
-              this.newService = this.serviceBootstrap;
+              this.resetNewServiceForm();
+
               // update services list
               bus.$emit("refresh-services");
               resolve(true);
@@ -325,6 +326,11 @@ export default {
         });
       });
     },
+    resetNewServiceForm() {
+      this.newService = Object.assign({}, this.serviceBootstrap);
+      this.formKey = utils.randomString(5);
+    },
+
     async createService() {
       let that = this;
       return new Promise((resolve, reject) => {

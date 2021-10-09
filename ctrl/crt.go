@@ -23,7 +23,7 @@ func hCerts(c *gin.Context) {
 	utils.PrintDebug("hCerts: total certificates %d", total)
 
 	var certs []models.Crt
-	err := db.GetConnection().Model(&models.Crt{}).Select("name").Order("id() desc").Limit(pageSize).Offset(offset).Find(&certs)
+	err := db.GetConnection().Model(&models.Crt{}).Select("name").Order("id desc").Limit(pageSize).Offset(offset).Find(&certs)
 	if err != nil {
 		log.Print(err)
 	}

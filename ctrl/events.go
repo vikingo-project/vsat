@@ -1,11 +1,13 @@
 package ctrl
 
 import (
-	"log"
+	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/vikingo-project/vsat/db"
 	"github.com/vikingo-project/vsat/models"
+	"gorm.io/gorm"
 
 	"github.com/gin-gonic/gin"
 )
@@ -16,9 +18,9 @@ func hSessions(c *gin.Context) {
 	interHash := c.Query("hash")
 
 	filterService := c.QueryArray("service[]")
-	filterClientIP := c.Query("client_ip")
-	filterLocalAddr := c.Query("local_addr")
-	filterDescription := c.Query("description")
+	filterClientIP := strings.TrimSpace(c.Query("client_ip"))
+	filterLocalAddr := strings.TrimSpace(c.Query("local_addr"))
+	filterDescription := strings.TrimSpace(c.Query("description"))
 
 	if page < 1 {
 		page = 1
@@ -43,36 +45,35 @@ func hSessions(c *gin.Context) {
 	}
 
 	if filterClientIP != "" {
-		tq.Where("client_ip LIKE ?", filterClientIP)
-		dq.Where("client_ip LIKE ?", filterClientIP)
+		tq.Where("client_ip LIKE ?", fmt.Sprintf("%%%s%%", filterClientIP))
+		dq.Where("client_ip LIKE ?", fmt.Sprintf("%%%s%%", filterClientIP))
 	}
 
 	if filterLocalAddr != "" {
-		tq.Where("local_addr LIKE ?", filterLocalAddr)
-		dq.Where("local_addr LIKE ?", filterLocalAddr)
+		tq.Where("local_addr LIKE ?", fmt.Sprintf("%%%s%%", filterLocalAddr))
+		dq.Where("local_addr LIKE ?", fmt.Sprintf("%%%s%%", filterLocalAddr))
 	}
 
 	if filterDescription != "" {
-		tq.Where("description LIKE ?", filterDescription)
-		dq.Where("description LIKE ?", filterDescription)
+		tq.Where("description LIKE ?", fmt.Sprintf("%%%s%%", filterDescription))
+		dq.Where("description LIKE ?", fmt.Sprintf("%%%s%%", filterDescription))
 	}
 
 	tq.Count(&total)
-	err := dq.Order("id() desc").Limit(pageSize).Offset(offset).Find(&sessions)
+	err := dq.Order("date DESC").Limit(pageSize).Offset(offset).Find(&sessions).Error
 	if err != nil {
-		log.Print(err)
-		c.JSON(200, gin.H{"status": "error", "error": err.Error()})
-		return
+		if err != gorm.ErrRecordNotFound {
+			c.JSON(200, gin.H{"status": "error", "error": err.Error()})
+			return
+		}
 	}
-
 	c.JSON(200, gin.H{"status": "ok", "sessions": sessions, "total": total})
 }
 
 func hEvents(c *gin.Context) {
 	hash := c.Param("hash")
-
 	var events []models.FullEvent
-	err := db.GetConnection().Model(&models.FullEvent{}).Where(&models.FullEvent{Session: hash}).Find(&events)
+	err := db.GetConnection().Model(&models.FullEvent{}).Where(&models.FullEvent{Session: hash}).Find(&events).Error
 	if err != nil {
 		c.JSON(200, gin.H{"status": "error", "error": err.Error()})
 		return

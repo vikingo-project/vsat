@@ -6,28 +6,31 @@ import (
 	"log"
 	"time"
 
-	_ "github.com/akamajoris/ql"
-
-	"github.com/akamajoris/ngorm"
-	"github.com/akamajoris/ngorm/errmsg"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 
 	"github.com/vikingo-project/vsat/shared"
 )
 
 var (
-	connection *ngorm.DB //*gorm.DB
+	connection *gorm.DB
 )
+
+func fixSqliteConString(name string) string {
+	return name + `?cache=shared&mode=rwc&_busy_timeout=50000000`
+}
 
 func Init() {
 	var err error
-	// connection, err = gorm.Open(mysql.Open(shared.Config.DB), &gorm.Config{}) // sql.Open("sqlite3_extended", shared.Config.DB)
-	// connection, err = sql.Open("sqlite3_extended", shared.Config.DB)
-	connection, err = ngorm.Open("ql", shared.Config.DB)
+	connection, err = gorm.Open(sqlite.Open(fixSqliteConString(shared.Config.DB)), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Silent),
+	})
 	if err != nil {
 		log.Fatal(err)
 	}
-	migrate()
 
+	migrate()
 }
 
 func Now() string {
@@ -36,8 +39,7 @@ func Now() string {
 
 func SQLQuery(query string, args ...interface{}) (result []map[string]string, err error) {
 	result = make([]map[string]string, 0)
-
-	rows, err := connection.Begin().SQLCommon().Query(query, args...)
+	rows, err := connection.Raw(query, args...).Rows()
 	if err != nil {
 		return
 	}
@@ -75,13 +77,16 @@ func SQLQuery(query string, args ...interface{}) (result []map[string]string, er
 }
 
 func ErrRecordNotFound(err error) bool {
-	return errors.Is(err, errmsg.ErrRecordNotFound)
+	return errors.Is(err, gorm.ErrRecordNotFound)
 }
 
-func GetConnection() *ngorm.DB {
+func GetConnection() *gorm.DB {
 	return connection
 }
 
 func Close() {
-	connection.Close()
+	sqlDB, err := connection.DB()
+	if err == nil {
+		sqlDB.Close()
+	}
 }

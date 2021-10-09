@@ -270,7 +270,7 @@ func serveFile(path, action string, data interface{}) func(w http.ResponseWriter
 		}
 
 		var file models.File
-		err = db.GetConnection().Select("file_name,data,content_type").Where(&models.File{Hash: settings.Hash}).Find(&file)
+		err = db.GetConnection().Select("file_name,data,content_type").Where(&models.File{Hash: settings.Hash}).Find(&file).Error
 		if err != nil {
 			log.Println("fuck", err)
 		}
