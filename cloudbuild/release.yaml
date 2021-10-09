@@ -93,6 +93,8 @@ steps:
       - "-c"
       - |
         set -x && \
+        apt update && \
+        apt install -y gcc-multilib gcc-mingw-w64 && \
         go build -ldflags="-X 'github.com/vikingo-project/vsat/shared.BuildHash=$SHORT_SHA' -X 'github.com/vikingo-project/vsat/shared.Version=$TAG_NAME' " -o vsat64.exe
     env:
       [
@@ -101,6 +103,8 @@ steps:
         "GOARCH=amd64",
         "TAG_NAME=$TAG_NAME",
         "CGO_ENABLED=1",
+        "CXX=x86_64-w64-mingw32-g++",
+        "CC=x86_64-w64-mingw32-gcc",
       ]
     volumes:
       - name: go
