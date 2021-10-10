@@ -8,7 +8,7 @@ steps:
     entrypoint: npm
     args: ["run", "build"]
     dir: "web"
-  - name: golang:1.16.5
+  - name: neilotoole/xcgo
     entrypoint: bash
     args:
       - "-c"
@@ -17,21 +17,20 @@ steps:
     volumes:
       - name: go
         path: /go
-  - name: golang:1.16.5
+  - name: neilotoole/xcgo
     dir: "/go/src/github.com/vikingo-project/vsat"
     args: ["go", "get", "-d"]
-    env: ["GOPATH=/go", "GOOS=linux", "GOARCH=amd64"]
     volumes:
       - name: go
         path: /go
-  - name: golang:1.16.5
+  - name: neilotoole/xcgo
     dir: "/go/src/github.com/vikingo-project/vsat"
     args: ["go", "get", "-u", "github.com/jteeuwen/go-bindata/..."]
     env: ["GOPATH=/go", "GOOS=linux", "GOARCH=amd64", "GO111MODULE=off"] # disable GO111MODULE! it's loading another version of bindata
     volumes:
       - name: go
         path: /go
-  - name: golang:1.16.5
+  - name: neilotoole/xcgo
     dir: "/go/src/github.com/vikingo-project/vsat/web"
     args:
       [
@@ -47,7 +46,7 @@ steps:
       - name: go
         path: /go
 
-  - name: golang:1.16.5
+  - name: neilotoole/xcgo
     dir: "/go/src/github.com/vikingo-project/vsat"
     entrypoint: /bin/sh
     args:
@@ -66,7 +65,7 @@ steps:
     volumes:
       - name: go
         path: /go
-  - name: golang:1.16.5
+  - name: neilotoole/xcgo
     dir: "/go/src/github.com/vikingo-project/vsat"
     entrypoint: /bin/sh
     args:
@@ -81,12 +80,14 @@ steps:
         "GOARCH=amd64",
         "TAG_NAME=$TAG_NAME",
         "CGO_ENABLED=1",
+        "CXX=o64-clang++",
+        "CC=o64-clang",
       ]
     volumes:
       - name: go
         path: /go
 
-  - name: golang:1.16.5
+  - name: neilotoole/xcgo
     dir: "/go/src/github.com/vikingo-project/vsat"
     entrypoint: /bin/sh
     args:
