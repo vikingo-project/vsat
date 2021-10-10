@@ -6,8 +6,10 @@
         <el-checkbox v-model="settings.log_response">Log response</el-checkbox>
       </el-form-item>
 
+      <h3 class="mt-4">Mode</h3>
+
       <el-form-item
-        label="Mode"
+        class="rule-group"
         prop="mode"
         :rules="{
           required: true,
@@ -18,7 +20,7 @@
         <el-radio-group
           v-model="settings.mode"
           size="small"
-          class="radio-button-group"
+          class="radio-button-group mb-3"
         >
           <el-radio-button label="response">Custom response</el-radio-button>
           <el-radio-button label="proxy">Proxy</el-radio-button>
