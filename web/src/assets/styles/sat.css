@@ -400,6 +400,7 @@ ul.step-list li.success span {
 
 .radio-button-group .el-radio-button__inner {
   font-weight: 400;
+  transition: 0.1s all ease-in;
 }
 
 .radio-button-group .el-radio-button:hover .el-radio-button__inner {
@@ -502,6 +503,7 @@ ul.step-list li.success span {
   font-weight: 500;
   font-size: 18px;
   margin-bottom: 4px;
+  word-break: break-word;
 }
 
 .attach-article-card-title i {
@@ -1140,4 +1142,29 @@ ul.step-list li.success span {
 
 .headers-group {
   margin-bottom: 12px;
+}
+
+.event-card.event-empty {
+  cursor: default;
+  background: #f0f4f5;
+  border: 1px solid #d7d7d794;
+}
+
+.event-card.event-empty:hover {
+  cursor: default;
+  box-shadow: none;
+}
+
+.event-card.event-empty .el-collapse-item__header {
+  cursor: default;
+}
+
+.event-card.event-empty .el-collapse-item__header .el-icon-arrow-right::before {
+  content: "";
+  width: 14px;
+  display: block;
+}
+
+.event-card.event-empty.status-bar::before {
+  border-radius: 3px 0 0 3px;
 }
