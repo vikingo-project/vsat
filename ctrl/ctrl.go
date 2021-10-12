@@ -94,12 +94,15 @@ func (c *Ctrl) Run(mgr *manager.Manager) error {
 			api.POST("/services/start/", startService)
 			api.POST("/services/stop/", stopService)
 
+			// sessions and events
 			api.GET("/sessions/", hSessions)
 			api.GET("/sessions/view/:hash/", hEvents)
-			// api.POST("/events/remove/", hevents)
-			api.GET("/modules/", hmodules)
+			api.POST("/sessions/remove/", hRemoveSession)
 
-			// Files
+			// modules
+			api.GET("/modules/", hModules)
+
+			// Files and certs
 			api.GET("/files/", hFiles)
 			api.POST("/files/remove/", hRemoveFile)
 			api.POST("/files/upload/", hUploadFiles)
