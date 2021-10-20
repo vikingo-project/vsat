@@ -56,6 +56,7 @@
             :model="localService"
             ref="localServiceForm"
             class="service-settings"
+            :rules="ruleValidate"
             @submit.native.prevent
           >
             <el-form-item label="Service name" prop="serviceName">
@@ -79,7 +80,7 @@
             <el-form-item>
               <div class="d-flex">
                 <div class="mr-4">
-                  <el-form-item label="Port" prop="port">
+                  <el-form-item label="Port" prop="listenPort">
                     <el-input-number
                       v-model="localService.listenPort"
                       suffix-icon="el-icon-date"
@@ -155,6 +156,29 @@ export default {
       ctlBtnLoading: false,
       editServiceDialogVisible: false,
       localService: { ...this.service },
+      ruleValidate: {
+        serviceName: [
+          {
+            required: true,
+            message: "Service name cannot be empty",
+            trigger: "blur",
+          },
+        ],
+        listenIP: [
+          {
+            required: true,
+            message: "Listen IP should be set",
+            trigger: "blur",
+          },
+        ],
+        listenPort: [
+          {
+            required: true,
+            message: "Port should be set",
+            trigger: "blur",
+          },
+        ],
+      },
     };
   },
   mounted() {

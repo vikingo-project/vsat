@@ -196,20 +196,21 @@ export default {
   },
 
   data() {
+    this.serviceBootstrap = {
+      serviceName: "",
+      moduleName: "",
+      listenIP: ``,
+      listenPort: 8080,
+      autoStart: false,
+      moduleSettings: {},
+    };
     return {
-      serviceBootstrap: {
-        serviceName: "",
-        moduleName: "",
-        listenIP: ``,
-        listenPort: 8080,
-        autoStart: false,
-        moduleSettings: {},
-      },
       filteredServices: [],
       filter: { service_name: "", base_proto: "" },
       modules: [],
       networks: [],
-      newService: Object.assign({}, this.serviceBootstrap),
+      newService: { ...this.serviceBootstrap },
+
       formKey: "default",
       moduleSettingsComp: {
         Empty: Empty,
