@@ -45,17 +45,7 @@
             v-for="(location, idx2) in host.locations"
             :key="idx2"
           >
-            <div
-              class="control-rule-item w-100 d-flex justify-content-end"
-              v-if="host.locations.length > 1"
-            >
-              <button
-                class="btn btn-icon del"
-                @click.prevent="removeLocation(idx, idx2)"
-              >
-                <i class="vik vik-delete"></i>
-              </button>
-            </div>
+          
             <el-form-item
               label="Location"
               :key="idx2"
@@ -197,6 +187,19 @@
               </el-form-item>
             </span>
             <!-- end of proxy tab -->
+
+            <div
+              class="control-rule-item w-100 mt-3 d-flex justify-content-end"
+              v-if="host.locations.length > 1"
+            >
+              <button
+                class="btn btn-icon del"
+                @click.prevent="removeLocation(idx, idx2)"
+              >
+                Delete<i class="vik vik-delete"></i>
+              </button>
+            </div>
+
           </div>
           <el-form-item>
             <el-button class="btn btn-add-new-group" @click="addLocation(idx)">

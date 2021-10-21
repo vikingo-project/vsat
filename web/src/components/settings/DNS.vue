@@ -11,12 +11,6 @@
 
           <div class="rule-group">
 
-            <div class="control-rule-item w-100 d-flex justify-content-end">
-              <button class="btn btn-icon del" @click.prevent="removeRecord(idx)">
-                <i class="vik vik-delete"></i>
-              </button>
-            </div>
-
             <div class="row mb-3">
               <div class="col">
                 <el-select v-model="record.type" placeholder="Resource records">
@@ -38,6 +32,13 @@
               <div class="col">
                 <el-input v-model="record.content" placeholder="Content"> </el-input>
               </div>
+            </div>
+
+            <div class="control-rule-item mt-3 w-100 d-flex justify-content-end">
+              <button class="btn btn-icon del" @click.prevent="removeRecord(idx)">
+                Delete
+                <i class="vik vik-delete"></i>
+              </button>
             </div>
 
           </div>

@@ -989,10 +989,22 @@ ul.step-list li.success span {
 .btn-mute.del i {
   width: 14px;
 }
+.btn-mute.del{
+  color: #787b8296;
+}
 
 .btn-mute.del:hover {
   color: #AA7D7DA6;
   background: #ECAAAA3D;
+}
+
+.control-rule-item .del{
+  color: #52707AA1;
+  font-size: 14px;
+}
+
+.control-rule-item .del i{
+  margin-left: 4px;
 }
 
 .el-select-dropdown__item.file-select span {
