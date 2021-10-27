@@ -13,24 +13,32 @@
 
             <div class="row mb-3">
               <div class="col">
-                <el-select v-model="record.type" placeholder="Resource records">
-                  <el-option v-for="type in recordTypes" :key="type" :value="type">
-                  </el-option>
-                </el-select>
+                <el-form-item label="Resource records">
+                  <el-select v-model="record.type" placeholder="Choose records">
+                    <el-option v-for="type in recordTypes" :key="type" :value="type">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
               </div>
               <div class="col">
                 <div v-if="record.type == 'CAA'">
-                  <el-input v-model="record.arg1" placeholder="Tag"> </el-input>
+                  <el-form-item label="Tag">
+                    <el-input v-model="record.arg1" placeholder="Value tag"> </el-input>
+                  </el-form-item>
                 </div>
               </div>
             </div>
 
             <div class="row">
               <div class="col">
-                <el-input v-model="record.name" placeholder="Name"></el-input>
+                <el-form-item label="Name">
+                  <el-input v-model="record.name" placeholder="Write name"></el-input>
+                </el-form-item>
               </div>
               <div class="col">
-                <el-input v-model="record.content" placeholder="Content"> </el-input>
+                <el-form-item label="Content">
+                  <el-input v-model="record.content" placeholder="Write content"> </el-input>
+                </el-form-item>
               </div>
             </div>
 
