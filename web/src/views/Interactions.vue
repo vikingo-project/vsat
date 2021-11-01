@@ -139,7 +139,11 @@
                         <li>{{ session.description }}</li>
                       </ul>
                     </template>
-                    <el-dropdown class="event-drop" trigger="click">
+                    <el-dropdown
+                      class="event-drop"
+                      trigger="click"
+                      @command="handleCommand"
+                    >
                       <span
                         class="
                           vik-button
@@ -149,10 +153,10 @@
                         ><i class="el-icon-more"></i
                       ></span>
                       <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item icon="vik vik-download"
-                          >Export</el-dropdown-item
-                        >
-                        <el-dropdown-item class="del" icon="vik vik-delete"
+                        <el-dropdown-item
+                          class="del"
+                          icon="vik vik-delete"
+                          :command="{ action: 'remove', hash: session.hash }"
                           >Remove</el-dropdown-item
                         >
                       </el-dropdown-menu>
@@ -255,6 +259,12 @@ export default {
     },
   },
   methods: {
+    handleCommand(args) {
+      let { action, hash } = args;
+      if (action === "remove") {
+        this.removeSession(hash);
+      }
+    },
     removeParam(k) {
       utils.removeQueryParam(this, k);
     },
@@ -340,6 +350,17 @@ export default {
       utils.$get(`/api/sessions/view/${hash}/`).then((data) => {
         if (data.status == "ok") {
           Vue.set(this.cache, hash, data.events);
+        }
+      });
+    },
+    async removeSession(hash) {
+      utils.$post(`/api/sessions/remove/`, { hash: hash }).then((data) => {
+        if (data.status === "ok") {
+          this.$notify.success({
+            title: "Success",
+            message: "Interaction removed",
+          });
+          this.loadSessions();
         }
       });
     },

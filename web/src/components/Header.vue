@@ -15,6 +15,10 @@
             <a class="nav-link">Services</a>
           </router-link>
 
+          <router-link class="nav-item" tag="li" :to="{ name: 'Tunnels' }">
+            <a class="nav-link">Tunnels</a>
+          </router-link>
+
           <router-link class="nav-item" tag="li" :to="{ name: 'Files' }">
             <a class="nav-link">Files</a>
           </router-link>

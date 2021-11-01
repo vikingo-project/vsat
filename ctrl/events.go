@@ -83,3 +83,16 @@ func hEvents(c *gin.Context) {
 	db.GetConnection().Model(&models.Session{}).Where("hash = ?", hash).Update("visited", true)
 	c.JSON(200, gin.H{"status": "ok", "events": events})
 }
+
+func hRemoveSession(c *gin.Context) {
+	type p struct {
+		Hash string `json:"hash" binding:"required"`
+	}
+	var params p
+	if err := c.ShouldBindJSON(&params); err != nil {
+		c.JSON(200, gin.H{"status": "error", "error": err.Error()})
+		return
+	}
+	db.GetConnection().Where("hash = ?", params.Hash).Delete(&models.Session{})
+	c.JSON(200, gin.H{"status": "ok"})
+}

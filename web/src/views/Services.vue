@@ -156,7 +156,7 @@
                       suffix-icon="el-icon-date"
                       placeholder="Set port"
                       :min="1"
-                      :key="65535"
+                      :max="65535"
                     ></el-input-number>
                   </el-form-item>
                 </div>
@@ -196,20 +196,21 @@ export default {
   },
 
   data() {
+    this.serviceBootstrap = {
+      serviceName: "",
+      moduleName: "",
+      listenIP: ``,
+      listenPort: 8080,
+      autoStart: false,
+      moduleSettings: {},
+    };
     return {
-      serviceBootstrap: {
-        serviceName: "",
-        moduleName: "",
-        listenIP: ``,
-        listenPort: 8080,
-        autoStart: false,
-        moduleSettings: {},
-      },
       filteredServices: [],
       filter: { service_name: "", base_proto: "" },
       modules: [],
       networks: [],
-      newService: Object.assign({}, this.serviceBootstrap),
+      newService: { ...this.serviceBootstrap },
+
       formKey: "default",
       moduleSettingsComp: {
         Empty: Empty,
@@ -275,7 +276,7 @@ export default {
   },
   methods: {
     validateModule() {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         let status =
           this.newService.moduleName && this.newService.moduleName !== "";
         if (status) {

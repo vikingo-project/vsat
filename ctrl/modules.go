@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func hmodules(c *gin.Context) {
+func hModules(c *gin.Context) {
 	avaliableModules := modules.GetAvaliableModules()
 	var modules []map[string]interface{}
 	for _, m := range avaliableModules {

@@ -1536,13 +1536,13 @@ footer {
   width: 52%;
 }
 
-.atom-list .mini-card .mini-card-right-side {
+/* .atom-list .mini-card .mini-card-right-side {
   flex: 1 1 auto;
   display: inline-flex;
   align-items: center;
   justify-content: flex-end;
   width: 45%;
-}
+} */
 
 .mini-card.active {
   background: #f6fdff;
@@ -1574,10 +1574,10 @@ footer {
 .atom-list .mini-card:active {
   box-shadow: 0px 5px 5px rgba(29, 29, 29, 0.1);
 }
-
+/* 
 .atom-list .mini-card .btn-icon {
   margin-left: 30px;
-}
+} */
 
 .atom-list .mini-card .btn-icon i {
   font-size: 18px;

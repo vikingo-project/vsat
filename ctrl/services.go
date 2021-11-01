@@ -41,7 +41,7 @@ func services(c *gin.Context) {
 	c.JSON(200, gin.H{"status": "ok", "services": services})
 }
 
-func createService(c *gin.Context) {
+func httpCreateService(c *gin.Context) {
 	type p struct {
 		ListenIP    string      `json:"listenIP" binding:"required"`
 		ListenPort  int         `json:"listenPort" binding:"required"`
@@ -81,7 +81,7 @@ func createService(c *gin.Context) {
 	c.JSON(200, gin.H{"status": "ok"})
 }
 
-func updateService(c *gin.Context) {
+func httpUpdateService(c *gin.Context) {
 	type p struct {
 		Hash        string      `json:"hash" binding:"required"`
 		ServiceName string      `json:"serviceName" binding:"required"`
@@ -108,7 +108,7 @@ func updateService(c *gin.Context) {
 	c.JSON(200, gin.H{"status": "ok"})
 }
 
-func hRemoveService(c *gin.Context) {
+func httpRemoveService(c *gin.Context) {
 	type p struct {
 		Hash string `json:"hash" binding:"required"`
 	}
@@ -129,7 +129,7 @@ func hRemoveService(c *gin.Context) {
 	c.JSON(200, gin.H{"status": "ok"})
 }
 
-func startService(c *gin.Context) {
+func httpStartService(c *gin.Context) {
 	type p struct {
 		Hash string `json:"hash" binding:"required"`
 	}
@@ -149,7 +149,7 @@ func startService(c *gin.Context) {
 	c.JSON(200, gin.H{"status": "ok"})
 }
 
-func stopService(c *gin.Context) {
+func httpStopService(c *gin.Context) {
 	type p struct {
 		Hash string `json:"hash" binding:"required"`
 	}
