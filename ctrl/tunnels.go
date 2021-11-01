@@ -79,8 +79,15 @@ func httpUpdateTunnel(c *gin.Context) {
 		return
 	}
 
-	err := db.GetConnection().Model(&models.Tunnel{}).Where(&models.Tunnel{Hash: params.Hash}).Updates(&models.Tunnel{
-		DstHost: params.DstHost, DstPort: params.DstPort, DstTLS: params.DstTLS, Autostart: params.AutoStart}).Error
+	err := db.GetConnection().Model(&models.Tunnel{}).Where(&models.Tunnel{Hash: params.Hash}).Updates(
+		// https://stackoverflow.com/questions/56653423/gorm-doesnt-update-boolean-field-to-false
+		// gorm doesn't work with bool in the struct :(
+		map[string]interface{}{
+			"dst_host":  params.DstHost,
+			"dst_port":  params.DstPort,
+			"dst_tls":   params.DstTLS,
+			"autostart": params.AutoStart,
+		}).Error
 	if err != nil {
 		c.JSON(200, gin.H{"status": "error", "error": err.Error()})
 		return
