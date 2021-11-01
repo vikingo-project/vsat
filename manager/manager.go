@@ -118,7 +118,7 @@ func (mgr *Manager) Start() {
 
 	// tunnels part
 	tunnels, _ := loadTunnelsFromDB()
-	utils.PrintDebug("start tunnels", tunnels)
+	utils.PrintDebug("start tunnels %v", tunnels)
 	for _, tunnel := range tunnels {
 		if tunnel.Autostart {
 			err := mgr.startTunnel(tunnel)
