@@ -23,17 +23,20 @@ let router = new Router({
       name: "Interactions",
       component: () => import("@/views/Interactions.vue")
     },
-
     {
       name: "Files",
       path: "/files",
       component: () => import("@/views/Files.vue")
     },
-
     {
       name: "Services",
       path: "/services",
       component: () => import("@/views/Services.vue")
+    },
+    {
+      name: "Tunnels",
+      path: "/tunnels",
+      component: () => import("@/views/Tunnels.vue")
     }
   ]
 });

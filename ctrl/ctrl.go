@@ -88,11 +88,19 @@ func (c *Ctrl) Run(mgr *manager.Manager) error {
 
 			// service handlers
 			api.GET("/services/", services)
-			api.POST("/services/create/", createService)
-			api.POST("/services/update/", updateService)
-			api.POST("/services/remove/", hRemoveService)
-			api.POST("/services/start/", startService)
-			api.POST("/services/stop/", stopService)
+			api.POST("/services/create/", httpCreateService)
+			api.POST("/services/update/", httpUpdateService)
+			api.POST("/services/remove/", httpRemoveService)
+			api.POST("/services/start/", httpStartService)
+			api.POST("/services/stop/", httpStopService)
+
+			// tunnels handlers
+			api.GET("/tunnels/", httpTunnels)
+			api.POST("/tunnels/create/", httpCreateTunnel)
+			api.POST("/tunnels/update/", httpUpdateTunnel)
+			api.POST("/tunnels/remove/", httpRemoveTunnel)
+			api.POST("/tunnels/start/", httpStartTunnel)
+			api.POST("/tunnels/stop/", httpStopTunnel)
 
 			// sessions and events
 			api.GET("/sessions/", hSessions)
