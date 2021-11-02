@@ -168,11 +168,7 @@ func (mgr *Manager) StartTunnel(hash string) (*tunnels.Tunnel, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	if utils.IsDevMode() {
-		log.Printf("manager: tunnel %s loaded from db", tunnel.Hash)
-	}
-
+	utils.PrintDebug("manager: tunnel %s loaded from db", tunnel.Hash)
 	err = mgr.startTunnel(tunnel)
 	return nil, err
 }
