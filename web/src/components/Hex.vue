@@ -6,13 +6,14 @@
           type="textarea"
           class=""
           spellcheck="false"
-          :autosize="{ minRows: 2 }"
+          :autosize="{ minRows: 16, maxRows: 16 }"
           v-model="proxy"
+          style="width: 425px"
           @keydown="checkEvent"
         >
         </el-input>
       </div>
-      <div class="col p-3">{{ raw }}</div>
+      <div class="col p-3" style="white-space: pre">{{ raw }}</div>
     </div>
   </div>
 </template>
@@ -65,7 +66,7 @@ export default {
         var c = parseInt(this.value.substr(i, 2), 16);
         h = 32 <= c && 127 > c ? h + String.fromCharCode(c) : h + ".";
       }
-      return h.replace(/(.{16})/g, "$1 ");
+      return h.replace(/(.{16})/g, "$1\n");
     },
   },
 };
