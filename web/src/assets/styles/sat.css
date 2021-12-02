@@ -174,7 +174,7 @@ h1.small-title {
   word-break: break-word;
 }
 
-.event-head li {
+.event-head-list li {
   font-size: 10px;
   color: #b1b1b1;
 }
@@ -230,6 +230,13 @@ h1.small-title {
 .event-body.is-active .el-collapse-item__header .el-collapse-item__arrow {
   transform: rotate(90deg);
 }
+
+.hidden-event-prop {
+  background: #f0f4f5;
+  border-radius: 4px;
+  padding: 5px 10px;
+}
+
 
 /* modal */
 
@@ -415,6 +422,13 @@ ul.step-list li.success span {
   width: 100%;
 }
 
+.service-settings .btn-outline-secondary:hover,
+.btn-outline-secondary:hover {
+  border: 0px;
+  color: #52707ACC;
+  background-color: #52707A33;
+}
+
 
 .upload-file {
   background: #fff;
@@ -447,23 +461,29 @@ ul.step-list li.success span {
   transition: 0.1s all ease-in;
 }
 
-.radio-button-group .el-radio-button:hover .el-radio-button__inner {
-  color: #82b0bf;
-}
-
 .radio-button-group .el-radio-button.is-disabled:hover .el-radio-button__inner {
   color: #c0c4cc;
 }
 
 .radio-button-group .el-radio-button__orig-radio:checked+.el-radio-button__inner {
   color: #fff;
-  background-color: #52707a;
-  border-color: #52707a;
+  background-color: #52707aab;
+  border-color: #52707a36;
   -webkit-box-shadow: -1px 0 0 0 #52707a7a;
   box-shadow: -1px 0 0 0 #52707a7a;
   font-weight: 400;
 }
 
+.radio-button-group .el-radio-button:hover .el-radio-button__inner {
+  color: #52707a;
+  background-color: #52707a1a;
+}
+
+.radio-button-group .el-radio-button[aria-checked="true"]:hover .el-radio-button__inner {
+  color: #fff;
+  background-color: #52707aab;
+  cursor: default;
+}
 
 .btn-new {
   min-height: 79px;
@@ -854,6 +874,38 @@ ul.step-list li.success span {
   top: 1px;
   right: 35px;
   padding: 0 5px;
+}
+
+@media screen and (max-width:768px) {
+  .event-drop.el-dropdown {
+    position: relative;
+    top: auto;
+    right: auto;
+    padding: 0 5px;
+    width: 100%;
+    text-align: center;
+    color: #52707AB0;
+    background: #dfe6e8ad;
+    border: 1px dashed #52707A38;
+    margin-top: 12px;
+    border-radius: 4px;
+  }
+
+  .event-drop.el-dropdown span {
+    width: 100%;
+    color: #52707AB0;
+  }
+
+  .event-drop.el-dropdown:hover {
+    background: #dfe6e8;
+    width: 100%;
+    border: 1px dashed #52707A70;
+    color: #52707AD9;
+  }
+
+  .event-drop.el-dropdown:hover span {
+    color: #52707AD9;
+  }
 }
 
 .el-radio-button:focus:not(.is-focus):not(:active):not(.is-disabled) {
