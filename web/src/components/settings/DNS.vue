@@ -11,8 +11,8 @@
 
           <div class="rule-group">
 
-            <div class="row mb-3">
-              <div class="col">
+            <div class="row mb-0 mb-md-3">
+              <div class="col-12 col-md-6 mb-3 mb-md-0">
                 <el-form-item label="Resource records">
                   <el-select v-model="record.type" placeholder="Choose records">
                     <el-option v-for="type in recordTypes" :key="type" :value="type">
@@ -20,7 +20,7 @@
                   </el-select>
                 </el-form-item>
               </div>
-              <div class="col">
+              <div class="col-12 col-md-6 mb-3 mb-md-0">
                 <div v-if="record.type == 'CAA'">
                   <el-form-item label="Tag">
                     <el-input v-model="record.arg1" placeholder="Value tag"> </el-input>
@@ -30,12 +30,12 @@
             </div>
 
             <div class="row">
-              <div class="col">
+              <div class="col-12 col-md-6 mb-3 mb-md-0">
                 <el-form-item label="Name">
                   <el-input v-model="record.name" placeholder="Write name"></el-input>
                 </el-form-item>
               </div>
-              <div class="col">
+              <div class="col-12 col-md-6">
                 <el-form-item label="Content">
                   <el-input v-model="record.content" placeholder="Write content"> </el-input>
                 </el-form-item>
