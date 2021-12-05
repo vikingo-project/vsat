@@ -2,7 +2,7 @@
   <footer>
     <div class="container text-center text-md-left">
       <div class="row">
-        <div class="col-md-1 footer-block">
+        <div class="col footer-block">
           <div class="footline">
             <a href="/" style="vertical-align: text-bottom">
               <img src="@/assets/logo.svg" alt />

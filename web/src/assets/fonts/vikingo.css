@@ -178,6 +178,9 @@ i.vik{
 .vik-info-c:before {
   content: "\e94b";
 }
+.vik-d-arrow:before {
+  content: "\e94d";
+}
 .vik-add-group-dc .path1:before {
   content: "\e925";
   color: rgb(82, 112, 122);

@@ -114,8 +114,8 @@
                 <ul class="event-head-list">
                   <li style="width: 0%">Service</li>
                   <li style="width: 5%">When</li>
-                  <li style="width: 2%">Local address</li>
-                  <li style="width: 2%">Client IP</li>
+                  <li class="d-none d-md-block" style="width: 2%">Local address</li>
+                  <li class="d-none d-md-block" style="width: 2%">Client IP</li>
                   <li>Description</li>
                 </ul>
               </div>
@@ -134,8 +134,8 @@
                         <li style="width: 5%">
                           <DateRenderer :date="session.date"></DateRenderer>
                         </li>
-                        <li style="width: 2%">{{ session.local_addr }}</li>
-                        <li style="width: 2%">{{ session.client_ip }}</li>
+                        <li class="d-none d-md-block" style="width: 2%">{{ session.local_addr }}</li>
+                        <li class="d-none d-md-block" style="width: 2%">{{ session.client_ip }}</li>
                         <li>{{ session.description }}</li>
                       </ul>
                     </template>
@@ -161,6 +161,18 @@
                         >
                       </el-dropdown-menu>
                     </el-dropdown>
+                    <div class="mt-2 mb-3">
+                      <div class="hidden-event-prop">
+                        <ul class="event-body-list event-head-list w-100">
+                          <li class="d-block d-md-none" style="width: 2%">Local address</li>
+                          <li class="d-block d-md-none" style="width: 2%">Client IP</li>
+                        </ul>
+                        <ul class="event-body-list w-100">
+                          <li class="d-block d-md-none" style="width: 2%">{{ session.local_addr }}</li>
+                          <li class="d-block d-md-none" style="width: 2%">{{ session.client_ip }}</li>
+                        </ul>
+                      </div>
+                    </div>
                     <Extra
                       :key="session.hash"
                       :events="inCache(session.hash)"
@@ -169,6 +181,7 @@
                 </div>
               </el-collapse>
 
+            
               <el-pagination
                 style="margin-top: 10px"
                 background
