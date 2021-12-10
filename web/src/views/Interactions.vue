@@ -161,7 +161,7 @@
                         >
                       </el-dropdown-menu>
                     </el-dropdown>
-                    <div class="mt-2 mb-3">
+                    <div class="d-md-none mt-2 mb-3">
                       <div class="hidden-event-prop">
                         <ul class="event-body-list event-head-list w-100">
                           <li class="d-block d-md-none" style="width: 2%">Local address</li>
