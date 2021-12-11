@@ -112,9 +112,12 @@
             <div class="event-list" v-if="sessions.length > 0">
               <div class="event-head">
                 <ul class="event-head-list">
+                  <li style="width: 1%"><el-checkbox></el-checkbox></li>
                   <li style="width: 0%">Service</li>
                   <li style="width: 5%">When</li>
-                  <li class="d-none d-md-block" style="width: 2%">Local address</li>
+                  <li class="d-none d-md-block" style="width: 2%">
+                    Local address
+                  </li>
                   <li class="d-none d-md-block" style="width: 2%">Client IP</li>
                   <li>Description</li>
                 </ul>
@@ -127,15 +130,26 @@
                   :key="session.hash"
                   v-for="session in sessions"
                 >
-                  <el-collapse-item :name="session.hash" class="event-body">
+                  <el-checkbox
+                    style="position: absolute; top: 2px"
+                  ></el-checkbox>
+                  <el-collapse-item
+                    :name="session.hash"
+                    class="event-body"
+                    style="margin-left: 20px"
+                  >
                     <template slot="title" style="display: flex; width: 100%">
                       <ul class="event-body-list w-100">
                         <li style="width: 0%">{{ session.service_name }}</li>
                         <li style="width: 5%">
                           <DateRenderer :date="session.date"></DateRenderer>
                         </li>
-                        <li class="d-none d-md-block" style="width: 2%">{{ session.local_addr }}</li>
-                        <li class="d-none d-md-block" style="width: 2%">{{ session.client_ip }}</li>
+                        <li class="d-none d-md-block" style="width: 2%">
+                          {{ session.local_addr }}
+                        </li>
+                        <li class="d-none d-md-block" style="width: 2%">
+                          {{ session.client_ip }}
+                        </li>
                         <li>{{ session.description }}</li>
                       </ul>
                     </template>
@@ -164,12 +178,20 @@
                     <div class="d-md-none mt-2 mb-3">
                       <div class="hidden-event-prop">
                         <ul class="event-body-list event-head-list w-100">
-                          <li class="d-block d-md-none" style="width: 2%">Local address</li>
-                          <li class="d-block d-md-none" style="width: 2%">Client IP</li>
+                          <li class="d-block d-md-none" style="width: 2%">
+                            Local address
+                          </li>
+                          <li class="d-block d-md-none" style="width: 2%">
+                            Client IP
+                          </li>
                         </ul>
                         <ul class="event-body-list w-100">
-                          <li class="d-block d-md-none" style="width: 2%">{{ session.local_addr }}</li>
-                          <li class="d-block d-md-none" style="width: 2%">{{ session.client_ip }}</li>
+                          <li class="d-block d-md-none" style="width: 2%">
+                            {{ session.local_addr }}
+                          </li>
+                          <li class="d-block d-md-none" style="width: 2%">
+                            {{ session.client_ip }}
+                          </li>
                         </ul>
                       </div>
                     </div>
@@ -181,7 +203,6 @@
                 </div>
               </el-collapse>
 
-            
               <el-pagination
                 style="margin-top: 10px"
                 background

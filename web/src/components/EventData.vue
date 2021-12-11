@@ -1,10 +1,11 @@
 <template>
   <div>
-    <pre v-for="record in parsedData">{{ record.key }}: {{ record.value }}</pre>
+    <pre :key="idx" v-for="(record, idx) in parsedData"
+      >{{ record.key }}: {{ record.value }}</pre
+    >
   </div>
 </template>
 <script>
-import { bus } from "@/bus.js";
 export default {
   data() {
     return {};
@@ -25,7 +26,7 @@ export default {
           data.push({ key: k, value: decoded[k] });
         }
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
       return data;
     },
