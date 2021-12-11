@@ -9,7 +9,7 @@
             </a>
           </div>
         </div>
-        <div class="col-md-3 footer-block">
+        <div class="col-md-3 text-center footer-block">
           <div class="footline">
             <a href="https://docs.vikingo.org/v/en/vsat"> Docs </a>
             |
@@ -17,7 +17,7 @@
           </div>
         </div>
 
-        <div class="col-md-4 footer-block ml-auto">
+        <div class="col footer-block">
           <div class="copyright">
             <span>© 2020-2021 Vikingo Satellite</span>
             <br />

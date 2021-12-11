@@ -197,10 +197,6 @@ h1.small-title {
   width: 30%;
 }
 
-.event-body button {
-  color: #787b82;
-}
-
 .event-body .btn-icon:hover {
   color: #82b0bf;
   cursor: pointer;
@@ -550,13 +546,28 @@ ul.step-list li.success span {
   font-weight: 400;
   color: #52707AB0;
   text-decoration: none;
-  background: none;
   background: #dfe6e8ad;
   width: 100%;
   border: 1px dashed #52707A38;
 }
 
 .btn.btn-add-new-group:hover {
+  background: #dfe6e8;
+  width: 100%;
+  border: 1px dashed #52707A70;
+  color: #52707AD9;
+}
+
+.btn-add-new-group-secondary {
+  font-weight: 400;
+  color: #52707A75;
+  text-decoration: none;
+  background: transparent;
+  width: 100%;
+  border: 1px dashed #52707A38;
+}
+
+.btn-add-new-group-secondary:hover {
   background: #dfe6e8;
   width: 100%;
   border: 1px dashed #52707A70;
