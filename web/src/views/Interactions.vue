@@ -112,7 +112,7 @@
             <div class="event-list" v-if="sessions.length > 0">
               <div class="event-head">
                 <ul class="event-head-list">
-                  <li style="width: 1%"><el-checkbox></el-checkbox></li>
+                  <li style="max-width: 35px"><el-checkbox></el-checkbox></li>
                   <li style="width: 0%">Service</li>
                   <li style="width: 5%">When</li>
                   <li class="d-none d-md-block" style="width: 2%">
@@ -136,7 +136,7 @@
                   <el-collapse-item
                     :name="session.hash"
                     class="event-body"
-                    style="margin-left: 20px"
+                    style="margin-left: 30px"
                   >
                     <template slot="title" style="display: flex; width: 100%">
                       <ul class="event-body-list w-100">
@@ -309,12 +309,12 @@ export default {
       this.pageSize = newSize;
       this.changePage(1);
     },
-    changePage(newPage) {
+    async changePage(newPage) {
       this.currentPage = newPage;
       if (newPage == 1) {
         this.new_interactions = 0; // reset updates counter
       }
-      this.loadSessions();
+      await this.loadSessions();
     },
 
     reloadSessions() {
@@ -323,7 +323,7 @@ export default {
     },
     async applyFilter() {
       this.applyLoading = true;
-      await this.loadSessions();
+      await this.changePage(1);
       this.applyLoading = false;
     },
 
