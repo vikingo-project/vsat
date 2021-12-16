@@ -64,8 +64,8 @@ h1.small-title {
   align-items: center;
 }
 
-.atom-list .mini-card .btn-group > .btn-group:not(:last-child) > .btn,
-.atom-list .mini-card .btn-group > .btn:not(:last-child):not(.dropdown-toggle) {
+.atom-list .mini-card .btn-group>.btn-group:not(:last-child)>.btn,
+.atom-list .mini-card .btn-group>.btn:not(:last-child):not(.dropdown-toggle) {
   border-top-right-radius: 8px;
   border-bottom-right-radius: 8px;
 }
@@ -144,13 +144,14 @@ h1.small-title {
 
 .event-body {
   flex: 1 1 auto;
-  padding: 4px 10px 4px 5px;
+  padding: 4px 12px 4px 5px;
 }
 
 .event-head {
   padding-left: 10px;
   padding-right: 36px;
   margin-bottom: 10px;
+  display: flex;
 }
 
 .event-head ul,
@@ -162,6 +163,13 @@ h1.small-title {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+@media screen and (min-width:768px) {
+  .event-head ul,
+  .event-body ul.event-body-list {
+    margin-right: 24px;
+  }
 }
 
 .event-head li,
@@ -495,9 +503,7 @@ ul.step-list li.success span {
   color: #c0c4cc;
 }
 
-.radio-button-group
-  .el-radio-button__orig-radio:checked
-  + .el-radio-button__inner {
+.radio-button-group .el-radio-button__orig-radio:checked+.el-radio-button__inner {
   color: #fff;
   background-color: #52707aab;
   border-color: #52707a36;
@@ -511,9 +517,7 @@ ul.step-list li.success span {
   background-color: #52707a1a;
 }
 
-.radio-button-group
-  .el-radio-button[aria-checked="true"]:hover
-  .el-radio-button__inner {
+.radio-button-group .el-radio-button[aria-checked="true"]:hover .el-radio-button__inner {
   color: #fff;
   background-color: #52707aab;
   cursor: default;
@@ -1212,7 +1216,7 @@ ul.step-list li.success span {
   padding: 0 4px;
 }
 
-.step-event ~ i {
+.step-event~i {
   margin-left: 12px;
 }
 

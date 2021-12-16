@@ -111,8 +111,8 @@
             </el-alert>
             <div class="event-list" v-if="sessions.length > 0">
               <div class="event-head">
-                <ul class="event-head-list">
-                  <li style="max-width: 35px"><el-checkbox></el-checkbox></li>
+                <el-checkbox class="d-flex"></el-checkbox>
+                <ul class="event-head-list w-100" style="margin-left: 15px">
                   <li style="width: 0%">Service</li>
                   <li style="width: 5%">When</li>
                   <li class="d-none d-md-block" style="width: 2%">
@@ -130,13 +130,11 @@
                   :key="session.hash"
                   v-for="session in sessions"
                 >
-                  <el-checkbox
-                    style="position: absolute; top: 2px"
-                  ></el-checkbox>
+                  <el-checkbox class="d-flex" ></el-checkbox>
                   <el-collapse-item
                     :name="session.hash"
                     class="event-body"
-                    style="margin-left: 30px"
+                    style="margin-left: 10px"
                   >
                     <template slot="title" style="display: flex; width: 100%">
                       <ul class="event-body-list w-100">

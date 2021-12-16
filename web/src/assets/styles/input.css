@@ -178,10 +178,16 @@ input::placeholder,
   background-position: center center;
   width: 20px;
   height: 20px;
-  border: 2px solid #c3cbcd;
+  border: 2px solid #d4dddf;
   border-radius: 4px;
   cursor: pointer;
   background-color: #fbfbfb;
+  transition: 0.1s all ease-in;
+}
+
+.el-checkbox__input{
+  width: 20px;
+  height: 20px;
 }
 
 .el-checkbox__inner:hover {
