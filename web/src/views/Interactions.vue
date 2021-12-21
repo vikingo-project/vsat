@@ -93,6 +93,7 @@
         <div class="content h-100">
           <div class="market-page">
             <h1>Interactions</h1>
+            <button class="filter-btn btn-sm btn-primary" @click="filterDrawer = true" ><i class="vik vik-adjust mr-2"></i>Filter</button>
           </div>
 
           <div class="aux-block h-100" v-loading="loading">
@@ -220,6 +221,83 @@
         </div>
       </div>
     </div>
+
+    <el-drawer
+      title="Filter"
+      direction="rtl"
+      :append-to-body="true"
+      :visible.sync="filterDrawer"
+      custom-class="filter-drawer"
+    >
+      <div class="drawer-body">
+
+        <div class="head-page d-none">
+          <div class="title">
+            <h1 class="small-title">Your link</h1>
+            <el-input placeholder="Your link will be here" v-model="yourLink">
+              <el-button
+                class="btn btn-link"
+                slot="append"
+                icon="el-icon-copy-document"
+                >Copy</el-button
+              >
+            </el-input>
+            <el-button class="btn btn-primary w-100 mt-3"
+              >Generate<i class="el-icon-right"></i
+            ></el-button>
+          </div>
+        </div>
+
+        <div class="category-list">
+          <el-form>
+            <el-form-item label="Service">
+              <el-select
+                v-model="filter.service"
+                placeholder="Service"
+                multiple
+              >
+                <el-option-group
+                  v-for="group in groupsAndServices"
+                  :key="group.label"
+                  :label="group.label"
+                >
+                  <el-option
+                    v-for="item in group.services"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-option-group>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="Client IP">
+              <el-input v-model="filter.client_ip" placeholder=""></el-input>
+            </el-form-item>
+            <el-form-item label="Local address">
+              <el-input
+                v-model="filter.local_addr"
+                placeholder="for example: :80"
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="Description">
+              <el-input
+                v-model="filter.description"
+                placeholder="type a word..."
+              ></el-input>
+            </el-form-item>
+          </el-form>
+        </div>
+
+      </div>
+
+      <div class="drawer-footer mt-auto w-100 ">
+        <el-button :loading="applyLoading" class="btn btn-primary btn-lg" @click="applyFilter" icon="vik vik-search">
+          Apply
+        </el-button>
+      </div>
+    </el-drawer>
+
   </div>
 </template>
 <script>
@@ -238,7 +316,7 @@ export default {
       pageSize: 15,
       cache: {},
       new_interactions: 0,
-
+      filterDrawer: false,
       loading: false,
       applyLoading: false,
       services: [],

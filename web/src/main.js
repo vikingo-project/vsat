@@ -27,6 +27,7 @@ import "@/components/element/packages/theme-chalk/src/tag.scss";
 import "@/components/element/packages/theme-chalk/src/popover.scss";
 import "@/components/element/packages/theme-chalk/src/popconfirm.scss";
 import "@/components/element/packages/theme-chalk/src/dropdown.scss";
+import "@/components/element/packages/theme-chalk/src/drawer.scss";
 
 import "@/assets/styles/input.css";
 import "@/assets/styles/button.css";

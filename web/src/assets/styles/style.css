@@ -1859,7 +1859,8 @@ footer {
 }
 
 .el-drawer {
-  min-width: 1000px;
+  max-width: 300px;
+  min-width: 260px;
 }
 
 .el-drawer__body {

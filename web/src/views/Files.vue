@@ -2,25 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-3 col-lg-2 col-xl-2 navbar-collapse sidebar">
-        <div class="sidebar-header">
-          <a class="vik-brand" href="#">
-            <img src="@/assets/logo.svg" alt />
-          </a>
-          <div id="dismissSidebar">
-            <svg
-              viewBox="0 0 24 24"
-              width="24"
-              height="24"
-              xmlns="http://www.w3.org/2000/svg"
-              class="SideNav__closeIcon__56eIa"
-              stroke="currentColor"
-              tabindex="0"
-            >
-              <path d="M1 1L23 23M1 23L23 1" />
-            </svg>
-          </div>
-        </div>
-
+        
         <div class="category-list">
           <h2>Filter</h2>
           <el-form>
@@ -44,11 +26,14 @@
             Apply
           </el-button>
         </div>
+
       </div>
+
       <div class="col">
         <div class="content" v-loading="filesLoading">
           <div class="market-page">
             <h1>Files</h1>
+            <button class="filter-btn btn-sm btn-primary" @click="filterDrawer = true" ><i class="vik vik-adjust mr-2"></i>Filter</button>
           </div>
           <div class="row item-container attach-list">
             <div class="col-md-6">
@@ -172,6 +157,43 @@
         </div>
       </span>
     </el-dialog>
+
+    <el-drawer
+      title="Filter"
+      direction="rtl"
+      :append-to-body="true"
+      :visible.sync="filterDrawer"
+      custom-class="filter-drawer"
+    >
+      <div class="drawer-body">
+        <div class="category-list">
+          <el-form>
+            <el-form-item label="File name">
+              <el-input v-model="filter.file_name"></el-input>
+            </el-form-item>
+            <el-form-item label="Content type">
+              <el-select v-model="filter.file_type" clearable>
+                <el-option v-for="type in types" :key="type" :value="type"
+                  >{{ type }}
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-form>
+        </div>
+      </div>
+
+      <div class="drawer-footer mt-auto w-100 ">
+        <el-button
+            :loading="false"
+            class="btn btn-primary btn-lg"
+            @click="applyFilter"
+            icon="vik vik-search"
+          >
+            Apply
+          </el-button>
+      </div>
+    </el-drawer>
+
   </div>
 </template>
 
@@ -192,6 +214,7 @@ export default {
       menuItems: [],
       types: [],
       filesLoading: false,
+      filterDrawer: false,
       filter: { file_name: "", file_type: "" },
     };
   },

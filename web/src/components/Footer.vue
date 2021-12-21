@@ -2,14 +2,14 @@
   <footer>
     <div class="container text-center text-md-left">
       <div class="row">
-        <div class="col footer-block">
+        <div class="col mb-3 mb-md-0 footer-block">
           <div class="footline">
             <a href="/" style="vertical-align: text-bottom">
               <img src="@/assets/logo.svg" alt />
             </a>
           </div>
         </div>
-        <div class="col-md-3 text-center footer-block">
+        <div class="col-md-3 mb-2 mb-md-0 text-center footer-block">
           <div class="footline">
             <a href="https://docs.vikingo.org/v/en/vsat"> Docs </a>
             |

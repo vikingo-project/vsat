@@ -1344,3 +1344,51 @@ ul.step-list li.success span {
 .event-card.event-empty.status-bar::before {
   border-radius: 3px 0 0 3px;
 }
+
+@media screen and (max-width:1009px) {
+  .market-page {
+    display: inline-flex;
+    align-items: baseline;
+    justify-content: space-between;
+    width: 100%;
+  }
+}
+
+@media screen and (min-width:1010px) {
+  .filter-btn{
+    display: none;
+  }
+}
+
+/*  drawer  */
+
+.filter-drawer .el-drawer__body,
+.header-drawer .el-drawer__body{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.menu-btn {
+  font-size: 18px;
+}
+
+@media screen and (min-width:576px) {
+  .menu-btn{
+    display: none;
+  }
+}
+
+@media screen and (max-width:575px) {
+  .menu-btn{
+    height: 30px;
+  }
+  header {
+    min-height: 36px;
+  }
+  .main-content {
+    margin-top: 12px;
+  }
+  header .navbar-brand {
+    margin-right: 0px;
+  }
+}
