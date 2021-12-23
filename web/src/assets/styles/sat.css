@@ -1,7 +1,13 @@
 [role="button"] {
   outline-style: none;
 }
+:-internal-direct-focus {
+  outline: none !important;
+}
 
+*:focus{
+  outline: none;
+}
 .btn:hover {
   cursor: pointer;
 }
@@ -166,6 +172,7 @@ h1.small-title {
 }
 
 @media screen and (min-width:768px) {
+
   .event-head ul,
   .event-body ul.event-body-list {
     margin-right: 24px;
@@ -1355,7 +1362,7 @@ ul.step-list li.success span {
 }
 
 @media screen and (min-width:1010px) {
-  .filter-btn{
+  .filter-btn {
     display: none;
   }
 }
@@ -1363,7 +1370,7 @@ ul.step-list li.success span {
 /*  drawer  */
 
 .filter-drawer .el-drawer__body,
-.header-drawer .el-drawer__body{
+.header-drawer .el-drawer__body {
   display: flex;
   flex-wrap: wrap;
 }
@@ -1373,22 +1380,61 @@ ul.step-list li.success span {
 }
 
 @media screen and (min-width:576px) {
-  .menu-btn{
+  .menu-btn {
     display: none;
   }
 }
 
 @media screen and (max-width:575px) {
-  .menu-btn{
+  .menu-btn {
     height: 30px;
   }
+
   header {
     min-height: 36px;
   }
+
   .main-content {
     margin-top: 12px;
   }
+
   header .navbar-brand {
     margin-right: 0px;
+  }
+}
+
+@media screen and (max-width:767px) {
+  .attach-list .attach-card {
+    padding: 12px;
+  }
+
+  .attach-card .attach-card-right-side {
+    margin-left: 8px;
+  }
+}
+
+
+@media screen and (max-width:767px) {
+  .main-content .login {
+    width: 100%;
+  }
+
+  .login-page {
+    max-width: 100%;
+    background: #fbfbfb;
+    border-radius: 8px;
+    padding: 40px 12px;
+    -webkit-box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.14);
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.14);
+    margin: 0 12px;
+  }
+
+  .login-page .form-login {
+    flex-wrap: wrap;
+  }
+
+  .login-page .form-login .el-input__inner {
+    min-width: auto;
+    width: 100%;
   }
 }

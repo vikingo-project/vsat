@@ -8,10 +8,10 @@
           <el-form-item label="Access token">
             <el-input v-model="form.token" placeholder="Enter token"></el-input>
           </el-form-item>
-          <el-form-item class="ml-3">
+          <el-form-item class="ml-md-3 mt-3 mt-md-0 w-100 w-md-auto">
             <el-button
               :loading="loading"
-              class="btn btn-primary"
+              class="btn btn-primary w-100"
               @click="checkToken"
               >Sign in<i class="ml-2 mr-0 el-icon-right"></i
             ></el-button>
