@@ -11,5 +11,6 @@ var (
 	Config        config
 	Version       = "0.0.0" // the real versions gets from build env
 	BuildHash     = "-"
+	DesktopMode   = "false"
 	Notifications = make(chan interface{})
 )

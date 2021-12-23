@@ -153,7 +153,7 @@ func httpStopService(c *gin.Context) {
 	type p struct {
 		Hash string `json:"hash" binding:"required"`
 	}
-	// hash := ""
+
 	var params p
 	if err := c.ShouldBindJSON(&params); err != nil {
 		c.JSON(200, gin.H{"status": "error", "error": err.Error()})

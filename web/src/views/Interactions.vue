@@ -71,6 +71,19 @@
                 placeholder="for example: :80"
               ></el-input>
             </el-form-item>
+            <el-form-item label="Time range">
+              <el-date-picker
+                style="width: 100%"
+                v-model="filter.dates"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                type="datetimerange"
+                start-placeholder="Start"
+                end-placeholder="End"
+                prefix-icon=""
+              >
+                <template v-slot:prefix> </template>
+              </el-date-picker>
+            </el-form-item>
             <el-form-item label="Description">
               <el-input
                 v-model="filter.description"
@@ -93,7 +106,12 @@
         <div class="content h-100">
           <div class="market-page">
             <h1>Interactions</h1>
-            <button class="filter-btn btn-sm btn-primary" @click="filterDrawer = true" ><i class="vik vik-adjust mr-2"></i>Filter</button>
+            <button
+              class="filter-btn btn-sm btn-primary"
+              @click="filterDrawer = true"
+            >
+              <i class="vik vik-adjust mr-2"></i>Filter
+            </button>
           </div>
 
           <div class="aux-block h-100" v-loading="loading">
@@ -131,7 +149,7 @@
                   :key="session.hash"
                   v-for="session in sessions"
                 >
-                  <el-checkbox class="d-flex" ></el-checkbox>
+                  <el-checkbox class="d-flex"></el-checkbox>
                   <el-collapse-item
                     :name="session.hash"
                     class="event-body"
@@ -230,7 +248,6 @@
       custom-class="filter-drawer"
     >
       <div class="drawer-body">
-
         <div class="head-page d-none">
           <div class="title">
             <h1 class="small-title">Your link</h1>
@@ -280,6 +297,20 @@
                 placeholder="for example: :80"
               ></el-input>
             </el-form-item>
+            <el-form-item label="Time range">
+              <el-date-picker
+                style="width: 100%"
+                v-model="filter.dates"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                type="datetimerange"
+                start-placeholder="Start"
+                end-placeholder="End"
+                prefix-icon=""
+              >
+                <template v-slot:prefix> </template>
+              </el-date-picker>
+            </el-form-item>
+
             <el-form-item label="Description">
               <el-input
                 v-model="filter.description"
@@ -288,16 +319,19 @@
             </el-form-item>
           </el-form>
         </div>
-
       </div>
 
-      <div class="drawer-footer mt-auto w-100 ">
-        <el-button :loading="applyLoading" class="btn btn-primary btn-lg" @click="applyFilter" icon="vik vik-search">
+      <div class="drawer-footer mt-auto w-100">
+        <el-button
+          :loading="applyLoading"
+          class="btn btn-primary btn-lg"
+          @click="applyFilter"
+          icon="vik vik-search"
+        >
           Apply
         </el-button>
       </div>
     </el-drawer>
-
   </div>
 </template>
 <script>
@@ -320,7 +354,13 @@ export default {
       loading: false,
       applyLoading: false,
       services: [],
-      filter: { service: [], client_ip: "", local_addr: "", description: "" },
+      filter: {
+        service: [],
+        client_ip: "",
+        local_addr: "",
+        description: "",
+        dates: [],
+      },
       total: 0,
       openedPannels: [],
     };

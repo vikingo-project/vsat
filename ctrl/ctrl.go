@@ -104,7 +104,7 @@ func (c *Ctrl) Run(mgr *manager.Manager) error {
 
 			// sessions and events
 			api.GET("/sessions/", hSessions)
-			api.GET("/sessions/view/:hash/", hEvents)
+			api.GET("/sessions/view/:hash/", httpEvents)
 			api.POST("/sessions/remove/", hRemoveSession)
 
 			// modules
@@ -127,7 +127,6 @@ func (c *Ctrl) Run(mgr *manager.Manager) error {
 		return router.RunTLS(shared.Config.Listen, "./vsat.crt", "./vsat.key")
 	}
 	return router.Run(shared.Config.Listen)
-
 }
 
 func prepare(mgr *manager.Manager) gin.HandlerFunc {
@@ -139,7 +138,7 @@ func prepare(mgr *manager.Manager) gin.HandlerFunc {
 func auth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// DO NOT CHECK AUTH IF DEBUG ENABLED AND CLIENT FROM LOCALHOST
-		if utils.IsDevMode() && c.ClientIP() == "::1" {
+		if (utils.IsDevMode() && c.ClientIP() == "::1") || shared.DesktopMode == "true" {
 			c.Next()
 			return
 		}

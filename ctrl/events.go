@@ -21,6 +21,7 @@ func hSessions(c *gin.Context) {
 	filterClientIP := strings.TrimSpace(c.Query("client_ip"))
 	filterLocalAddr := strings.TrimSpace(c.Query("local_addr"))
 	filterDescription := strings.TrimSpace(c.Query("description"))
+	filterDates := c.QueryArray("dates[]")
 
 	if page < 1 {
 		page = 1
@@ -59,6 +60,13 @@ func hSessions(c *gin.Context) {
 		dq.Where("description LIKE ?", fmt.Sprintf("%%%s%%", filterDescription))
 	}
 
+	if len(filterDates) > 0 {
+		if len(filterDates) == 2 {
+			tq.Where("date BETWEEN ? AND ?", filterDates[0], filterDates[1])
+			dq.Where("date BETWEEN ? AND ?", filterDates[0], filterDates[1])
+		}
+	}
+
 	tq.Count(&total)
 	err := dq.Order("date DESC").Limit(pageSize).Offset(offset).Find(&sessions).Error
 	if err != nil {
@@ -70,18 +78,30 @@ func hSessions(c *gin.Context) {
 	c.JSON(200, gin.H{"status": "ok", "sessions": sessions, "total": total})
 }
 
-func hEvents(c *gin.Context) {
+// httpEvents is a HTTP handler for getting events from the interaction
+func httpEvents(c *gin.Context) {
 	hash := c.Param("hash")
+	page, _ := strconv.Atoi(c.Query("page"))
+	pageSize := 10 // events per page
+	offset := (page - 1) * pageSize
+
+	var total int64
+	ec := db.GetConnection().Model(&models.FullEvent{}).Where(&models.FullEvent{Session: hash})
+	ec.Count(&total)
+
 	var events []models.FullEvent
-	err := db.GetConnection().Model(&models.FullEvent{}).Where(&models.FullEvent{Session: hash}).Find(&events).Error
+	ed := db.GetConnection().Model(&models.Session{})
+	err := ed.Model(&models.FullEvent{}).Where(&models.FullEvent{Session: hash}).Order("date ASC").Limit(pageSize).Offset(offset).Find(&events).Error
 	if err != nil {
-		c.JSON(200, gin.H{"status": "error", "error": err.Error()})
-		return
+		if err != gorm.ErrRecordNotFound {
+			c.JSON(200, gin.H{"status": "error", "error": err.Error()})
+			return
+		}
 	}
 
-	// set session visited
+	// mark session as visited
 	db.GetConnection().Model(&models.Session{}).Where("hash = ?", hash).Update("visited", true)
-	c.JSON(200, gin.H{"status": "ok", "events": events})
+	c.JSON(200, gin.H{"status": "ok", "events": events, "total": total})
 }
 
 func hRemoveSession(c *gin.Context) {

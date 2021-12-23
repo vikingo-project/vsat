@@ -3,6 +3,9 @@ module github.com/vikingo-project/vsat
 go 1.16
 
 require (
+	github.com/asticode/go-astikit v0.21.1 // indirect
+	github.com/asticode/go-astilectron v0.25.0 // indirect
+	github.com/asticode/go-astilectron-bootstrap v0.4.14 // indirect
 	github.com/elazarl/go-bindata-assetfs v1.0.1
 	github.com/flosch/pongo2/v4 v4.0.2
 	github.com/gin-gonic/contrib v0.0.0-20201101042839-6a891bf89f19
@@ -12,6 +15,7 @@ require (
 	github.com/jbowes/whatsnew v0.6.2
 	github.com/miekg/dns v1.1.43
 	github.com/mitchellh/mapstructure v1.4.2
+	github.com/shibukawa/configdir v0.0.0-20170330084843-e180dbdc8da0 // indirect
 	github.com/vmihailenco/msgpack v4.0.4+incompatible // indirect
 	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519
 	golang.org/x/mod v0.5.0 // indirect

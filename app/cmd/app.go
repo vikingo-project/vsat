@@ -12,7 +12,6 @@ import (
 	"time"
 
 	"github.com/jbowes/whatsnew"
-
 	"github.com/vikingo-project/vsat/ctrl"
 	"github.com/vikingo-project/vsat/db"
 	"github.com/vikingo-project/vsat/manager"
@@ -40,7 +39,7 @@ func main() {
 	}()
 
 	go func() {
-		// check new version
+		// check for new version
 		for {
 			ctx := context.Background()
 			fut := whatsnew.Check(ctx, &whatsnew.Options{
@@ -59,7 +58,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-
 }
 
 func init() {
