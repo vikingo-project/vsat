@@ -123,7 +123,7 @@ func (c *Ctrl) Run(mgr *manager.Manager) error {
 	router.Use(static.Serve("/", BinaryFileSystem("dist")))
 
 	// dev mode enables extended logging; ctrl server uses HTTP instead of HTTPS
-	if !utils.IsDevMode() {
+	if !utils.IsDevMode() && shared.DesktopMode != "true" {
 		return router.RunTLS(shared.Config.Listen, "./vsat.crt", "./vsat.key")
 	}
 	return router.Run(shared.Config.Listen)
