@@ -3,7 +3,5 @@
   "icon_path_darwin": "resources/icon.icns",
   "icon_path_linux": "resources/icon.png",
   "icon_path_windows": "resources/icon.ico",
-  "build_flags": {
-    "tags": "json1"
-  }
+  "environments": [{"arch": "amd64", "os": "windows"}]
 }
