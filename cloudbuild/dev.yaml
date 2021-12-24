@@ -102,7 +102,7 @@ steps:
       - name: go
         path: /go
   - name: neilotoole/xcgo
-    dir: "/go/src/github.com/vikingo-project/vsat/app/desktop"
+    dir: "/go/src/github.com/vikingo-project/vsat"
     entrypoint: /bin/sh
     args:
       - "-c"
