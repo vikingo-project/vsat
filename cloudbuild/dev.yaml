@@ -102,7 +102,7 @@ steps:
       - name: go
         path: /go
   - name: neilotoole/xcgo
-    dir: "/go/src/github.com/vikingo-project/vsat"
+    dir: "/go/src/github.com/vikingo-project/vsat/app/desktop"
     entrypoint: /bin/sh
     args:
       - "-c"
@@ -138,4 +138,4 @@ steps:
       - -c
       - |
         zip -r /go/src/github.com/vikingo-project/vsat/vsat-desktop-windows.zip /go/src/github.com/vikingo-project/vsat/app/desktop/output/windows-amd64/ && \
-        gsutil -m cp -r /go/src/github.com/vikingo-project/vsat/vsat-desktop-windows.zip gs://vikingo-vsat/$(date +%m-%d-%Y)_$SHORT_SHA/ && \
+        gsutil -m cp -r /go/src/github.com/vikingo-project/vsat/vsat-desktop-windows.zip gs://vikingo-vsat/$(date +%m-%d-%Y)_$SHORT_SHA/
