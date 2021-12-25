@@ -106,6 +106,11 @@
         <div class="content h-100">
           <div class="market-page">
             <h1>Interactions</h1>
+            <div v-if="checkedSessions.length" style="margin-left: 10px">
+              <el-button class="btn-sm btn-danger">
+                <i class="vik vik-delete mr-2"></i>Remove selected
+              </el-button>
+            </div>
             <button
               class="filter-btn btn-sm btn-primary"
               @click="filterDrawer = true"
@@ -128,9 +133,15 @@
                 >
               </div>
             </el-alert>
+
             <div class="event-list" v-if="sessions.length > 0">
               <div class="event-head">
-                <el-checkbox class="d-flex"></el-checkbox>
+                <el-checkbox
+                  class="d-flex"
+                  v-model="checkAll"
+                  :indeterminate="isIndeterminate"
+                  @change="handleCheckAll"
+                ></el-checkbox>
                 <ul class="event-head-list w-100" style="margin-left: 15px">
                   <li style="width: 0%">Service</li>
                   <li style="width: 5%">When</li>
@@ -147,9 +158,15 @@
                   class="event-card status-bar status-event-info"
                   v-bind:class="{ new: !session.visited }"
                   :key="session.hash"
-                  v-for="session in sessions"
+                  v-for="(session, idx) in sessions"
                 >
-                  <el-checkbox class="d-flex"></el-checkbox>
+                  <el-checkbox
+                    class="d-flex"
+                    @change="onCheck(session.hash)"
+                    v-model="session.checked"
+                    :checked="checkedSessions.includes(session.hash)"
+                    :key="session.hash"
+                  ></el-checkbox>
                   <el-collapse-item
                     :name="session.hash"
                     class="event-body"
@@ -354,6 +371,11 @@ export default {
       loading: false,
       applyLoading: false,
       services: [],
+
+      checkAll: false,
+      checkedSessions: [],
+      isIndeterminate: false,
+
       filter: {
         service: [],
         client_ip: "",
@@ -409,6 +431,32 @@ export default {
     },
   },
   methods: {
+    handleCheckAll(val) {
+      if (val) {
+        // check all
+        this.checkedSessions = [];
+        for (let i in this.sessions) {
+          this.checkedSessions.push(this.sessions[i].hash);
+          this.sessions[i].checked = true;
+        }
+      } else {
+        this.checkedSessions = [];
+        for (let i in this.sessions) {
+          this.sessions[i].checked = false;
+        }
+      }
+      this.isIndeterminate = false;
+    },
+    onCheck(hash) {
+      if (this.checkedSessions.includes(hash)) {
+        this.checkedSessions.splice(this.checkedSessions.indexOf(hash), 1);
+      } else {
+        this.checkedSessions.push(hash);
+      }
+      let checkedCount = this.checkedSessions.length;
+      this.isIndeterminate =
+        checkedCount > 0 && checkedCount < this.sessions.length; //this.cities.length;
+    },
     handleCommand(args) {
       let { action, hash } = args;
       if (action === "remove") {
@@ -485,8 +533,11 @@ export default {
             resolve();
             this.loading = false;
             if (data.status == "ok") {
-              this.sessions = data.sessions;
+              this.sessions = JSON.parse(JSON.stringify(data.sessions));
               this.total = data.total;
+              for (var i in this.sessions) {
+                this.sessions[i].checked = false;
+              }
             } else {
               this.$notify.error({
                 title: "Error",
