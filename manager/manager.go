@@ -73,14 +73,15 @@ type Manager struct {
 	Tunnels   tunnelsList
 }
 
-func NewManager() *Manager {
-	return &Manager{
+// mgr is an manager instance
+var mgr *Manager
+
+func Start() {
+	mgr = &Manager{
 		Instances: make(map[string]InstanceInfo),
 		Tunnels:   tunnelsList{locker: sync.Mutex{}, list: make(map[string]*tunnels.Tunnel)},
 	}
-}
 
-func (mgr *Manager) Start() {
 	// services part
 	var module modules.Module
 
@@ -130,7 +131,7 @@ func (mgr *Manager) Start() {
 	}
 }
 
-func (mgr *Manager) StartService(hash string) error {
+func StartService(hash string) error {
 	// todo: check running instances by hash...
 	service, err := loadServiceFromDB(hash)
 	if err != nil {
@@ -151,18 +152,18 @@ func (mgr *Manager) StartService(hash string) error {
 	return nil
 }
 
-func (mgr *Manager) StopService(hash string) error {
+func StopService(hash string) error {
 	return mgr.stopService(hash)
 }
 
-func (mgr *Manager) IsServiceActive(hash string) bool {
+func IsServiceActive(hash string) bool {
 	if _, ok := mgr.Instances[hash]; ok {
 		return true
 	}
 	return false
 }
 
-func (mgr *Manager) StartTunnel(hash string) (*tunnels.Tunnel, error) {
+func StartTunnel(hash string) (*tunnels.Tunnel, error) {
 	// todo: check running instances by hash...
 	tunnel, err := loadTunnelFromDB(hash)
 	if err != nil {
@@ -173,6 +174,10 @@ func (mgr *Manager) StartTunnel(hash string) (*tunnels.Tunnel, error) {
 	return nil, err
 }
 
-func (mgr *Manager) StopTunnel(hash string) error {
+func StopTunnel(hash string) error {
 	return mgr.stopTunnel(hash)
+}
+
+func Tunnels() *tunnelsList {
+	return &mgr.Tunnels
 }

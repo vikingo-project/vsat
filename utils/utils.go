@@ -18,7 +18,9 @@ import (
 	"math/big"
 	mrand "math/rand"
 	"net"
+	"net/url"
 	"os"
+	"runtime"
 	"strings"
 	"time"
 
@@ -215,4 +217,47 @@ func PrintDebug(f string, args ...interface{}) {
 	if IsDevMode() {
 		log.Printf(f, args...)
 	}
+}
+
+// exists returns whether the given file or directory exists
+func exists(path string) bool {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true
+	}
+	if os.IsNotExist(err) {
+		return false
+	}
+	return false
+}
+
+func GetAppConfigDir(appName string) (string, error) {
+	const vendor = "Vikingo"
+	path, _ := os.Getwd()
+	if runtime.GOOS == "windows" {
+		path = os.Getenv("APPDATA")
+	} else if runtime.GOOS == "linux" {
+		path, _ = os.Getwd()
+		// todo
+		// https://github.com/shibukawa/configdir/blob/master/config_xdg.go
+	} else if runtime.GOOS == "darwin" {
+		// path = os.Getenv("HOME") + "/Library/Application Support"
+		path = os.Getenv("HOME") + "/Library/Caches"
+		// https://github.com/shibukawa/configdir/blob/master/config_xdg.go
+	}
+	fullPath := path + string(os.PathSeparator) + vendor + string(os.PathSeparator) + appName + string(os.PathSeparator)
+	if !exists(fullPath) {
+		err := os.MkdirAll(fullPath, 0755)
+		if err != nil {
+			return "", err
+		}
+	}
+	return fullPath, nil
+}
+
+func QueryArray(q url.Values, key string) []string {
+	if values, ok := q[key]; ok && len(values) > 0 {
+		return values
+	}
+	return []string{}
 }
