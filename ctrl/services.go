@@ -2,12 +2,13 @@ package ctrl
 
 import (
 	"encoding/json"
-	"fmt"
-	"log"
+	"net/http"
 	"strings"
 	"time"
 
+	"github.com/vikingo-project/vsat/api"
 	"github.com/vikingo-project/vsat/db"
+	"github.com/vikingo-project/vsat/manager"
 	"github.com/vikingo-project/vsat/models"
 	"github.com/vikingo-project/vsat/modules"
 	"github.com/vikingo-project/vsat/utils"
@@ -16,29 +17,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func services(c *gin.Context) {
-	filterBaseProto := strings.Trim(c.Query("base_proto"), " ")
-	filterName := strings.TrimSpace(c.Query("service_name"))
-	var services []models.Service
-	dq := db.GetConnection().Model(&models.Service{})
-	if filterBaseProto != "" {
-		dq.Where(`base_proto LIKE ?`, fmt.Sprintf("%%%s%%", strings.ToLower(filterBaseProto)))
+func httpServices(c *gin.Context) {
+	res, err := api.Instance.Services(c.Request.URL.RawQuery)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{"error": err.Error()})
+		c.Abort()
+		return
 	}
-
-	if filterName != "" {
-		dq.Where("service_name LIKE ?", fmt.Sprintf("%%%s%%", filterName))
-	}
-
-	err := dq.Find(&services).Error
-	if err != nil && err != gorm.ErrRecordNotFound {
-		log.Fatal(err)
-	}
-
-	mgr := getManager(c)
-	for i, service := range services {
-		services[i].Active = mgr.IsServiceActive(service.Hash) // set actual service status
-	}
-	c.JSON(200, gin.H{"status": "ok", "services": services})
+	c.JSON(http.StatusOK, gin.H{"status": "ok", "Total": res.Total, "Records": res.Records})
 }
 
 func httpCreateService(c *gin.Context) {
@@ -120,8 +106,8 @@ func httpRemoveService(c *gin.Context) {
 	}
 
 	// restart service
-	mgr := getManager(c)
-	mgr.StopService(params.Hash)
+
+	manager.StopService(params.Hash)
 
 	// waiting for 1s, service should be stopped
 	time.Sleep(time.Second)
@@ -140,8 +126,7 @@ func httpStartService(c *gin.Context) {
 		return
 	}
 
-	mgr := getManager(c)
-	err := mgr.StartService(params.Hash)
+	err := manager.StartService(params.Hash)
 	if err != nil {
 		c.JSON(200, gin.H{"status": "error", "error": err.Error()})
 		return
@@ -159,6 +144,5 @@ func httpStopService(c *gin.Context) {
 		c.JSON(200, gin.H{"status": "error", "error": err.Error()})
 		return
 	}
-	mgr := getManager(c)
-	mgr.StopService(params.Hash)
+	manager.StopService(params.Hash)
 }

@@ -4,60 +4,30 @@ import (
 	"fmt"
 	"net/http"
 	"path/filepath"
-	"strconv"
-	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/vikingo-project/vsat/api"
 	"github.com/vikingo-project/vsat/db"
 	"github.com/vikingo-project/vsat/files"
 	"github.com/vikingo-project/vsat/models"
 )
 
-func hFiles(c *gin.Context) {
-	fileHash := c.Query("hash")
-	fileName := strings.TrimSpace(c.Query("file_name"))
-	fileType := c.Query("file_type")
-
-	page, _ := strconv.Atoi(c.Query("page"))
-	pageSize := 50
-	if page < 1 {
-		page = 1
-	}
-	offset := (page - 1) * pageSize
-
-	var total int64
-	cq := db.GetConnection().Model(&models.File{})
-	cq.Count(&total)
-
-	dq := db.GetConnection().Model(&models.File{}).Select("hash,date,file_name,size,content_type,interaction_hash,service_hash").Order("date DESC").Limit(pageSize).Offset(offset)
-	if fileName != "" {
-		dq.Where("file_name LIKE ?", fmt.Sprintf("%%%s%%", fileName))
-	}
-	if fileType != "" {
-		dq.Where("content_type == ?", fileType)
-	}
-	if fileHash != "" {
-		dq.Where("hash == ?", fileHash)
-	}
-
-	var files []models.File
-	err := dq.Find(&files).Error
+func httpFiles(c *gin.Context) {
+	res, err := api.Instance.Files(c.Request.URL.RawQuery)
 	if err != nil {
 		c.JSON(200, gin.H{"status": "error", "error": err.Error()})
 		return
 	}
-	c.JSON(200, gin.H{"status": "ok", "total": total, "files": files})
+	c.JSON(200, gin.H{"status": "ok", "Total": res.Total, "Records": res.Records})
 }
 
-func hTypes(c *gin.Context) {
-	var files []models.File
-	db.GetConnection().Model(&models.File{}).Select("distinct content_type").Find(&files)
-
-	var types []string
-	for _, f := range files {
-		types = append(types, f.ContentType)
+func httpFileTypes(c *gin.Context) {
+	res, err := api.Instance.FileTypes()
+	if err != nil {
+		c.JSON(200, gin.H{"status": "error", "error": err.Error()})
+		return
 	}
-	c.JSON(200, gin.H{"status": "ok", "types": types})
+	c.JSON(200, gin.H{"status": "ok", "Records": res.Records})
 }
 
 func hDownloadFile(c *gin.Context) {
