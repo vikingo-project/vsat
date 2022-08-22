@@ -6,6 +6,10 @@ export function About() {
   return window['go']['api']['APIC']['About']();
 }
 
+export function CreateService(arg1) {
+  return window['go']['api']['APIC']['CreateService'](arg1);
+}
+
 export function FileTypes() {
   return window['go']['api']['APIC']['FileTypes']();
 }
@@ -36,4 +40,8 @@ export function SessionEvents(arg1) {
 
 export function Sessions(arg1) {
   return window['go']['api']['APIC']['Sessions'](arg1);
+}
+
+export function Tunnels(arg1) {
+  return window['go']['api']['APIC']['Tunnels'](arg1);
 }

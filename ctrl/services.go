@@ -3,16 +3,12 @@ package ctrl
 import (
 	"encoding/json"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/vikingo-project/vsat/api"
 	"github.com/vikingo-project/vsat/db"
 	"github.com/vikingo-project/vsat/manager"
 	"github.com/vikingo-project/vsat/models"
-	"github.com/vikingo-project/vsat/modules"
-	"github.com/vikingo-project/vsat/utils"
-	"gorm.io/gorm"
 
 	"github.com/gin-gonic/gin"
 )
@@ -28,56 +24,29 @@ func httpServices(c *gin.Context) {
 }
 
 func httpCreateService(c *gin.Context) {
-	type p struct {
-		ListenIP    string      `json:"listenIP" binding:"required"`
-		ListenPort  int         `json:"listenPort" binding:"required"`
-		ServiceName string      `json:"serviceName" binding:"required"`
-		AutoStart   bool        `json:"autoStart"`
-		ModuleName  string      `json:"moduleName" binding:"required"`
-		Settings    interface{} `json:"moduleSettings" binding:"required"`
-	}
-
-	var params p
-	if err := c.ShouldBindJSON(&params); err != nil {
-		c.JSON(200, gin.H{"status": "error", "error": err.Error()})
+	var service models.WebService
+	c.Bind(&service)
+	res, err := api.Instance.CreateService(&service)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusOK, gin.H{"status": "error", "error": err.Error()})
 		return
 	}
-
-	// todo: validate settings...
-	settings, _ := json.Marshal(params.Settings)
-
-	module := modules.GetModuleByName(params.ModuleName)
-	baseProto := strings.Join(module.GetInfo()["base_proto"].([]string), "/")
-
-	err := db.GetConnection().Save(&models.Service{
-		Hash:        utils.EasyHash(false),
-		ServiceName: params.ServiceName,
-		ModuleName:  params.ModuleName,
-		ListenIP:    params.ListenIP,
-		ListenPort:  params.ListenPort,
-		Autostart:   params.AutoStart,
-		Settings:    string(settings),
-		BaseProto:   baseProto,
-	}).Error
-
-	if err != nil && err != gorm.ErrRecordNotFound {
-		c.JSON(200, gin.H{"status": "error", "error": err.Error()})
-		return
-	}
-	c.JSON(200, gin.H{"status": "ok"})
+	c.JSON(200, gin.H{"status": "ok", "Hash": res})
 }
 
 func httpUpdateService(c *gin.Context) {
-	type p struct {
-		Hash        string      `json:"hash" binding:"required"`
-		ServiceName string      `json:"serviceName" binding:"required"`
-		ListenIP    string      `json:"listenIP" binding:"required"`
-		ListenPort  int         `json:"listenPort" binding:"required"`
-		AutoStart   bool        `json:"autoStart"`
-		Settings    interface{} `json:"moduleSettings" binding:"required"`
-	}
+	/*
+		type p struct {
+			Hash        string      `json:"hash" binding:"required"`
+			ServiceName string      `json:"serviceName" binding:"required"`
+			ListenIP    string      `json:"listenIP" binding:"required"`
+			ListenPort  int         `json:"listenPort" binding:"required"`
+			AutoStart   bool        `json:"autoStart"`
+			Settings    interface{} `json:"moduleSettings" binding:"required"`
+		}
+	*/
 
-	var params p
+	var params models.Service
 	if err := c.ShouldBindJSON(&params); err != nil {
 		c.JSON(200, gin.H{"status": "error", "error": err.Error()})
 		return
@@ -85,7 +54,7 @@ func httpUpdateService(c *gin.Context) {
 
 	settings, _ := json.Marshal(params.Settings)
 	err := db.GetConnection().Model(&models.Service{}).Where(&models.Service{Hash: params.Hash}).Updates(&models.Service{ServiceName: params.ServiceName,
-		ListenIP: params.ListenIP, ListenPort: params.ListenPort, Autostart: params.AutoStart, Settings: string(settings)}).Error
+		ListenIP: params.ListenIP, ListenPort: params.ListenPort, Autostart: params.Autostart, Settings: settings}).Error
 	if err != nil {
 		c.JSON(200, gin.H{"status": "error", "error": err.Error()})
 		return

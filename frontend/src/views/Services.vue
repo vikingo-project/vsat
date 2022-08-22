@@ -203,7 +203,7 @@ import * as utils from "@/utils.js";
 import ServiceCard from "@/components/ServiceCard.vue";
 import { FormWizard, TabContent } from "@/components/vue-form-wizard";
 import "@/components/vue-form-wizard/assets/wizard.scss";
-import { getServices, getModules, getNetworks } from "@/api.js";
+import { getServices, getModules, getNetworks, createService } from "@/api.js";
 
 import Empty from "@/components/settings/Empty.vue";
 import DNS from "@/components/settings/DNS.vue";
@@ -360,6 +360,24 @@ export default {
     async createService() {
       let that = this;
       return new Promise((resolve, reject) => {
+        createService(this.newService)
+          .then((data) => {
+            console.log("data=", data);
+            this.$notify.success({
+              title: "Success",
+              message: "Service created",
+            });
+            resolve();
+          })
+          .catch((e) => {
+            this.$notify.error({
+              title: "Error",
+              message: err,
+            });
+            reject();
+          });
+
+        /*
         utils
           .$post(`/api/services/create/`, this.newService)
           .then((data) => {
@@ -379,12 +397,9 @@ export default {
             }
           })
           .catch((err) => {
-            that.$notify.error({
-              title: "Error",
-              message: err,
-            });
-            reject();
+            
           });
+          */
       });
     },
     async applyFilter() {

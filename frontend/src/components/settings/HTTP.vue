@@ -45,7 +45,6 @@
             v-for="(location, idx2) in host.locations"
             :key="idx2"
           >
-          
             <el-form-item
               label="Location"
               :key="idx2"
@@ -199,7 +198,6 @@
                 Delete<i class="vik vik-delete"></i>
               </button>
             </div>
-
           </div>
           <el-form-item>
             <el-button class="btn btn-add-new-group" @click="addLocation(idx)">
@@ -219,6 +217,7 @@
 </template>
 <script>
 import * as utils from "@/utils.js";
+import { getFiles, getFileTypes } from "@/api.js";
 
 export default {
   name: "http-settings",
@@ -269,22 +268,18 @@ export default {
   },
   async mounted() {
     if (this.preset) {
-      console.log("preset changed..", this.preset);
       // todo: load file by hash
       this.settings = this.preset;
     }
-    utils
-      .$get(`/api/files/?` + utils.objectToString({ page: this.currentPage }))
+    getFiles(utils.objectToString({ page: this.currentPage }))
       .then((data) => {
-        if (data.status == "ok") {
-          this.files = data.files;
-          this.total = data.total;
-        }
+        this.files = data.Records;
+        this.total = data.Total;
       })
-      .catch((err) => {
+      .catch((e) => {
         this.$notify.error({
           title: "Error",
-          message: err,
+          message: e,
         });
       });
   },

@@ -19,7 +19,7 @@
 
         <div class="col footer-block">
           <div class="copyright">
-            <span>© 2020-2021 Vikingo Satellite</span>
+            <span>© 2020-2022 Vikingo Satellite</span>
             <br />
           </div>
         </div>
@@ -31,14 +31,19 @@
   </footer>
 </template>
 <script>
-import * as utils from "@/utils.js";
+import { getAbout } from "@/api.js";
 export default {
   async mounted() {
-    utils.$get(`/api/about/`).then((data) => {
-      this.version = data.version;
-      this.build = data.build;
-    });
+    getAbout()
+      .then((data) => {
+        this.version = data.Version;
+        this.build = data.Build;
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   },
+
   data() {
     return {
       showAbout: false,

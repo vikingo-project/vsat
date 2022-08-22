@@ -10,6 +10,17 @@ export async function getServices(params) {
     return data;
   }
 }
+export async function createService(params) {
+  if (config.desktop_mode) {
+    const m = await import("@/../wailsjs/go/api/APIC");
+    let encodedSettings = JSON.stringify(params.moduleSettings);
+    params.moduleSettings = encodedSettings;
+    return m["CreateService"](params);
+  } else {
+    let data = await utils.$post(`/api/services/create/`, params);
+    return data;
+  }
+}
 
 export async function getModules() {
   if (config.desktop_mode) {
@@ -76,6 +87,16 @@ export async function getFileTypes() {
     return m["FileTypes"]();
   } else {
     let data = await utils.$get(`/api/files/types/`);
+    return data;
+  }
+}
+
+export async function getAbout() {
+  if (config.desktop_mode) {
+    const m = await import("@/../wailsjs/go/api/APIC");
+    return m["About"]();
+  } else {
+    let data = await utils.$get(`/api/about/`);
     return data;
   }
 }

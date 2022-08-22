@@ -51,7 +51,15 @@ func NewApp() *App {
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 	runtime.LogTrace(a.ctx, "Startup...")
-
+	go func() {
+		// use desktop notification stream instead of ws from server package
+		//for data := range shared.WSMessagesChan {
+		// check broadcast/dst
+		// log.Println("got ws message", data)
+		//runtime.EventsEmit(a.ctx, data.Event, data)
+		// WSServer.BroadcastToRoom("/", data.Room, data.Event, data)
+		//}
+	}()
 }
 
 func main() {
