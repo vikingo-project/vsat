@@ -2,7 +2,6 @@ package api
 
 import (
 	"fmt"
-	"log"
 	"net/url"
 	"strings"
 
@@ -44,10 +43,9 @@ func (a *APIC) Services(params string) (*RecordsContainer, error) {
 }
 
 func (a *APIC) CreateService(ws *models.WebService) (string, error) {
-	log.Printf("service %+v", ws)
-
 	vdtr := validator.New()
 	vdtr.SetTagName("binding")
+
 	// todo: validate settings...
 	if err := vdtr.Struct(ws); err != nil {
 		return "", err
@@ -66,4 +64,32 @@ func (a *APIC) CreateService(ws *models.WebService) (string, error) {
 
 	err := db.GetConnection().Save(service).Error
 	return service.Hash, err
+}
+
+func (a *APIC) UpdateService(params *models.WebService) (string, error) {
+	vdtr := validator.New()
+	vdtr.SetTagName("binding")
+
+	// todo: validate settings...
+	if err := vdtr.Struct(params); err != nil {
+		return "", err
+	}
+	err := db.GetConnection().Model(&models.Service{}).Where(&models.Service{Hash: params.Hash}).Updates(&models.Service{ServiceName: params.ServiceName,
+		ListenIP: params.ListenIP, ListenPort: params.ListenPort, Autostart: params.Autostart, Settings: []byte(params.Settings)}).Error
+
+	return params.Hash, err
+}
+
+func (a *APIC) ToggleService(params *models.ChangeServiceState) error {
+	vdtr := validator.New()
+	vdtr.SetTagName("binding")
+	if err := vdtr.Struct(params); err != nil {
+		return err
+	}
+	if params.NewState == "start" {
+		return manager.StartService(params.Hash)
+
+	} else {
+		return manager.StopService(params.Hash)
+	}
 }

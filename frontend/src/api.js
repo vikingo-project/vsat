@@ -10,14 +10,37 @@ export async function getServices(params) {
     return data;
   }
 }
+
 export async function createService(params) {
+  let settingsAsString = JSON.stringify(params.moduleSettings);
+  params.moduleSettings = settingsAsString;
   if (config.desktop_mode) {
     const m = await import("@/../wailsjs/go/api/APIC");
-    let encodedSettings = JSON.stringify(params.moduleSettings);
-    params.moduleSettings = encodedSettings;
     return m["CreateService"](params);
   } else {
     let data = await utils.$post(`/api/services/create/`, params);
+    return data;
+  }
+}
+
+export async function updateService(params) {
+  let settingsAsString = JSON.stringify(params.moduleSettings);
+  params.moduleSettings = settingsAsString;
+  if (config.desktop_mode) {
+    const m = await import("@/../wailsjs/go/api/APIC");
+    return m["UpdateService"](params);
+  } else {
+    let data = await utils.$post(`/api/services/update/`, params);
+    return data;
+  }
+}
+
+export async function toggleService(params) {
+  if (config.desktop_mode) {
+    const m = await import("@/../wailsjs/go/api/APIC");
+    return m["ToggleService"](params);
+  } else {
+    let data = await utils.$post(`/api/services/toggle/`, params);
     return data;
   }
 }

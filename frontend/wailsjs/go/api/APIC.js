@@ -42,6 +42,14 @@ export function Sessions(arg1) {
   return window['go']['api']['APIC']['Sessions'](arg1);
 }
 
+export function ToggleService(arg1) {
+  return window['go']['api']['APIC']['ToggleService'](arg1);
+}
+
 export function Tunnels(arg1) {
   return window['go']['api']['APIC']['Tunnels'](arg1);
+}
+
+export function UpdateService(arg1) {
+  return window['go']['api']['APIC']['UpdateService'](arg1);
 }

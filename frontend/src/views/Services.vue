@@ -358,7 +358,6 @@ export default {
     },
 
     async createService() {
-      let that = this;
       return new Promise((resolve, reject) => {
         createService(this.newService)
           .then((data) => {
@@ -369,7 +368,7 @@ export default {
             });
             resolve();
           })
-          .catch((e) => {
+          .catch((err) => {
             this.$notify.error({
               title: "Error",
               message: err,

@@ -132,7 +132,7 @@ import TCP from "@/components/settings/TCP.vue";
 import FTP from "@/components/settings/FTP.vue";
 import { bus } from "@/bus.js";
 import * as utils from "@/utils.js";
-import { getNetworks } from "@/api.js";
+import { getNetworks, toggleService, updateService } from "@/api.js";
 
 export default {
   props: ["service"],
@@ -228,10 +228,25 @@ export default {
   },
   methods: {
     toggleServiceState() {
-      let that = this;
-      that.ctlBtnLoading = true;
+      this.ctlBtnLoading = true;
+      toggleService({
+        hash: this.service.hash,
+        state: this.service.active ? "stop" : "start",
+      })
+        .then(() => {
+          this.ctlBtnLoading = false;
+          bus.$emit("refresh-services");
+        })
+        .catch((e) => {
+          this.ctlBtnLoading = false;
+          this.$notify.error({
+            title: "Error",
+            message: e,
+          });
+        });
+      /*
       utils
-        .$post(`/api/services/${this.service.active ? "stop" : "start"}/`, {
+        .$post(`/api/services/${}/`, {
           hash: this.service.hash,
         })
         .then((data) => {
@@ -251,6 +266,7 @@ export default {
             message: err,
           });
         });
+        */
     },
     fixModuleName(name) {
       return name.replace(/_/g, " ");
@@ -303,6 +319,22 @@ export default {
         });
     },
     updateService() {
+      updateService(this.localService)
+        .then(() => {
+          this.$notify.success({
+            title: "Success",
+            message: "Service updated",
+          });
+          this.editServiceDialogVisible = false;
+        })
+        .catch((err) => {
+          this.ctlBtnLoading = false;
+          this.$notify.error({
+            title: "Error",
+            message: err,
+          });
+        });
+      /*
       let that = this;
       utils
         .$post(`/api/services/update/`, this.localService)
@@ -328,6 +360,7 @@ export default {
             message: err,
           });
         });
+        */
     },
     validateModuleSettings() {
       let that = this;

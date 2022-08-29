@@ -1,7 +1,6 @@
 package ctrl
 
 import (
-	"encoding/json"
 	"net/http"
 	"time"
 
@@ -9,6 +8,7 @@ import (
 	"github.com/vikingo-project/vsat/db"
 	"github.com/vikingo-project/vsat/manager"
 	"github.com/vikingo-project/vsat/models"
+	"github.com/vikingo-project/vsat/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -23,44 +23,25 @@ func httpServices(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": "ok", "Total": res.Total, "Records": res.Records})
 }
 
-func httpCreateService(c *gin.Context) {
+func httpCreateUpdateService(c *gin.Context) {
 	var service models.WebService
 	c.Bind(&service)
-	res, err := api.Instance.CreateService(&service)
+	var (
+		res string
+		err error
+	)
+	if service.Hash == "" {
+		utils.PrintDebug("create a new service")
+		res, err = api.Instance.CreateService(&service)
+	} else {
+		utils.PrintDebug("update service")
+		res, err = api.Instance.UpdateService(&service)
+	}
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusOK, gin.H{"status": "error", "error": err.Error()})
 		return
 	}
 	c.JSON(200, gin.H{"status": "ok", "Hash": res})
-}
-
-func httpUpdateService(c *gin.Context) {
-	/*
-		type p struct {
-			Hash        string      `json:"hash" binding:"required"`
-			ServiceName string      `json:"serviceName" binding:"required"`
-			ListenIP    string      `json:"listenIP" binding:"required"`
-			ListenPort  int         `json:"listenPort" binding:"required"`
-			AutoStart   bool        `json:"autoStart"`
-			Settings    interface{} `json:"moduleSettings" binding:"required"`
-		}
-	*/
-
-	var params models.Service
-	if err := c.ShouldBindJSON(&params); err != nil {
-		c.JSON(200, gin.H{"status": "error", "error": err.Error()})
-		return
-	}
-
-	settings, _ := json.Marshal(params.Settings)
-	err := db.GetConnection().Model(&models.Service{}).Where(&models.Service{Hash: params.Hash}).Updates(&models.Service{ServiceName: params.ServiceName,
-		ListenIP: params.ListenIP, ListenPort: params.ListenPort, Autostart: params.Autostart, Settings: settings}).Error
-	if err != nil {
-		c.JSON(200, gin.H{"status": "error", "error": err.Error()})
-		return
-	}
-
-	c.JSON(200, gin.H{"status": "ok"})
 }
 
 func httpRemoveService(c *gin.Context) {
@@ -84,34 +65,17 @@ func httpRemoveService(c *gin.Context) {
 	c.JSON(200, gin.H{"status": "ok"})
 }
 
-func httpStartService(c *gin.Context) {
-	type p struct {
-		Hash string `json:"hash" binding:"required"`
-	}
-
-	var params p
+func httpToggleService(c *gin.Context) {
+	var params models.ChangeServiceState
 	if err := c.ShouldBindJSON(&params); err != nil {
 		c.JSON(200, gin.H{"status": "error", "error": err.Error()})
 		return
 	}
-
-	err := manager.StartService(params.Hash)
+	err := api.Instance.ToggleService(&params)
 	if err != nil {
 		c.JSON(200, gin.H{"status": "error", "error": err.Error()})
 		return
 	}
 	c.JSON(200, gin.H{"status": "ok"})
-}
 
-func httpStopService(c *gin.Context) {
-	type p struct {
-		Hash string `json:"hash" binding:"required"`
-	}
-
-	var params p
-	if err := c.ShouldBindJSON(&params); err != nil {
-		c.JSON(200, gin.H{"status": "error", "error": err.Error()})
-		return
-	}
-	manager.StopService(params.Hash)
 }

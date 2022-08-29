@@ -24,4 +24,8 @@ export function SessionEvents(arg1:string):Promise<api.RecordsContainer>;
 
 export function Sessions(arg1:string):Promise<api.RecordsContainer>;
 
+export function ToggleService(arg1:models.ChangeServiceState):Promise<Error>;
+
 export function Tunnels(arg1:string):Promise<api.RecordsContainer>;
+
+export function UpdateService(arg1:models.WebService):Promise<string>;

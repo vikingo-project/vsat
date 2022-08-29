@@ -15,6 +15,7 @@ type Service struct {
 }
 
 type WebService struct {
+	Hash        string `json:"hash" `
 	ServiceName string `json:"serviceName" binding:"required"`
 	ModuleName  string `json:"moduleName" binding:"required"`
 	ListenIP    string `json:"listenIP" binding:"required"`
@@ -23,4 +24,9 @@ type WebService struct {
 	Autostart   bool   `json:"autoStart"`
 	Active      bool   `json:"active"`
 	BaseProto   string `json:"baseProto"`
+}
+
+type ChangeServiceState struct {
+	Hash     string `json:"hash" binding:"required"`
+	NewState string `json:"state" binding:"required"`
 }

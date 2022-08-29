@@ -1,6 +1,7 @@
 export namespace models {
 	
 	export class WebService {
+	    hash: string;
 	    serviceName: string;
 	    moduleName: string;
 	    listenIP: string;
@@ -16,6 +17,7 @@ export namespace models {
 	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.hash = source["hash"];
 	        this.serviceName = source["serviceName"];
 	        this.moduleName = source["moduleName"];
 	        this.listenIP = source["listenIP"];
@@ -24,6 +26,20 @@ export namespace models {
 	        this.autoStart = source["autoStart"];
 	        this.active = source["active"];
 	        this.baseProto = source["baseProto"];
+	    }
+	}
+	export class ChangeServiceState {
+	    hash: string;
+	    state: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new ChangeServiceState(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.hash = source["hash"];
+	        this.state = source["state"];
 	    }
 	}
 

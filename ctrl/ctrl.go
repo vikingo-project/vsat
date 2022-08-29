@@ -58,18 +58,16 @@ func (c *Ctrl) Run() error {
 	{
 		api := authorized.Group("/api")
 		{
-			api.GET("/sql/", sql)
 			api.GET("/about/", httpAbout)
 			api.GET("/ping/", ping)
 			api.GET("/networks/", httpNetworks)
 
-			// service handlers
+			// services handlers
 			api.GET("/services/", httpServices)
-			api.POST("/services/create/", httpCreateService)
-			api.POST("/services/update/", httpUpdateService)
+			api.POST("/services/create/", httpCreateUpdateService)
+			api.POST("/services/update/", httpCreateUpdateService)
 			api.POST("/services/remove/", httpRemoveService)
-			api.POST("/services/start/", httpStartService)
-			api.POST("/services/stop/", httpStopService)
+			api.POST("/services/toggle/", httpToggleService)
 
 			// tunnels handlers
 			api.GET("/tunnels/", httpTunnels)
