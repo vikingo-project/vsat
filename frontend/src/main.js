@@ -48,20 +48,22 @@ import Elem from "@/components/element/src/index";
 import lang from "@/components/element/src/locale/lang/en";
 import locale from "@/components/element/src/locale";
 import { checkAuth } from "@/auth";
+import config from "@/config";
 
 Vue.use(Elem);
 Vue.use(VueAxios, axios);
-Vue.use(
-  new VueSocketIO({
-    debug: false,
-    connection:
-      location.protocol +
-      "//" +
-      location.hostname +
-      (location.port ? ":" + location.port : "") // http://127.0.0.1:1025
-  })
-);
-// }
+if (!config.desktop_mode) {
+  Vue.use(
+    new VueSocketIO({
+      debug: false,
+      connection:
+        location.protocol +
+        "//" +
+        location.hostname +
+        (location.port ? ":" + location.port : "") // http://127.0.0.1:1025
+    })
+  );
+}
 
 locale.use(lang);
 Vue.config.lang = "en-US";

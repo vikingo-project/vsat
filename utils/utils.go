@@ -10,6 +10,7 @@ import (
 	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/hex"
+	"encoding/json"
 	"encoding/pem"
 	"fmt"
 	"hash/crc32"
@@ -260,4 +261,9 @@ func QueryArray(q url.Values, key string) []string {
 		return values
 	}
 	return []string{}
+}
+
+func ToJSON(any interface{}) []byte {
+	e, _ := json.Marshal(any)
+	return e
 }

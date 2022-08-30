@@ -210,15 +210,7 @@ export default {
       return view ? view : Empty; // if module has no settings view render default Empty view
     },
     moduleSettings() {
-      if (this.localService.settings && this.localService.settings.length > 0) {
-        try {
-          let s = JSON.parse(this.localService.settings);
-          return s;
-        } catch (e) {
-          console.log("Failed to decode module preset", e);
-        }
-      }
-      return {};
+      return this.localService.moduleSettings;
     },
     localServiceDefaultPort() {
       return this.$refs.moduleSettings.defaultPort

@@ -15,15 +15,15 @@ type Service struct {
 }
 
 type WebService struct {
-	Hash        string `json:"hash" `
-	ServiceName string `json:"serviceName" binding:"required"`
-	ModuleName  string `json:"moduleName" binding:"required"`
-	ListenIP    string `json:"listenIP" binding:"required"`
-	ListenPort  int    `json:"listenPort" binding:"required"`
-	Settings    string `json:"moduleSettings" binding:"required"`
-	Autostart   bool   `json:"autoStart"`
-	Active      bool   `json:"active"`
-	BaseProto   string `json:"baseProto"`
+	Hash        string      `json:"hash" `
+	ServiceName string      `json:"serviceName" binding:"required"`
+	ModuleName  string      `json:"moduleName" binding:"required"`
+	ListenIP    string      `json:"listenIP" binding:"required"`
+	ListenPort  int         `json:"listenPort" binding:"required"`
+	Settings    interface{} `json:"moduleSettings" binding:"required"`
+	Autostart   bool        `json:"autoStart"`
+	Active      bool        `json:"active"`
+	BaseProto   string      `json:"baseProto"`
 }
 
 type ChangeServiceState struct {

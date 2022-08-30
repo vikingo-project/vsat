@@ -12,8 +12,6 @@ export async function getServices(params) {
 }
 
 export async function createService(params) {
-  let settingsAsString = JSON.stringify(params.moduleSettings);
-  params.moduleSettings = settingsAsString;
   if (config.desktop_mode) {
     const m = await import("@/../wailsjs/go/api/APIC");
     return m["CreateService"](params);
@@ -24,8 +22,6 @@ export async function createService(params) {
 }
 
 export async function updateService(params) {
-  let settingsAsString = JSON.stringify(params.moduleSettings);
-  params.moduleSettings = settingsAsString;
   if (config.desktop_mode) {
     const m = await import("@/../wailsjs/go/api/APIC");
     return m["UpdateService"](params);

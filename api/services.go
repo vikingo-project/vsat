@@ -38,6 +38,7 @@ func (a *APIC) Services(params string) (*RecordsContainer, error) {
 		services[i].Active = manager.IsServiceActive(service.Hash) // set actual service status
 	}
 	return &RecordsContainer{
+		Total:   int64(len(services)),
 		Records: services,
 	}, nil
 }
@@ -59,7 +60,7 @@ func (a *APIC) CreateService(ws *models.WebService) (string, error) {
 		ListenPort:  ws.ListenPort,
 		Autostart:   ws.Autostart,
 		BaseProto:   strings.Join(module.GetInfo()["base_proto"].([]string), "/"),
-		Settings:    []byte(ws.Settings),
+		Settings:    utils.ToJSON(ws.Settings),
 	}
 
 	err := db.GetConnection().Save(service).Error
@@ -75,7 +76,7 @@ func (a *APIC) UpdateService(params *models.WebService) (string, error) {
 		return "", err
 	}
 	err := db.GetConnection().Model(&models.Service{}).Where(&models.Service{Hash: params.Hash}).Updates(&models.Service{ServiceName: params.ServiceName,
-		ListenIP: params.ListenIP, ListenPort: params.ListenPort, Autostart: params.Autostart, Settings: []byte(params.Settings)}).Error
+		ListenIP: params.ListenIP, ListenPort: params.ListenPort, Autostart: params.Autostart, Settings: utils.ToJSON(params.Settings)}).Error
 
 	return params.Hash, err
 }

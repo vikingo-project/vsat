@@ -6,7 +6,7 @@ export namespace models {
 	    moduleName: string;
 	    listenIP: string;
 	    listenPort: number;
-	    moduleSettings: string;
+	    moduleSettings: any;
 	    autoStart: boolean;
 	    active: boolean;
 	    baseProto: string;
