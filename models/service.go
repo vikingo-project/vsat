@@ -26,6 +26,10 @@ type WebService struct {
 	BaseProto   string      `json:"baseProto"`
 }
 
+type ServiceHash struct {
+	Hash string `json:"hash" binding:"required"`
+}
+
 type ChangeServiceState struct {
 	Hash     string `json:"hash" binding:"required"`
 	NewState string `json:"state" binding:"required"`

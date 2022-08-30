@@ -30,6 +30,10 @@ export function Networks() {
   return window['go']['api']['APIC']['Networks']();
 }
 
+export function RemoveService(arg1) {
+  return window['go']['api']['APIC']['RemoveService'](arg1);
+}
+
 export function Services(arg1) {
   return window['go']['api']['APIC']['Services'](arg1);
 }

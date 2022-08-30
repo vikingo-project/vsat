@@ -18,6 +18,8 @@ export function Modules():Promise<api.RecordsContainer>;
 
 export function Networks():Promise<api.RecordsContainer>;
 
+export function RemoveService(arg1:models.ServiceHash):Promise<Error>;
+
 export function Services(arg1:string):Promise<api.RecordsContainer>;
 
 export function SessionEvents(arg1:string):Promise<api.RecordsContainer>;

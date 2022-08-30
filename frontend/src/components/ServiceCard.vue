@@ -132,7 +132,12 @@ import TCP from "@/components/settings/TCP.vue";
 import FTP from "@/components/settings/FTP.vue";
 import { bus } from "@/bus.js";
 import * as utils from "@/utils.js";
-import { getNetworks, toggleService, updateService } from "@/api.js";
+import {
+  getNetworks,
+  toggleService,
+  updateService,
+  removeService,
+} from "@/api.js";
 
 export default {
   props: ["service"],
@@ -279,32 +284,22 @@ export default {
       */
     },
     removeService() {
-      let that = this;
       this.removing = true;
-      utils
-        .$post(`/api/services/remove/`, this.localService)
-        .then((data) => {
+      removeService(this.localService)
+        .then(() => {
           this.removing = false;
-          if (data.status == "error") {
-            that.$notify.error({
-              title: "Error",
-              message: data.error,
-            });
-            return;
-          }
-          if (data.status == "ok") {
-            that.$notify.success({
-              title: "Success",
-              message: "Service removed",
-            });
-            setTimeout(() => {
-              bus.$emit("refresh-services");
-            }, 1500);
-            that.editServiceDialogVisible = false;
-          }
+          this.$notify.success({
+            title: "Success",
+            message: "Service removed",
+          });
+          setTimeout(() => {
+            bus.$emit("refresh-services");
+          }, 1500);
+          this.editServiceDialogVisible = false;
         })
         .catch((err) => {
-          that.$notify.error({
+          this.removing = false;
+          this.$notify.error({
             title: "Error",
             message: err,
           });
@@ -326,33 +321,6 @@ export default {
             message: err,
           });
         });
-      /*
-      let that = this;
-      utils
-        .$post(`/api/services/update/`, this.localService)
-        .then((data) => {
-          if (data.status == "error") {
-            that.$notify.error({
-              title: "Error",
-              message: data.error,
-            });
-            return;
-          }
-          if (data.status == "ok") {
-            that.$notify.success({
-              title: "Success",
-              message: "Service updated",
-            });
-            that.editServiceDialogVisible = false;
-          }
-        })
-        .catch((err) => {
-          that.$notify.error({
-            title: "Error",
-            message: err,
-          });
-        });
-        */
     },
     validateModuleSettings() {
       let that = this;

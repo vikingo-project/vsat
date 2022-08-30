@@ -2,11 +2,8 @@ package ctrl
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/vikingo-project/vsat/api"
-	"github.com/vikingo-project/vsat/db"
-	"github.com/vikingo-project/vsat/manager"
 	"github.com/vikingo-project/vsat/models"
 	"github.com/vikingo-project/vsat/utils"
 
@@ -45,23 +42,13 @@ func httpCreateUpdateService(c *gin.Context) {
 }
 
 func httpRemoveService(c *gin.Context) {
-	type p struct {
-		Hash string `json:"hash" binding:"required"`
-	}
-
-	var params p
-	if err := c.ShouldBindJSON(&params); err != nil {
-		c.JSON(200, gin.H{"status": "error", "error": err.Error()})
+	var params models.ServiceHash
+	c.Bind(&params)
+	err := api.Instance.RemoveService(&params)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusOK, gin.H{"status": "error", "error": err.Error()})
 		return
 	}
-
-	// restart service
-
-	manager.StopService(params.Hash)
-
-	// waiting for 1s, service should be stopped
-	time.Sleep(time.Second)
-	db.GetConnection().Delete(&models.Service{}, &models.Service{Hash: params.Hash})
 	c.JSON(200, gin.H{"status": "ok"})
 }
 

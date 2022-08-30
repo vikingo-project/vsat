@@ -28,6 +28,18 @@ export namespace models {
 	        this.baseProto = source["baseProto"];
 	    }
 	}
+	export class ServiceHash {
+	    hash: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new ServiceHash(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.hash = source["hash"];
+	    }
+	}
 	export class ChangeServiceState {
 	    hash: string;
 	    state: string;

@@ -31,6 +31,16 @@ export async function updateService(params) {
   }
 }
 
+export async function removeService(params) {
+  if (config.desktop_mode) {
+    const m = await import("@/../wailsjs/go/api/APIC");
+    return m["RemoveService"](params);
+  } else {
+    let data = await utils.$post(`/api/services/remove/`, params);
+    return data;
+  }
+}
+
 export async function toggleService(params) {
   if (config.desktop_mode) {
     const m = await import("@/../wailsjs/go/api/APIC");

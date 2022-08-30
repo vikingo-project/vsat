@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/url"
 	"strings"
+	"time"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/vikingo-project/vsat/db"
@@ -93,4 +94,17 @@ func (a *APIC) ToggleService(params *models.ChangeServiceState) error {
 	} else {
 		return manager.StopService(params.Hash)
 	}
+}
+
+func (a *APIC) RemoveService(params *models.ServiceHash) error {
+	vdtr := validator.New()
+	vdtr.SetTagName("binding")
+	if err := vdtr.Struct(params); err != nil {
+		return err
+	}
+	// stop service and remove from DB
+	manager.StopService(params.Hash)
+	// waiting for 1s, service should be stopped
+	time.Sleep(time.Second)
+	return db.GetConnection().Delete(&models.Service{}, &models.Service{Hash: params.Hash}).Error
 }
