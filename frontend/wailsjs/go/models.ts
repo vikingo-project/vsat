@@ -1,5 +1,31 @@
 export namespace models {
 	
+	export class ServiceHash {
+	    hash: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new ServiceHash(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.hash = source["hash"];
+	    }
+	}
+	export class ChangeServiceState {
+	    hash: string;
+	    state: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new ChangeServiceState(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.hash = source["hash"];
+	        this.state = source["state"];
+	    }
+	}
 	export class WebService {
 	    hash: string;
 	    serviceName: string;
@@ -26,32 +52,6 @@ export namespace models {
 	        this.autoStart = source["autoStart"];
 	        this.active = source["active"];
 	        this.baseProto = source["baseProto"];
-	    }
-	}
-	export class ServiceHash {
-	    hash: string;
-	
-	    static createFrom(source: any = {}) {
-	        return new ServiceHash(source);
-	    }
-	
-	    constructor(source: any = {}) {
-	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.hash = source["hash"];
-	    }
-	}
-	export class ChangeServiceState {
-	    hash: string;
-	    state: string;
-	
-	    static createFrom(source: any = {}) {
-	        return new ChangeServiceState(source);
-	    }
-	
-	    constructor(source: any = {}) {
-	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.hash = source["hash"];
-	        this.state = source["state"];
 	    }
 	}
 

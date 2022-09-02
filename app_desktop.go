@@ -85,8 +85,13 @@ func main() {
 		}
 	}()
 
+	go func() {
+		for msg := range shared.Notifications {
+			log.Println("got msg", msg)
+		}
+	}()
+
 	app := NewApp()
-	log.Println("app", app)
 	err := wails.Run(&options.App{
 		Title:     "Vikingo Satellite",
 		Width:     1024,
