@@ -14,6 +14,8 @@ require (
 	github.com/vmihailenco/msgpack v4.0.4+incompatible
 	github.com/wailsapp/wails/v2 v2.0.0-beta.43
 	golang.org/x/crypto v0.0.0-20220214200702-86341886e292
+	golang.org/x/net v0.0.0-20220225172249-27dd8689420f // indirect
+	golang.org/x/sys v0.0.0-20220227234510-4e6760a101f9 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	gopkg.in/yaml.v2 v2.4.0
 	gorm.io/datatypes v1.0.7

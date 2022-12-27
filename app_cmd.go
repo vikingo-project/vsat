@@ -36,7 +36,7 @@ func main() {
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 	go func() {
 		<-c
-		// database should be closed validly
+		// database should be closed before exit
 		db.Close()
 		os.Exit(0)
 	}()
