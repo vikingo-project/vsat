@@ -6,7 +6,7 @@ jobs:
   package:
     strategy:
       matrix:
-        go-version: [1.17]
+        go-version: [1.18]
         os: [macos-11, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
