@@ -33,9 +33,7 @@ func loadTunnelFromDB(hash string) (models.Tunnel, error) {
 }
 
 func (mgr *Manager) startTunnel(tunnel models.Tunnel) error {
-	if utils.IsDevMode() {
-		log.Println("Start tunnel", tunnel.Hash)
-	}
+	utils.PrintDebug("Start tunnel %s", tunnel.Hash)
 
 	t := &tunnels.Tunnel{
 		Hash:           tunnel.Hash,
@@ -44,9 +42,7 @@ func (mgr *Manager) startTunnel(tunnel models.Tunnel) error {
 		DestinationTLS: tunnel.DstTLS,
 	}
 
-	var (
-		errChan = make(chan error)
-	)
+	var errChan = make(chan error)
 
 	err := t.Start(errChan)
 	if err != nil {
@@ -54,22 +50,18 @@ func (mgr *Manager) startTunnel(tunnel models.Tunnel) error {
 		return err
 	}
 
-	go func() {
-		defer log.Println("exit from waiter routine")
+	go func(hash string) {
+		defer utils.PrintDebug("remove tunnel %s", hash)
 		<-errChan
-		utils.PrintDebug("err chan", err)
-		mgr.Tunnels.Remove(tunnel.Hash)
-	}()
+		mgr.Tunnels.Remove(hash)
+	}(tunnel.Hash)
 
-	// mark tunnel as live
 	mgr.Tunnels.Add(tunnel.Hash, t)
 	return nil
 }
 
 func (mgr *Manager) stopTunnel(hash string) error {
-	if utils.IsDevMode() {
-		log.Println("Stop tunnel", hash)
-	}
+	utils.PrintDebug("Stop tunnel %s", hash)
 	t := mgr.Tunnels.Get(hash)
 	if t != nil {
 		t.Stop()

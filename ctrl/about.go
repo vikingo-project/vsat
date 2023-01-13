@@ -1,11 +1,12 @@
 package ctrl
 
 import (
-	"github.com/vikingo-project/vsat/shared"
+	"github.com/vikingo-project/vsat/api"
 
 	"github.com/gin-gonic/gin"
 )
 
-func about(c *gin.Context) {
-	c.JSON(200, gin.H{"version": shared.Version, "build": shared.BuildHash})
+func httpAbout(c *gin.Context) {
+	res := api.Instance.About()
+	c.JSON(200, res)
 }

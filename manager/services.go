@@ -41,7 +41,7 @@ func (mgr *Manager) startService(service models.Service) (modules.Module, error)
 	if module == nil {
 		return nil, fmt.Errorf("module %s is not registered", service.ModuleName)
 	}
-	utils.PrintDebug("start service", service.Settings)
+	utils.PrintDebug("start service %v", service.Settings)
 
 	// decode settings from DB (string) to map[string]interface{}
 	var settings interface{}

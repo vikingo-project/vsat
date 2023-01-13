@@ -1,0 +1,322 @@
+@font-face {
+  font-family: 'vikingo';
+  src:
+    url('vikingo.ttf?4vx898') format('truetype'),
+    url('vikingo.woff?4vx898') format('woff'),
+    url('vikingo.svg?4vx898#vikingo') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+i.vik{
+  font-family: 'vikingo' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 0;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+[class$="-dc"]{
+	display: inline-flex;
+}
+.vik-arrow-down:before {
+  content: "\e900";
+}
+.vik-arrow-up:before {
+  content: "\e901";
+}
+.vik-down:before {
+  content: "\e902";
+}
+.vik-left:before {
+  content: "\e903";
+}
+.vik-more:before {
+  content: "\e904";
+}
+.vik-plus-small:before {
+  content: "\e905";
+}
+.vik-rigth:before {
+  content: "\e906";
+}
+.vik-up:before {
+	content: "\e907";
+}
+.vik-x-small:before {
+  content: "\e908";
+}
+.vik-logout:before {
+  content: "\e94c";
+}
+.vik-add-group:before {
+  content: "\e909";
+}
+.vik-arrows-up-down:before {
+  content: "\e90a";
+}
+.vik-check:before {
+  content: "\e90b";
+}
+.vik-continue:before {
+  content: "\e90c";
+}
+.vik-delete:before {
+  content: "\e90d";
+}
+.vik-download:before {
+  content: "\e90e";
+}
+.vik-upload:before {
+  content: "\e945";
+}
+.vik-edit:before {
+  content: "\e90f";
+}
+.vik-file:before {
+  content: "\e910";
+}
+.vik-grid:before {
+  content: "\e911";
+}
+.vik-history-back:before {
+  content: "\e912";
+}
+.vik-list:before {
+  content: "\e913";
+}
+.vik-lue:before {
+  content: "\e914";
+}
+.vik-pause:before {
+  content: "\e915";
+}
+.vik-plus:before {
+  content: "\e916";
+}
+.vik-refresh:before {
+  content: "\e917";
+}
+.vik-run:before {
+  content: "\e918";
+}
+.vik-save:before {
+  content: "\e919";
+}
+.vik-scan:before {
+  content: "\e91a";
+}
+.vik-search:before {
+  content: "\e91b";
+}
+.vik-send:before {
+  content: "\e91c";
+}
+.vik-settings:before {
+  content: "\e91d";
+}
+.vik-share:before {
+  content: "\e91e";
+}
+.vik-star:before {
+  content: "\e91f";
+}
+.vik-star-active:before {
+  content: "\e920";
+}
+.vik-stop:before {
+  content: "\e921";
+}
+.vik-update:before {
+  content: "\e922";
+}
+.vik-web-engine:before {
+  content: "\e923";
+}
+.vik-x:before {
+  content: "\e924";
+}
+.vik-filter:before {
+  content: "\e93d";
+}
+.vik-adjust:before {
+  content: "\e93e";
+}
+.vik-verified:before {
+  content: "\e93f";
+}
+.vik-support:before {
+  content: "\e940";
+}
+.vik-import:before {
+  content: "\e943";
+}
+.vik-export:before {
+  content: "\e944";
+}
+.vik-collapse:before {
+  content: "\e946";
+}
+.vik-expand:before {
+  content: "\e947";
+}
+.vik-alt-collapse:before {
+  content: "\e948";
+}
+.vik-alt-expand:before {
+  content: "\e949";
+}
+.vik-info:before {
+  content: "\e94a";
+}
+.vik-info-c:before {
+  content: "\e94b";
+}
+.vik-d-arrow:before {
+  content: "\e94d";
+}
+.vik-add-group-dc .path1:before {
+  content: "\e925";
+  color: rgb(82, 112, 122);
+}
+.vik-add-group-dc .path2:before {
+  content: "\e926";
+  margin-left: -1.2138671875em;
+  color: rgb(82, 112, 122);
+}
+.vik-add-group-dc .path3:before {
+  content: "\e927";
+  margin-left: -1.2138671875em;
+  color: rgb(130, 176, 191);
+}
+.vik-check-dc .path1:before {
+  content: "\e928";
+  color: rgb(82, 112, 122);
+}
+.vik-check-dc .path2:before {
+  content: "\e929";
+  margin-left: -1em;
+  color: rgb(130, 176, 191);
+}
+:disabled .vik-check-dc .path1:before {
+  content: "\e928";
+  color: #b8cfd5;
+}
+:disabled .vik-check-dc .path2:before {
+  content: "\e929";
+  margin-left: -1em;
+  color: #99c4d3;
+}
+.vik-download-dc .path1:before {
+  content: "\e92a";
+  color: rgb(130, 176, 191);
+}
+.vik-download-dc .path2:before {
+  content: "\e92b";
+  margin-left: -1.0712890625em;
+  color: rgb(82, 112, 122);
+}
+button:hover .vik-download-dc .path1:before {
+}
+button:hover .vik-download-dc .path2::before {
+  color: rgb(130, 176, 191);
+}
+.vik-file-dc .path1:before {
+  content: "\e92c";
+  color: rgb(82, 112, 122);
+}
+.vik-file-dc .path2:before {
+  content: "\e92d";
+  margin-left: -0.9287109375em;
+  color: rgb(130, 176, 191);
+}
+.vik-file-dc .path3:before {
+  content: "\e92e";
+  margin-left: -0.9287109375em;
+  color: rgb(130, 176, 191);
+}
+.vik-file-dc .path4:before {
+  content: "\e92f";
+  margin-left: -0.9287109375em;
+  color: rgb(130, 176, 191);
+}
+.vik-web-engine-dc .path1:before {
+  content: "\e930";
+  color: rgb(82, 112, 122);
+}
+.vik-web-engine-dc .path2:before {
+  content: "\e931";
+  margin-left: -1.2138671875em;
+  color: rgb(130, 176, 191);
+}
+.vik-web-engine-dc .path3:before {
+  content: "\e932";
+  margin-left: -1.2138671875em;
+  color: rgb(130, 176, 191);
+}
+.vik-history-back-dc .path1:before {
+  content: "\e933";
+  color: rgb(82, 112, 122);
+}
+.vik-history-back-dc .path2:before {
+  content: "\e934";
+  margin-left: -1em;
+  color: rgb(130, 176, 191);
+}
+.vik-lue-dc .path1:before {
+  content: "\e935";
+  color: rgb(130, 176, 191);
+}
+.vik-lue-dc .path2:before {
+  content: "\e936";
+  margin-left: -1.2138671875em;
+  color: rgb(130, 176, 191);
+}
+.vik-lue-dc .path3:before {
+  content: "\e937";
+  margin-left: -1.2138671875em;
+  color: rgb(130, 176, 191);
+}
+.vik-lue-dc .path4:before {
+  content: "\e938";
+  margin-left: -1.2138671875em;
+  color: rgb(82, 112, 122);
+}
+.vik-scan-dc .path1:before {
+  content: "\e939";
+  color: rgb(130, 176, 191);
+}
+.vik-scan-dc .path2:before {
+  content: "\e93a";
+  margin-left: -1.0712890625em;
+  color: rgb(82, 112, 122);
+}
+.vik-update-dc .path1:before {
+  content: "\e93b";
+  color: rgb(130, 176, 191);
+}
+.vik-update-dc .path2:before {
+  content: "\e93c";
+  margin-left: -1.142578125em;
+  color: rgb(82, 112, 122);
+}
+button:hover .vik-update-dc .path1:before {
+}
+button:hover  .vik-update-dc .path2::before {
+  color: rgb(130, 176, 191);
+}
+.vik-verified-dc .path1:before {
+  content: "\e941";
+  color: rgb(130, 176, 191);
+}
+.vik-verified-dc .path2:before {
+  content: "\e942";
+  margin-left: -1em;
+  color: rgb(96, 136, 149)
+}

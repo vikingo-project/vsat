@@ -1,4 +1,4 @@
-timeout: 1500s
+timeout: 3000s
 steps:
   - name: node:12
     entrypoint: npm
@@ -8,8 +8,8 @@ steps:
     entrypoint: npm
     args: ["run", "build"]
     dir: "web"
-  - name: golang:1.16.5
-    entrypoint: bash
+  - name: neilotoole/xcgo
+    entrypoint: sh
     args:
       - "-c"
       - |
@@ -17,21 +17,28 @@ steps:
     volumes:
       - name: go
         path: /go
-  - name: golang:1.16.5
-    dir: "/go/src/github.com/vikingo-project/vsat"
+  - name: neilotoole/xcgo
+    dir: "/go/src/github.com/vikingo-project/vsat/app/desktop"
     args: ["go", "get", "-d"]
-    env: ["GOPATH=/go", "GOOS=linux", "GOARCH=amd64"]
+    env:
+      [
+        "GOPATH=/go",
+        "CGO_ENABLED=1",
+        "GOOS=linux",
+        "GOARCH=amd64",
+        "GIT_SSL_NO_VERIFY=1",
+      ]
     volumes:
       - name: go
         path: /go
-  - name: golang:1.16.5
+  - name: neilotoole/xcgo
     dir: "/go/src/github.com/vikingo-project/vsat"
     args: ["go", "get", "-u", "github.com/jteeuwen/go-bindata/..."]
     env: ["GOPATH=/go", "GOOS=linux", "GOARCH=amd64", "GO111MODULE=off"] # disable GO111MODULE! it's loading another version of bindata
     volumes:
       - name: go
         path: /go
-  - name: golang:1.16.5
+  - name: neilotoole/xcgo
     dir: "/go/src/github.com/vikingo-project/vsat/web"
     args:
       [
@@ -46,16 +53,62 @@ steps:
     volumes:
       - name: go
         path: /go
-
-  - name: golang:1.16.5
+  - name: neilotoole/xcgo
     dir: "/go/src/github.com/vikingo-project/vsat"
+    args: ["go", "get", "-u", "github.com/asticode/go-astilectron-bundler/..."]
+    env:
+      [
+        "GOPATH=/go",
+        "CGO_ENABLED=1",
+        "GOOS=linux",
+        "GOARCH=amd64",
+        "GO111MODULE=off",
+        "GIT_SSL_NO_VERIFY=1",
+      ]
+    volumes:
+      - name: go
+        path: /go
+  - name: neilotoole/xcgo
+    dir: "/go/src/github.com/vikingo-project/vsat"
+    args:
+      [
+        "go",
+        "install",
+        "github.com/asticode/go-astilectron-bundler/astilectron-bundler",
+      ]
+    env:
+      [
+        "GOPATH=/go",
+        "CGO_ENABLED=1",
+        "GOOS=linux",
+        "GOARCH=amd64",
+        "GO111MODULE=off",
+        "GIT_SSL_NO_VERIFY=1",
+      ]
+    volumes:
+      - name: go
+        path: /go
+
+  - name: neilotoole/xcgo
+    dir: "/go/src/github.com/vikingo-project/vsat/app/cmd"
     entrypoint: /bin/sh
     args:
       - "-c"
       - |
         set -x && \
-        go build -ldflags="-X 'github.com/vikingo-project/vsat/shared.Version=13.3.7' " -o vsat64
+        go build -ldflags="-X 'github.com/vikingo-project/vsat/shared.Version=13.3.7' " -o ../../vsat64
     env: ["GOPATH=/go", "GOOS=linux", "GOARCH=amd64", "CGO_ENABLED=1"]
+    volumes:
+      - name: go
+        path: /go
+  - name: neilotoole/xcgo
+    dir: "/go/src/github.com/vikingo-project/vsat"
+    entrypoint: /bin/sh
+    args:
+      - "-c"
+      - |
+        set -x && cd app/desktop && go mod tidy && astilectron-bundler
+    env: ["GOPATH=/go", "CGO_ENABLED=1", "GOOS=linux", "GOARCH=amd64"]
     volumes:
       - name: go
         path: /go
@@ -75,3 +128,14 @@ steps:
   - name: "gcr.io/cloud-builders/docker"
     args: ["push", "vkngo/vsat:dev"]
     dir: "/go/src/github.com/vikingo-project/vsat"
+
+  - name: "gcr.io/cloud-builders/gsutil"
+    entrypoint: "bash"
+    volumes:
+      - name: go
+        path: /go
+    args:
+      - -c
+      - |
+        zip -r /go/src/github.com/vikingo-project/vsat/vsat-desktop-windows.zip /go/src/github.com/vikingo-project/vsat/app/desktop/output/windows-amd64/ && \
+        gsutil -m cp -r /go/src/github.com/vikingo-project/vsat/vsat-desktop-windows.zip gs://vikingo-vsat/$(date +%m-%d-%Y)_$SHORT_SHA/

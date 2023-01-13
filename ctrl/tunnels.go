@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/vikingo-project/vsat/db"
+	"github.com/vikingo-project/vsat/manager"
 	"github.com/vikingo-project/vsat/models"
 	"github.com/vikingo-project/vsat/utils"
 	"gorm.io/gorm"
@@ -21,12 +22,11 @@ func httpTunnels(c *gin.Context) {
 		log.Fatal(err)
 	}
 
-	mgr := getManager(c)
 	for i, t := range tuns {
-		live := mgr.Tunnels.Exists(t.Hash)
+		live := manager.Tunnels().Exists(t.Hash)
 		tuns[i].Connected = live
 		if live {
-			tuns[i].PublicAddr = mgr.Tunnels.GetPublicAddr(t.Hash)
+			tuns[i].PublicAddr = manager.Tunnels().GetPublicAddr(t.Hash)
 		}
 	}
 	c.JSON(200, gin.H{"status": "ok", "tunnels": tuns})
@@ -79,8 +79,15 @@ func httpUpdateTunnel(c *gin.Context) {
 		return
 	}
 
-	err := db.GetConnection().Model(&models.Tunnel{}).Where(&models.Tunnel{Hash: params.Hash}).Updates(&models.Tunnel{
-		DstHost: params.DstHost, DstPort: params.DstPort, DstTLS: params.DstTLS, Autostart: params.AutoStart}).Error
+	err := db.GetConnection().Model(&models.Tunnel{}).Where(&models.Tunnel{Hash: params.Hash}).Updates(
+		// https://stackoverflow.com/questions/56653423/gorm-doesnt-update-boolean-field-to-false
+		// gorm doesn't work with bool in the struct :(
+		map[string]interface{}{
+			"dst_host":  params.DstHost,
+			"dst_port":  params.DstPort,
+			"dst_tls":   params.DstTLS,
+			"autostart": params.AutoStart,
+		}).Error
 	if err != nil {
 		c.JSON(200, gin.H{"status": "error", "error": err.Error()})
 		return
@@ -101,8 +108,7 @@ func httpRemoveTunnel(c *gin.Context) {
 	}
 
 	// restart service
-	mgr := getManager(c)
-	mgr.StopTunnel(params.Hash)
+	manager.StopTunnel(params.Hash)
 
 	// waiting for 1s, service should be stopped
 	time.Sleep(time.Second)
@@ -121,8 +127,7 @@ func httpStartTunnel(c *gin.Context) {
 		return
 	}
 
-	mgr := getManager(c)
-	_, err := mgr.StartTunnel(params.Hash)
+	_, err := manager.StartTunnel(params.Hash)
 	if err != nil {
 		c.JSON(200, gin.H{"status": "error", "error": err.Error()})
 		return
@@ -143,7 +148,6 @@ func httpStopTunnel(c *gin.Context) {
 		return
 	}
 
-	mgr := getManager(c)
-	mgr.StopTunnel(params.Hash)
+	manager.StopTunnel(params.Hash)
 	c.JSON(200, gin.H{"status": "ok"})
 }

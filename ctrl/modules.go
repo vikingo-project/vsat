@@ -1,17 +1,18 @@
 package ctrl
 
 import (
-	"github.com/vikingo-project/vsat/modules"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/vikingo-project/vsat/api"
 )
 
-func hModules(c *gin.Context) {
-	avaliableModules := modules.GetAvaliableModules()
-	var modules []map[string]interface{}
-	for _, m := range avaliableModules {
-		modules = append(modules, m.GetInfo())
+func httpModules(c *gin.Context) {
+	res, err := api.Instance.Modules()
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{"error": err.Error(), "Total": 0, "Records": make(map[string]string, 0)})
+		c.Abort()
+		return
 	}
-
-	c.JSON(200, gin.H{"status": "ok", "modules": modules})
+	c.JSON(http.StatusOK, gin.H{"status": "ok", "Total": res.Total, "Records": res.Records})
 }
