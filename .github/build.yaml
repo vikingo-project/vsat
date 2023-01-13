@@ -1,0 +1,57 @@
+on:
+  push:
+    tags:
+      - "v*"
+jobs:
+  package:
+    strategy:
+      matrix:
+        go-version: [1.17]
+        os: [macos-11, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go-version }}
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set Version
+        run: echo "VERSION=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      - name: Get Wails
+        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+
+      - name: Install gon via HomeBrew for code signing and app notarization
+        run: |
+          brew tap mitchellh/gon
+          brew install mitchellh/gon/gon
+        if: matrix.os == 'macos-11'
+
+      - name: Build and Sign MacOS Binaries
+        run: |
+          ./scripts/build-macos.sh
+        if: matrix.os == 'macos-11'
+
+      - name: Build package windows
+        run: |
+          $GP = (go env GOPATH)
+          $env:path = "$env:path;$GP\bin"
+          echo "building on ${{ matrix.os }}"
+          choco install mingw
+          wails build -platform windows/amd64 -clean
+          Compress-Archive -Path .\build\bin\vsat.exe -DestinationPath .\vsat-windows-amd64.zip
+        if: matrix.os == 'windows-latest'
+      - name: upload artifacts macOS-AMD64
+        uses: actions/upload-artifact@v2
+        with:
+          name: vsat-macOS
+          path: vsat-*.zip
+        if: matrix.os == 'macos-11'
+
+      - name: upload artifact windows
+        uses: actions/upload-artifact@v2
+        with:
+          name: vsat-windows
+          path: vsat-windows-amd64.zip
+        if: matrix.os == 'windows-latest'
