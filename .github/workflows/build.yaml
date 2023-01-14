@@ -50,7 +50,7 @@ jobs:
         run: cd frontend && npm install && npm run build
 
       - name: Build wails app for macOS
-        run: CGO_ENABLED=1 wails build -platform darwin/arm64
+        run: CGO_ENABLED=1 wails build -platform darwin/arm64 -tags "full json1"
         if: matrix.os == 'macos-11'
 
       - name: Compress macOS
@@ -67,7 +67,7 @@ jobs:
           $env:path = "$env:path;$GP\bin"
           echo "building on ${{ matrix.os }}"
           choco install mingw
-          wails build -platform windows/amd64 -clean
+          wails build -platform windows/amd64 -tags "full json1" -clean 
           Compress-Archive -Path .\build\bin\vsat.exe -DestinationPath .\vsat-windows-amd64.zip
         if: matrix.os == 'windows-latest'
 

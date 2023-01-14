@@ -1,5 +1,5 @@
-//go:build desktop
-// +build desktop
+//go:build full
+// +build full
 
 package main
 
