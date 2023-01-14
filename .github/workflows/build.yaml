@@ -21,7 +21,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Set Version
         run: echo "VERSION=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-        
+
       - name: Normalise platform tag
         id: normalise_platform
         run: |
@@ -30,6 +30,14 @@ jobs:
 
       - name: Get Wails
         run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+      
+      - name: Set up Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Update npm
+        run: npm install -g npm
 
       # - name: Install gon via HomeBrew for code signing and app notarization
       #   run: |
