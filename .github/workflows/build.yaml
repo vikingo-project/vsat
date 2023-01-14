@@ -47,15 +47,19 @@ jobs:
       #   if: matrix.os == 'macos-11'
 
       - name: Build frontend assets
-        shell: bash
-        run: cd frontend && npm install && VUE_APP_DESKTOP=true npm run build
+        env:
+          VUE_APP_DESKTOP: 'true'
+        run: cd frontend && npm install && npm run build
 
       - name: Build wails app for macOS
-        run: CGO_ENABLED=1 wails build -platform darwin/arm64 -tags "full json1" -s
+        env:
+          VUE_APP_DESKTOP: 'true'
+          CGO_ENABLED: '1'
+        run: wails build -platform darwin/arm64 -tags "full json1" -s
         if: matrix.os == 'macos-11'
 
       - name: Compress macOS
-        run: cd build/bin && ls -la && zip -r vsat-darwin-arm64.zip *.app && ls -la
+        run: cd build/bin && ls -la && zip -r vsat-darwin-arm64.zip *.app
         if: matrix.os == 'macos-11'
 
       # - name: Notarise macOS app + create dmg
@@ -63,6 +67,9 @@ jobs:
       #   if: matrix.os == 'macos-11'
 
       - name: Build package windows
+        env:
+          VUE_APP_DESKTOP: 'true'
+          CGO_ENABLED: '1'
         run: |
           $GP = (go env GOPATH)
           $env:path = "$env:path;$GP\bin"
@@ -76,7 +83,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: vsat-darwin-arm64
-          path: vsat-*.zip
+          path: vsat-darwin-arm64.zip
         if: matrix.os == 'macos-11'
 
       - name: upload artifact windows
