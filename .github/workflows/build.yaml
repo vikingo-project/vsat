@@ -45,6 +45,9 @@ jobs:
       #     brew install mitchellh/gon/gon
       #   if: matrix.os == 'macos-11'
 
+      - name: Build frontend assets
+        run: cd frontend && npm install && npm run build
+
       - name: Build wails app for macOS
         run: CGO_ENABLED=1 wails build -platform darwin/arm64
         if: matrix.os == 'macos-11'
