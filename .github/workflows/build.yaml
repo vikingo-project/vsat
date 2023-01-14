@@ -47,6 +47,7 @@ jobs:
 
       - name: Build frontend assets
         run: cd frontend && npm install && npm run build
+        if: matrix.os == 'macos-11'
 
       - name: Build wails app for macOS
         run: CGO_ENABLED=1 wails build -platform darwin/arm64
@@ -54,6 +55,7 @@ jobs:
 
       - name: Compress macOS
         run: cd build/bin && zip -r vsat-${{ steps.normalise_platform.outputs.tag }}.zip Vsat.app
+        if: matrix.os == 'macos-11'
 
       # - name: Notarise macOS app + create dmg
       #   run: gon -log-level=info gon.config.json
