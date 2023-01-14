@@ -54,7 +54,7 @@ jobs:
         if: matrix.os == 'macos-11'
 
       - name: Compress macOS
-        run: cd build/bin && zip -r vsat-${{ steps.normalise_platform.outputs.tag }}.zip Vsat.app
+        run: cd build/bin && zip -r vsat-darwin-arm6.zip *.app
         if: matrix.os == 'macos-11'
 
       # - name: Notarise macOS app + create dmg
