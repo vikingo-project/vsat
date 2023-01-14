@@ -28,9 +28,12 @@ jobs:
           brew install mitchellh/gon/gon
         if: matrix.os == 'macos-11'
 
-      - name: Build and Sign MacOS Binaries
-        run: |
-          ./scripts/build-macos.sh
+      - name: Build wails app for macOS
+        run: CGO_ENABLED=1 wails build -platform ${{ matrix.platform }} -ldflags "-X main.version=${{ github.event.release.tag_name }}"
+        if: matrix.os == 'macos-11'
+
+      - name: Notarise macOS app + create dmg
+        run: gon -log-level=info gon.config.json
         if: matrix.os == 'macos-11'
 
       - name: Build package windows
@@ -42,6 +45,7 @@ jobs:
           wails build -platform windows/amd64 -clean
           Compress-Archive -Path .\build\bin\vsat.exe -DestinationPath .\vsat-windows-amd64.zip
         if: matrix.os == 'windows-latest'
+
       - name: upload artifacts macOS-AMD64
         uses: actions/upload-artifact@v2
         with:

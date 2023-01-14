@@ -1,0 +1,10 @@
+{
+    "source": [
+      "./build/bin/Vsat.app"
+    ],
+    "bundle_id": "net.vikingo.Vsat",
+    "dmg": {
+      "output_path": "build/bin/Vsat.dmg",
+      "volume_name": "Vikingo Satellite"
+    }
+  }
