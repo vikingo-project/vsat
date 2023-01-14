@@ -36,8 +36,8 @@ jobs:
         with:
           node-version: '14'
 
-      - name: Update npm
-        run: npm install -g npm
+      # - name: Update npm
+      #   run: npm install -g npm
 
       # - name: Install gon via HomeBrew for code signing and app notarization
       #   run: |
