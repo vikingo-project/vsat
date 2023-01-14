@@ -47,14 +47,14 @@ jobs:
       #   if: matrix.os == 'macos-11'
 
       - name: Build frontend assets
-        run: cd frontend && npm install && npm run build
+        run: cd frontend && npm install && VUE_APP_DESKTOP=true npm run build
 
       - name: Build wails app for macOS
-        run: CGO_ENABLED=1 wails build -platform darwin/arm64 -tags "full json1"
+        run: CGO_ENABLED=1 wails build -platform darwin/arm64 -tags "full json1" -s
         if: matrix.os == 'macos-11'
 
       - name: Compress macOS
-        run: cd build/bin && zip -r vsat-darwin-arm6.zip *.app
+        run: cd build/bin && ls -la && zip -r vsat-darwin-arm64.zip *.app && ls -la
         if: matrix.os == 'macos-11'
 
       # - name: Notarise macOS app + create dmg
@@ -71,16 +71,16 @@ jobs:
           Compress-Archive -Path .\build\bin\vsat.exe -DestinationPath .\vsat-windows-amd64.zip
         if: matrix.os == 'windows-latest'
 
-      - name: upload artifacts macOS-AMD64
+      - name: upload artifacts darwin-arm64
         uses: actions/upload-artifact@v2
         with:
-          name: vsat-macOS
+          name: vsat-darwin-arm64
           path: vsat-*.zip
         if: matrix.os == 'macos-11'
 
       - name: upload artifact windows
         uses: actions/upload-artifact@v2
         with:
-          name: vsat-windows
+          name: vsat-windows-amd64.zip
           path: vsat-windows-amd64.zip
         if: matrix.os == 'windows-latest'
