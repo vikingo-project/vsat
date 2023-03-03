@@ -1,7 +1,18 @@
 package tunnels
 
+const (
+	AuthReq uint8 = iota
+	AuthRes
+	NewConReq
+	NewConRes
+	Ping
+	Pong
+)
+
 type AuthReqMsg struct {
-	Token string // tunnel token
+	Token       string // tunnel token
+	Type        string // tunnel type: RDP, HTTP, TCP
+	Destination string
 }
 
 type AuthResMsg struct {

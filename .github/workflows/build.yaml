@@ -92,3 +92,16 @@ jobs:
           name: vsat-windows-amd64.zip
           path: vsat-windows-amd64.zip
         if: matrix.os == 'windows-latest'
+  notifications:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Telegram
+          uses: appleboy/telegram-action@master
+          if: always()
+          with:
+            to: ${{ secrets.TG_TO }}
+            token: ${{ secrets.TG_TOKEN }}
+            message: |
+              Commit message: ${{ github.event.commits[0].message }}
+              Repository: ${{ github.repository }}
+              Status: ${{ job.status }}

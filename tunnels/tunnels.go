@@ -30,7 +30,6 @@ func (c *Con) ReadPacket() (action uint8, data []byte, err error) {
 		utils.PrintDebug("Read failed binary'%s'\n", err)
 		return
 	}
-	utils.PrintDebug("ReadPacket# length %d", length)
 	data = make([]byte, length)
 	io.ReadFull(c, data)
 	return
@@ -79,14 +78,6 @@ type Tunnel struct {
 }
 
 const cloudTunAddr = "tun.vkng.cc:443"
-const (
-	AuthReq uint8 = iota
-	AuthRes
-	NewConReq
-	NewConRes
-	Ping
-	Pong
-)
 
 type NetEvent struct {
 	action uint8
@@ -104,9 +95,11 @@ func (t *Tunnel) Start(errChan chan error) error {
 	t.ctrlCon = &Con{ctrlCon, &sync.RWMutex{}}
 
 	go func() {
-		defer ctrlCon.Close()
+		defer func() {
+			ctrlCon.Close()
+		}()
 
-		err := t.ctrlCon.WritePacket(AuthReq, &AuthReqMsg{Token: t.Hash})
+		err := t.ctrlCon.WritePacket(AuthReq, &AuthReqMsg{Token: t.Hash, Type: t.Type, Destination: t.Destination})
 		if err != nil {
 			utils.PrintDebug("failed to write packet", err)
 			errChan <- err
@@ -122,15 +115,11 @@ func (t *Tunnel) Start(errChan chan error) error {
 					netErrCh <- err
 					return
 				}
-				if err != nil {
-					netErrCh <- err
-					return
-				}
 				netEventCh <- NetEvent{action, data}
 			}
 		}(netEventCh, netErrCh)
 
-		ticker := time.NewTicker(5 * time.Second)
+		ticker := time.NewTicker(10 * time.Second)
 		defer ticker.Stop()
 
 		for {
@@ -184,7 +173,7 @@ func (t *Tunnel) Start(errChan chan error) error {
 
 					err = serverCon.WritePacket(NewConRes, &NewConResMsg{Session: newConReqMsg.Session})
 					if err != nil {
-						log.Println(err)
+						utils.PrintDebug("Failed to write packet %s", err)
 						errChan <- err
 						break
 					}

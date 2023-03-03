@@ -29,7 +29,7 @@ func httpTunnels(c *gin.Context) {
 			tuns[i].PublicAddr = manager.Tunnels().GetPublicAddr(t.Hash)
 		}
 	}
-	c.JSON(200, gin.H{"status": "ok", "tunnels": tuns})
+	c.JSON(200, gin.H{"status": "ok", "Records": tuns})
 }
 
 func httpCreateTunnel(c *gin.Context) {
