@@ -161,19 +161,19 @@ func (m *module) loggingMiddleware(next http.Handler) http.Handler {
 
 		if m.settings.LogRequest {
 			rawReq, _ := httputil.DumpRequest(r, true)
-			if len(rawReq) > 1024*10 {
-				rawReq = rawReq[:1024*10]
-				rawReq = append(rawReq, []byte("...")...)
-			}
+			// if len(rawReq) > 1024*10 {
+			// 	rawReq = rawReq[:1024*10]
+			// 	rawReq = append(rawReq, []byte("...")...)
+			// }
 			data["request"] = string(rawReq)
 		}
 
 		if m.settings.LogResponse {
 			rawRes, _ := httputil.DumpResponse(fakeWriter.Result(), true)
-			if len(rawRes) > 1024*10 {
-				rawRes = rawRes[:1024*10]
-				rawRes = append(rawRes, []byte("...")...)
-			}
+			// if len(rawRes) > 1024*10 {
+			// 	rawRes = rawRes[:1024*10]
+			// 	rawRes = append(rawRes, []byte("...")...)
+			// }
 			data["response"] = string(rawRes)
 		}
 
