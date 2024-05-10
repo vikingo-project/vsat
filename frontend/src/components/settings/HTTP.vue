@@ -82,6 +82,7 @@
                 <el-radio-button label="file">Serve file</el-radio-button>
                 <el-radio-button label="folder">Serve folder</el-radio-button>
                 <el-radio-button label="proxy">Proxy</el-radio-button>
+                <el-radio-button label="lua">Lua handler</el-radio-button>
               </el-radio-group>
             </el-form-item>
             <span v-if="location.action_name == 'template'">
@@ -185,6 +186,25 @@
                 <el-input v-model="location.action_data.custom_host"></el-input>
               </el-form-item>
             </span>
+
+            <span v-if="location.action_name == 'lua'">
+              <el-form-item label="Code">
+                <el-input
+                  type="textarea"
+                  :rows="2"
+                  placeholder="Lua handler"
+                  v-model="location.action_data.code"
+                >
+                </el-input>
+                <el-alert class="mt-2" :closable="false" type="info" show-icon>
+                  You can use variables like
+                  <div v-pre>
+                    {{ req.headers.User_Agent }}, {{ req.uri }},
+                    {{ req.remote_addr }}
+                  </div>
+                </el-alert>
+              </el-form-item>
+            </span>
             <!-- end of proxy tab -->
 
             <div
@@ -230,6 +250,7 @@ export default {
         file: { hash: "" },
         folder: { folder: "" },
         proxy: { destination: "", custom_host: "" },
+        lua: {code:"function handler(req, res)\n  res.body = 'hello'\nreturn res\nend"},
       },
 
       hostBootstrap: {
@@ -389,7 +410,17 @@ export default {
             !action.action_data.destination ||
             action.action_data.destination === ""
           ) {
-            callback(new Error("Destination URL shold be set"));
+            callback(new Error("Destination URL should be set"));
+            return;
+          }
+          break;
+        case "lua":
+          var action = this.getActionNode(this.settings, rule.field);
+          if (
+            !action.action_data.code ||
+            action.action_data.code === ""
+          ) {
+            callback(new Error("Handler code should be set"));
             return;
           }
           break;

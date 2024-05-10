@@ -31,11 +31,13 @@ type header struct {
 	Name  string `json:"name" mapstructure:"name"`
 	Value string `json:"value" mapstructure:"value"`
 }
+
 type templateSettings struct {
 	Status   int      `json:"status" mapstructure:"status"`
 	Template string   `json:"template" mapstructure:"template"`
 	Headers  []header `json:"headers" mapstructure:"headers"`
 }
+
 type fileSettings struct {
 	Hash string `json:"hash" mapstructure:"hash"`
 }
@@ -47,6 +49,10 @@ type folderSettings struct {
 type proxySettings struct {
 	Destination string `json:"destination" mapstructure:"destination"`
 	CustomHost  string `json:"custom_host" mapstructure:"custom_host"`
+}
+
+type luaSettings struct {
+	Code string `json:"code" mapstructure:"code"`
 }
 
 type Location struct {
@@ -260,6 +266,7 @@ func serveTemplate(path, action string, data interface{}) func(w http.ResponseWr
 		w.Write([]byte(data))
 	}
 }
+
 func serveFile(path, action string, data interface{}) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Println("serve file")
@@ -392,6 +399,9 @@ func (m *module) Up() error {
 					if action == "proxy" {
 						router.Host(host.Hostname).PathPrefix(path).HandlerFunc(doProxy(path, action, data))
 					}
+					if action == "lua" {
+						router.Path(path).HandlerFunc(serveLua(path, action, data))
+					}
 
 				}(location.Path, location.Action, location.Data)
 			}
@@ -417,6 +427,9 @@ func (m *module) Up() error {
 						}
 						if action == "proxy" {
 							router.PathPrefix(path).HandlerFunc(doProxy(path, action, data))
+						}
+						if action == "lua" {
+							router.Path(path).HandlerFunc(serveLua(path, action, data))
 						}
 					}(location.Path, location.Action, location.Data)
 				}

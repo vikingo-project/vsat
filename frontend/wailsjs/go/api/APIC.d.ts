@@ -18,7 +18,7 @@ export function Modules():Promise<api.RecordsContainer>;
 
 export function Networks():Promise<api.RecordsContainer>;
 
-export function RemoveService(arg1:models.ServiceHash):Promise<Error>;
+export function RemoveService(arg1:models.ServiceHash):Promise<void>;
 
 export function Services(arg1:string):Promise<api.RecordsContainer>;
 
@@ -26,7 +26,7 @@ export function SessionEvents(arg1:string):Promise<api.RecordsContainer>;
 
 export function Sessions(arg1:string):Promise<api.RecordsContainer>;
 
-export function ToggleService(arg1:models.ChangeServiceState):Promise<Error>;
+export function ToggleService(arg1:models.ChangeServiceState):Promise<void>;
 
 export function Tunnels(arg1:string):Promise<api.RecordsContainer>;
 
