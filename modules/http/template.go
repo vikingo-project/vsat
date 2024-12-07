@@ -1,6 +1,7 @@
 package vshttp
 
 import (
+	"net"
 	"net/http"
 	"strings"
 
@@ -22,7 +23,9 @@ func Render(tpl string, r *http.Request) ([]byte, error) {
 	if err != nil {
 		return []byte{}, err
 	}
+	clientIP, _, _ := net.SplitHostPort(r.RemoteAddr)
 	out, err := template.Execute(pongo2.Context{
+		"client_ip": clientIP,
 		"req": pongo2.Context{
 			"path":        r.URL.Path,
 			"uri":         r.RequestURI,
