@@ -31,11 +31,13 @@ type header struct {
 	Name  string `json:"name" mapstructure:"name"`
 	Value string `json:"value" mapstructure:"value"`
 }
+
 type templateSettings struct {
 	Status   int      `json:"status" mapstructure:"status"`
 	Template string   `json:"template" mapstructure:"template"`
 	Headers  []header `json:"headers" mapstructure:"headers"`
 }
+
 type fileSettings struct {
 	Hash string `json:"hash" mapstructure:"hash"`
 }
@@ -45,8 +47,9 @@ type folderSettings struct {
 }
 
 type proxySettings struct {
-	Destination string `json:"destination" mapstructure:"destination"`
-	CustomHost  string `json:"custom_host" mapstructure:"custom_host"`
+	Destination string   `json:"destination" mapstructure:"destination"`
+	CustomHost  string   `json:"custom_host" mapstructure:"custom_host"`
+	Headers     []header `json:"headers" mapstructure:"headers"`
 }
 
 type Location struct {
@@ -329,6 +332,14 @@ func doProxy(path, action string, data interface{}) func(w http.ResponseWriter, 
 				req.Host = settings.CustomHost
 			} else {
 				req.Host = r.Host
+			}
+
+			for _, header := range settings.Headers {
+				v, err := Render(header.Value, r)
+				if err != nil {
+					utils.PrintDebug(err.Error())
+				}
+				req.Header.Add(header.Name, string(v))
 			}
 
 			resp, err := client.Do(req)
