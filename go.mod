@@ -1,6 +1,8 @@
 module github.com/vikingo-project/vsat
 
-go 1.18
+go 1.23.0
+
+toolchain go1.24.2
 
 require (
 	github.com/flosch/pongo2/v4 v4.0.2
@@ -13,7 +15,7 @@ require (
 	github.com/mitchellh/mapstructure v1.4.2
 	github.com/vmihailenco/msgpack v4.0.4+incompatible
 	github.com/wailsapp/wails/v2 v2.3.1
-	golang.org/x/crypto v0.5.0
+	golang.org/x/crypto v0.40.0
 	gopkg.in/yaml.v2 v2.4.0
 	gorm.io/datatypes v1.0.7
 	gorm.io/driver/sqlite v1.3.1
@@ -30,10 +32,10 @@ require (
 	github.com/gofrs/uuid v4.0.0+incompatible // indirect
 	github.com/golang/protobuf v1.3.3 // indirect
 	github.com/gomodule/redigo v1.8.4 // indirect
-	github.com/google/uuid v1.3.0 // indirect
+	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/imdario/mergo v0.3.13 // indirect
-	github.com/jbowes/semver v0.1.0 // indirect
+	github.com/jbowes/semver v0.1.3 // indirect
 	github.com/jchv/go-winloader v0.0.0-20210711035445-715c2860da7e // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
@@ -59,9 +61,9 @@ require (
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	github.com/wailsapp/mimetype v1.4.1 // indirect
 	golang.org/x/exp v0.0.0-20230113213754-f9f960f08ad4 // indirect
-	golang.org/x/net v0.5.0 // indirect
-	golang.org/x/sys v0.4.0 // indirect
-	golang.org/x/text v0.6.0 // indirect
+	golang.org/x/net v0.42.0 // indirect
+	golang.org/x/sys v0.34.0 // indirect
+	golang.org/x/text v0.27.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	gorm.io/driver/mysql v1.3.2 // indirect
 )
