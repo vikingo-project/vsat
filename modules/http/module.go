@@ -52,6 +52,10 @@ type proxySettings struct {
 	Headers     []header `json:"headers" mapstructure:"headers"`
 }
 
+type luaSettings struct {
+	Code string `json:"code" mapstructure:"code"`
+}
+
 type Location struct {
 	Path   string      `json:"path" mapstructure:"path"`               // location path/URI
 	Action string      `json:"action_name" mapstructure:"action_name"` // what to do
@@ -263,6 +267,7 @@ func serveTemplate(path, action string, data interface{}) func(w http.ResponseWr
 		w.Write([]byte(data))
 	}
 }
+
 func serveFile(path, action string, data interface{}) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Println("serve file")
@@ -403,6 +408,9 @@ func (m *module) Up() error {
 					if action == "proxy" {
 						router.Host(host.Hostname).PathPrefix(path).HandlerFunc(doProxy(path, action, data))
 					}
+					if action == "lua" {
+						router.Path(path).HandlerFunc(serveLua(path, action, data))
+					}
 
 				}(location.Path, location.Action, location.Data)
 			}
@@ -428,6 +436,9 @@ func (m *module) Up() error {
 						}
 						if action == "proxy" {
 							router.PathPrefix(path).HandlerFunc(doProxy(path, action, data))
+						}
+						if action == "lua" {
+							router.Path(path).HandlerFunc(serveLua(path, action, data))
 						}
 					}(location.Path, location.Action, location.Data)
 				}
