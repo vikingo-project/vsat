@@ -185,6 +185,39 @@
               <el-form-item label="Custom host header (if needed)">
                 <el-input v-model="location.action_data.custom_host"></el-input>
               </el-form-item>
+              <el-form-item label="Headers"
+                ><div
+                  v-for="(header, hidx) in location.action_data.headers"
+                  :key="hidx"
+                  class="headers-group"
+                >
+                  <div class="row">
+                    <div class="col">
+                      <el-input placeholder="Name" v-model="header.name">
+                      </el-input>
+                    </div>
+                    <div class="col">
+                      <el-input placeholder="Value" v-model="header.value">
+                      </el-input>
+                    </div>
+                    <div class="col-auto d-flex align-content-center">
+                      <el-button
+                        class="btn btn-mute del"
+                        @click="removeHeader(idx, idx2, hidx)"
+                      >
+                        <i class="vik vik-delete"></i>
+                      </el-button>
+                    </div>
+                  </div>
+                </div>
+
+                <el-button
+                  class="btn btn-add-new-group"
+                  @click="addHeader(idx, idx2)"
+                >
+                  <i class="vik vik-plus"></i>Add header
+                </el-button>
+              </el-form-item>
             </span>
 
             <span v-if="location.action_name == 'lua'">
@@ -249,7 +282,7 @@ export default {
         template: { template: "", status: 200, headers: [] },
         file: { hash: "" },
         folder: { folder: "" },
-        proxy: { destination: "", custom_host: "" },
+        proxy: { destination: "", custom_host: "", headers: [] },
         lua: {code:"function handler(req, res)\n  res.body = 'hello'\nreturn res\nend"},
       },
 
