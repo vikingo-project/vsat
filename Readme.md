@@ -36,7 +36,7 @@ docker run --rm -ti -v -p 1025:1025 vkngo/satellite ./vsat64
 
 Or use persistent DB storage
 
-```
+```bash
 docker run --rm -ti -v /your/persistent/directory:/app/storage -p 1025:1025 -p 53:53/udp -p 80:80 -p 443:443 -p 21:21 -p 60000:60000 -p 60001:60001 vkngo/satellite ./vsat64 -db /app/storage/dbname.db
 ```
 
