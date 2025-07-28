@@ -4,7 +4,6 @@ on:
       - "v*"
     branches:
       - main
-      - dev
 jobs:
   package:
     strategy:

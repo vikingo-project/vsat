@@ -1,0 +1,101 @@
+on:
+  push:
+    branches:
+      - dev
+jobs:
+  package:
+    strategy:
+      matrix:
+        go-version: ["1.23"]
+        os: [ubuntu-22.04]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go-version }}
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set Version
+        run: echo "VERSION=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      - name: Normalise platform tag
+        id: normalise_platform
+        run: |
+          tag=$(echo ${{ matrix.platform }} | sed -e 's/\//-/g')
+          echo "::set-output name=tag::$tag"
+        if: matrix.os == 'macos-latest'
+
+      - name: Get Wails
+        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+      
+      - name: Set up Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Build frontend cli assets
+        env:
+          VUE_APP_DESKTOP: 'false'
+        run: cd frontend && npm install && npm run build
+        if: matrix.os == 'ubuntu-22.04'
+
+      - name: Build ubuntu cli 
+        env:
+          VUE_APP_DESKTOP: 'false'
+          CGO_ENABLED: '1'
+        run: |
+          go build -tags "json1 netgo" -o vsat
+          zip -6 vsat-linux-amd64.zip vsat
+        if: matrix.os == 'ubuntu-22.04'
+
+      - name: upload artifacts linux-amd64
+        uses: actions/upload-artifact@v4
+        with:
+          name: vsat-linux-amd64
+          path: vsat-linux-amd64.zip
+        if: matrix.os == 'ubuntu-22.04'
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: vkngo/vsat
+          flavor: latest=false
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+        if: matrix.os == 'ubuntu-22.04'
+
+      - name: Login to image repository
+        # if: github.ref_type == 'tag'
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_LOGIN }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+        if: matrix.os == 'ubuntu-22.04'
+  
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: Dockerfile
+          push: ${{ github.ref_name == 'dev' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+        if: matrix.os == 'ubuntu-22.04'
+
+  notifications:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Telegram
+          uses: appleboy/telegram-action@master
+          if: always()
+          with:
+            to: ${{ secrets.TG_TO }}
+            token: ${{ secrets.TG_TOKEN }}
+            message: |
+              Commit message: ${{ github.event.commits[0].message }}
+              Repository: ${{ github.repository }}
+              Status: ${{ job.status }}
