@@ -4,7 +4,7 @@ import {models} from '../models';
 import {api} from '../models';
 import {manager} from '../models';
 
-export function About():Promise<{[key: string]: any}>;
+export function About():Promise<Record<string, any>>;
 
 export function CreateService(arg1:models.WebService):Promise<string>;
 
