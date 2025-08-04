@@ -10,12 +10,20 @@ const (
 )
 
 type AuthReqMsg struct {
-	Token       string // tunnel token
+	Hash        string // tunnel hash
+	APIKey      string // user secret
 	Type        string // tunnel type: RDP, HTTP, TCP
 	Destination string
+	Extra       map[string]string
+}
+
+type Message struct {
+	Level   uint8
+	Message string
 }
 
 type AuthResMsg struct {
+	Message    Message
 	PublicAddr string // secret token
 }
 

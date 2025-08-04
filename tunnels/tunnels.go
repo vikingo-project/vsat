@@ -99,9 +99,9 @@ func (t *Tunnel) Start(errChan chan error) error {
 			ctrlCon.Close()
 		}()
 
-		err := t.ctrlCon.WritePacket(AuthReq, &AuthReqMsg{Token: t.Hash, Type: t.Type, Destination: t.Destination})
+		err := t.ctrlCon.WritePacket(AuthReq, &AuthReqMsg{Hash: t.Hash, Type: t.Type, Destination: t.Destination})
 		if err != nil {
-			utils.PrintDebug("failed to write packet", err)
+			utils.PrintDebug("failed to write packet %v", err)
 			errChan <- err
 			return
 		}
@@ -141,11 +141,11 @@ func (t *Tunnel) Start(errChan chan error) error {
 				switch event.action {
 				case Pong:
 				case AuthRes:
-					utils.PrintDebug("got AuthRes", string(event.data))
+					utils.PrintDebug("got AuthRes %s", string(event.data))
 					authResMsg := &AuthResMsg{}
 					err = msgpack.Unmarshal(event.data, authResMsg)
 					if err != nil {
-						log.Println("unmarshal err ", err)
+						utils.PrintDebug("unmarshal err %v", err)
 						errChan <- err
 						break
 					}
