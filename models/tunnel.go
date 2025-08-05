@@ -1,12 +1,15 @@
 package models
 
+import "github.com/vikingo-project/vsat/shared"
+
 type Tunnel struct {
-	Hash       string `json:"hash" gorm:"primary_key"`
-	Type       string `gorm:"column:type" json:"type"`
-	DstHost    string `json:"dstHost"`
-	DstPort    int    `json:"dstPort"`
-	DstTLS     bool   `json:"dstTLS"`
-	Autostart  bool   `json:"autoStart"`
-	Connected  bool   `json:"connected"`
-	PublicAddr string `json:"publicAddr"`
+	Hash       string         `json:"hash" gorm:"primary_key"`
+	Type       string         `gorm:"column:type" json:"type"`
+	DstHost    string         `json:"dstHost"`
+	DstPort    int            `json:"dstPort"`
+	DstTLS     bool           `json:"dstTLS"`
+	Autostart  bool           `json:"autoStart"`
+	Connected  bool           `json:"connected"`
+	PublicAddr string         `json:"publicAddr"`
+	Stat       shared.StatMsg `json:"stat" gorm:"-"`
 }

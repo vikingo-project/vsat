@@ -7,6 +7,7 @@ import (
 	"github.com/vikingo-project/vsat/db"
 	"github.com/vikingo-project/vsat/manager"
 	"github.com/vikingo-project/vsat/models"
+	"github.com/vikingo-project/vsat/shared"
 	"github.com/vikingo-project/vsat/utils"
 	"gorm.io/gorm"
 
@@ -27,6 +28,8 @@ func httpTunnels(c *gin.Context) {
 		tuns[i].Connected = live
 		if live {
 			tuns[i].PublicAddr = manager.Tunnels().GetPublicAddr(t.Hash)
+			tuns[i].Stat.Used = shared.Stat[t.Hash].Used
+			tuns[i].Stat.Limit = shared.Stat[t.Hash].Limit
 		}
 	}
 	c.JSON(200, gin.H{"status": "ok", "Records": tuns})

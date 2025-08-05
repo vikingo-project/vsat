@@ -20,10 +20,10 @@
             v-if="tunnel.type == `HTTP` && tunnel.publicAddr !== ``"
             ><a
               :key="p"
-              v-for="p in ['http://', 'https://']"
+              v-for="p in ['https://']"
               :href="p + tunnel.publicAddr"
               target="_blank"
-              >{{ p }}{{ tunnel.publicAddr }}<br /></a
+              >{{ p }}{{ tunnel.publicAddr }} {{ stat }}<br /></a
           ></span>
         </div>
       </div>
@@ -174,6 +174,12 @@ export default {
       if (this.tunnel.connected) icons.push("vik-stop");
       if (!this.tunnel.connected) icons.push("vik-run");
       return icons.join(" ");
+    },
+    stat() {
+      if (this.tunnel.connected) {
+        return `(${utils.humanFileSize(this.tunnel.stat.used)} / ${utils.humanFileSize(this.tunnel.stat.limit)})`;
+      }
+      return "";
     },
   },
   methods: {

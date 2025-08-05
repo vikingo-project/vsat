@@ -4,7 +4,6 @@ import (
 	"embed"
 	"fmt"
 	"io/fs"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -26,7 +25,7 @@ func NewCtrlServer() *Ctrl {
 }
 
 func (c *Ctrl) Run() error {
-	// gin.SetMode(gin.ReleaseMode)
+
 	_, certErr := os.Stat("./vsat.crt")
 	_, keyErr := os.Stat("./vsat.key")
 	if os.IsNotExist(certErr) || os.IsNotExist(keyErr) {
@@ -35,8 +34,8 @@ func (c *Ctrl) Run() error {
 		if err != nil {
 			panic(err)
 		}
-		ioutil.WriteFile("./vsat.crt", []byte(cert), 0666)
-		ioutil.WriteFile("./vsat.key", []byte(key), 0666)
+		os.WriteFile("./vsat.crt", []byte(cert), 0644)
+		os.WriteFile("./vsat.key", []byte(key), 0644)
 	}
 
 	// start socketio server
@@ -48,6 +47,9 @@ func (c *Ctrl) Run() error {
 	}()
 	defer wsServer.Close()
 
+	if !utils.IsDevMode() {
+		gin.SetMode(gin.ReleaseMode)
+	}
 	router := gin.New()
 	router.GET("/socket.io/*any", gin.WrapH(wsServer))
 	router.POST("/socket.io/*any", gin.WrapH(wsServer))
