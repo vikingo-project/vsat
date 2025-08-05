@@ -9,6 +9,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/vikingo-project/vsat/shared"
 	"github.com/vikingo-project/vsat/utils"
 	"github.com/vmihailenco/msgpack"
 )
@@ -140,6 +141,15 @@ func (t *Tunnel) Start(errChan chan error) error {
 			case event := <-netEventCh:
 				switch event.action {
 				case Pong:
+				case Stat:
+					statMsg := &shared.StatMsg{}
+					err = msgpack.Unmarshal(event.data, statMsg)
+					if err != nil {
+						log.Printf("failed to unmarshal stat %v", err)
+						continue
+					}
+					shared.Stat[t.Hash] = *statMsg
+					log.Printf("tunnel %s stat: %v", t.Hash, shared.Stat[t.Hash])
 				case AuthRes:
 					utils.PrintDebug("got AuthRes %s", string(event.data))
 					authResMsg := &AuthResMsg{}

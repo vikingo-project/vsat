@@ -7,6 +7,7 @@ const (
 	NewConRes
 	Ping
 	Pong
+	Stat
 )
 
 type AuthReqMsg struct {

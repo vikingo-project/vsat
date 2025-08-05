@@ -7,10 +7,20 @@ type config struct {
 	Token  string `yaml:"token"`            // ctrl access token
 }
 
+type StatMsg struct {
+	Used  int `json:"used"`
+	Limit int `json:"limit"`
+}
+
 var (
 	Config        config
 	Version       = "0.0.0" // the real versions gets from build env
 	BuildHash     = "-"
 	DesktopMode   = "false"
 	Notifications = make(chan interface{})
+	Stat          map[string]StatMsg
 )
+
+func init() {
+	Stat = make(map[string]StatMsg)
+}
