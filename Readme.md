@@ -46,9 +46,10 @@ where `/your/persistent/directory` is a directory on the host system.
 
 <details>
   <summary>Interactions page</summary>
-  <img src="https://static.vikingo.org/images/satellite-1.jpg"/ >
+  ![ezgif-5e25d893ad289282](https://github.com/user-attachments/assets/cd238e42-90ab-4a46-a684-912fc2f879a5)
 </details>
 <details>
   <summary>Share folder via HTTP</summary>
-  <a href="https://www.youtube.com/watch?v=uPK0ltzT5o4"><img src="https://i9.ytimg.com/vi/uPK0ltzT5o4/mq2.jpg?sqp=CISP6YoG&rs=AOn4CLDUE2vpBcxG2C-mGOxpIRcoj2G2bg" /></a>
+  <a href="https://www.youtube.com/watch?v=uPK0l
+tzT5o4"><img src="https://i9.ytimg.com/vi/uPK0ltzT5o4/mq2.jpg?sqp=CISP6YoG&rs=AOn4CLDUE2vpBcxG2C-mGOxpIRcoj2G2bg" /></a>
 </details>
