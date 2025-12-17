@@ -46,7 +46,8 @@ where `/your/persistent/directory` is a directory on the host system.
 
 <details>
   <summary>Interactions page</summary>
-  ![ezgif-5e25d893ad289282](https://github.com/user-attachments/assets/cd238e42-90ab-4a46-a684-912fc2f879a5)
+  <img src="https://github.com/user-attachments/assets/cd238e42-90ab-4a46-a684-912fc2f879a5" />
+
 </details>
 <details>
   <summary>Share folder via HTTP</summary>
