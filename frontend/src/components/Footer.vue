@@ -11,7 +11,7 @@
         </div>
         <div class="col-md-3 mb-2 mb-md-0 text-center footer-block">
           <div class="footline">
-            <a href="https://docs.vikingo.org/v/en/vsat"> Docs </a>
+            <a target="_blank" href="https://vikingo.org/satellite/about"> Docs </a>
             |
             <a href="javascript:;" @click="showAbout = true"> About </a>
           </div>
@@ -19,7 +19,7 @@
 
         <div class="col footer-block">
           <div class="copyright">
-            <span>© 2020-2022 Vikingo Satellite</span>
+            <span>© 2020-2025 Vikingo Satellite</span>
             <br />
           </div>
         </div>

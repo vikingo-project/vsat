@@ -2,6 +2,7 @@
   <div>
     <el-form :model="settings" ref="settingsForm" class="service-settings">
       <el-form-item label="Logging">
+        <el-checkbox v-model="settings.log_connect">Log connect</el-checkbox>
         <el-checkbox v-model="settings.log_request">Log request</el-checkbox>
         <el-checkbox v-model="settings.log_response">Log response</el-checkbox>
       </el-form-item>
@@ -298,6 +299,7 @@ export default {
       },
       settings: {
         allow_file_upload: true,
+        log_connect: true,
         log_request: true,
         log_response: false,
         tls: { enabled: false, autocert: false },

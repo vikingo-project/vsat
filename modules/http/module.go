@@ -76,6 +76,7 @@ type settings struct {
 	TLS             TLSConfig    `json:"tls" mapstructure:"tls"`
 	Hosts           []HostConfig `json:"hosts" mapstructure:"hosts"`
 	AllowFileUpload bool         `json:"allow_file_upload" mapstructure:"allow_file_upload"`
+	LogConnect      bool         `json:"log_connect" mapstructure:"log_connect"`
 	LogRequest      bool         `json:"log_request" mapstructure:"log_request"`
 	LogResponse     bool         `json:"log_response" mapstructure:"log_response"`
 }
@@ -157,35 +158,37 @@ func (m *module) loggingMiddleware(next http.Handler) http.Handler {
 		w.Write(fakeWriter.Body.Bytes())
 
 		clientIP := utils.ExtractIP(r.RemoteAddr)
+		var session = ""
+		if m.settings.LogConnect {
+			session, _ = m.API.NewSession(models.SessionInfo{
+				Description: fmt.Sprintf("%s %s", r.Method, r.RequestURI),
+				ClientIP:    clientIP,
+				LocalAddr:   fmt.Sprintf("%s:%d", m.listenIP, m.listenPort),
+			})
 
-		session, _ := m.API.NewSession(models.SessionInfo{
-			Description: fmt.Sprintf("%s %s", r.Method, r.RequestURI),
-			ClientIP:    clientIP,
-			LocalAddr:   fmt.Sprintf("%s:%d", m.listenIP, m.listenPort),
-		})
+			var data = make(map[string]interface{})
 
-		var data = make(map[string]interface{})
+			if m.settings.LogRequest {
+				rawReq, _ := httputil.DumpRequest(r, true)
+				// if len(rawReq) > 1024*10 {
+				// 	rawReq = rawReq[:1024*10]
+				// 	rawReq = append(rawReq, []byte("...")...)
+				// }
+				data["request"] = string(rawReq)
+			}
 
-		if m.settings.LogRequest {
-			rawReq, _ := httputil.DumpRequest(r, true)
-			// if len(rawReq) > 1024*10 {
-			// 	rawReq = rawReq[:1024*10]
-			// 	rawReq = append(rawReq, []byte("...")...)
-			// }
-			data["request"] = string(rawReq)
-		}
+			if m.settings.LogResponse {
+				rawRes, _ := httputil.DumpResponse(fakeWriter.Result(), true)
+				// if len(rawRes) > 1024*10 {
+				// 	rawRes = rawRes[:1024*10]
+				// 	rawRes = append(rawRes, []byte("...")...)
+				// }
+				data["response"] = string(rawRes)
+			}
 
-		if m.settings.LogResponse {
-			rawRes, _ := httputil.DumpResponse(fakeWriter.Result(), true)
-			// if len(rawRes) > 1024*10 {
-			// 	rawRes = rawRes[:1024*10]
-			// 	rawRes = append(rawRes, []byte("...")...)
-			// }
-			data["response"] = string(rawRes)
-		}
-
-		if m.settings.LogRequest || m.settings.LogResponse {
-			m.API.PushEvent(models.Event{Session: session, Name: "request", Data: data})
+			if m.settings.LogRequest || m.settings.LogResponse {
+				m.API.PushEvent(models.Event{Session: session, Name: "request", Data: data})
+			}
 		}
 
 		if m.settings.AllowFileUpload {
