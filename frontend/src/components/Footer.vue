@@ -19,7 +19,7 @@
 
         <div class="col footer-block">
           <div class="copyright">
-            <span>© 2020-2025 Vikingo Satellite</span>
+            <span>© 2020-2026 Vikingo Satellite</span>
             <br />
           </div>
         </div>
